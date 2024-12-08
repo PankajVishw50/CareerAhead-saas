@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "careerahead"
+version = "0.1.0"
+description = ""
+authors = ["Pankaj vishw <vishw.dev.1000@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1.4"
+psycopg2-binary = "^2.9.10"
+python-dotenv = "^1.0.1"
+django-storages = "^1.14.4"
+
+
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
