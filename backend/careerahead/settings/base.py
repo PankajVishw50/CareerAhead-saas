@@ -11,9 +11,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'corsheaders',
+    'rest_framework',
+
+    'account',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', 
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,6 +78,16 @@ STORAGES = {
 
 }
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'account.auth.TokenAuthentication',
+    ],
+    'EXCEPTION_HANDLER': 'careerahead.exceptions.api_exception_handler',
+}
+
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -97,3 +114,35 @@ AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 AWS_S3_FILE_OVERWRITE = True 
 AWS_LOCATION = 'files/' 
 AWS_QUERYSTRING_AUTH = False
+
+AUTH_USER_MODEL = 'account.User'
+
+# EMAIL
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 465))
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'true').lower() in ('true', 't', '1')
+EMAIL_LOG = False
+EMAIL_DEBUG_REDIRECT = False
+EMAIL_DEBUG_RECEIVERS = []
+EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 60 * 24 # One Day 
+
+HOSTED_DOMAIN = os.getenv('HOSTED_DOMAIN')
+HOSTED_URL_PREFIX = os.getenv('HOSTED_URL_PREFIX')
+
+
+# Tokens config
+TOKEN_REFRESH_EXPIRY_TIME = (60 * 60 * 24) * 30 # 30 DAYS
+TOKEN_REFRESH_BYTES = 64
+TOKEN_REFRESH_KEY = os.getenv('TOKEN_REFRESH_KEY', '--rt-k')
+TOKEN_REFRESH_ID_KEY = os.getenv('TOKEN_REFRESH_ID_KEY', '_longtid')
+TOKEN_REFRESH_SECURE = True  # Only allows https network (except request from localhost domain)
+TOKEN_REFRESH_SAMESITE = 'lax' # available options: samesite, lax, none
+TOKEN_REFRESH_HTTP_ONLY = True 
+TOKEN_ACCESS_EXPIRY_TIME = 60 * 30 # 30 MINUTES 
+TOKEN_ACCESS_ALGORITHMS = ['HS256']
+
+TOKEN_REFRESH_MAX_NUMBER_IN_DB = 25
+
+ALLOWED_HOSTS = ['*']

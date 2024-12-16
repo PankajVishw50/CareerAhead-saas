@@ -1,0 +1,191 @@
+openapi: 3.0.0
+info:
+  title: CareerAhead
+  version: 0.1.0-alpha
+  contact:
+    name: Pankaj Vishw
+    email: vishw.dev.1000@gmail.com
+servers:
+  - url: http://localhost:{port}/api
+    variables:
+      port:
+        default: "7575"
+tags:
+  - name: Authentication
+    description: Authentication and Authorization related tasks
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorPayload:
+      description: Error Payload 
+      type: object
+      properties:
+        status_code:
+          type: integer
+          format: int32
+          example: 200
+        message: 
+          type: string
+          nullable: true 
+        messages:
+          type: array
+          items:
+            type: string
+      required:
+        - status_code
+        - message
+    GeneralErrorMessage:
+      description: General Error Message 
+      type: object 
+      properties:
+        error: 
+          $ref: '#/components/schemas/ErrorPayload'
+  parameters:
+    RefreshTokenCookie:
+      name: --rt-k
+      description: |
+        The refresh token saved in cookie during login 
+        if `in_cookie` was set to true.
+        It it's set you don't need to pass refresh_token in body. 
+      in: cookie
+      required: false
+      schema:
+        type: string  
+        example: lwfjlewkfjlwekflwekfjoweifjwelkfewolkfjwo...
+
+  responses:
+    GeneralErrorResponse:
+      description: Request Failed 
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/GeneralErrorMessage'
+security: 
+  - BearerAuth: []
+
+paths:
+  /auth/login:
+    post:
+      operationId: login
+      tags:
+        - Authentication
+      description: | 
+        Authenticates a user and returns an access token and a refresh token. 
+        The behavior can be customized by passing the `in_body` and `in_cookie` parameters:
+        - `in_body`: If set to false, the refresh token is not included in the response body.
+        - `in_cookie`: If set to true, the refresh token is set as an HTTP-only cookie.
+
+        They are optional and If not provided 
+        server proceed with `in_body: false` and `in_cookie: true`
+        for safety purposes for frontend. 
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: myemail@example.com
+                password:
+                  type: string
+                  format: password
+                  example: mysecretpassword
+                in_body:
+                  type: boolean
+                  default: true
+                in_cookie:
+                  type: boolean
+                  default: false
+              required:
+                - email 
+                - password
+      responses:
+        '200':
+          description: Successfully Logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: 
+                    type: string
+                  refresh_token:
+                    type: string
+                required:
+                  - access_token
+          headers:
+            Set-Cookie:
+              description: contains the refresh_token if 'in_cookie' is true. 
+              schema:
+                type: string
+                example: --rt-k=dGhpcyBpcyBhIHNhbXBsZSB0b2tlbi4; HttpOnly; lax; Path=/token/refresh
+        default:
+          $ref: '#/components/responses/GeneralErrorResponse'
+
+  /auth/token/access:
+    get:
+      description: | 
+        Use a refresh token to generate a new access token. The refresh token can be provided in two ways:
+        1. As a `refresh_token` field in the JSON body.
+        2. Automatically retrieved from an HTTP-only cookie if stored during login.
+      operationId: getAccessToken
+      tags:
+        - Authentication
+      parameters:
+        - $ref: '#/components/parameters/RefreshTokenCookie'
+      responses:
+        '200':
+          description: Successfully got the access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: 
+                    type: string
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+
+  /auth/logout:
+    post:
+      description: |
+        Invalidates refresh token passed which makes it 
+        not able to get new access token using the provided refresh token. 
+        Remember just because you make request to `/auth/logout` doesn't mean 
+        now your access token is also invalidated. You can still access api 
+        using same access token until it expires (generally 30 minutes). You should 
+        still manage it securely or discard it.
+        You also need to pass access token in Authorization header, if sending
+        refresh token in cookie. This is for browser frontend for csrf issue. 
+        Otherwise if you are sending refresh_token in body then you don't need 
+        to pass access_token.
+      operationId: logout 
+      tags:
+        - Authentication 
+      security:
+        - BearerAuth: []
+        - {}
+      parameters:
+        - $ref: '#/components/parameters/RefreshTokenCookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Successfully Logged out.
+        default:
+          $ref: '#/components/responses/GeneralErrorResponse'
+

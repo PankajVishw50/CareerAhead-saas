@@ -4,6 +4,14 @@ import os
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+# Email
+EMAIL_LOG = True
+
+## If it's set to false no email will be sent in debug mode
+EMAIL_DEBUG_REDIRECT = os.getenv('EMAIL_DEBUG_REDIRECT', 'false').lower() in ('true', 't', '1')
+## Email addresses where email should be redirected to
+EMAIL_DEBUG_RECEIVERS = os.getenv('EMAIL_DEBUG_RECEIVERS', '').split('|')
+
 
 DATABASES = {
     'default': {
@@ -15,3 +23,6 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
     }
 }
+
+TOKEN_REFRESH_MAX_NUMBER_IN_DB = 50
+CORS_ALLOW_ALL_ORIGINS = True
