@@ -1,6 +1,6 @@
 .PHONY: runserver
 runserver:
-	python3 manage.py runserver localhost:7575
+	python3 manage.py runserver localhost:7575 
 	
 .PHONY: check 
 check:

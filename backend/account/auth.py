@@ -5,6 +5,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from django.utils.functional import SimpleLazyObject
+from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 import jwt
 import secrets 
 import datetime
@@ -123,19 +124,45 @@ class Token:
 
 class TokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
+        # import ipdb;ipdb.set_trace()
         # Ignore if there is no token
         if not (_token := Token.get_authorization_token(request)):
-            return 
-        
+            return None
+
         # Parse token
         if not (token := Token.decode_access_token(_token)):
-            raise AuthenticationFailed('Invalid access token')
+            raise AuthenticationFailed('Invalid Token')
 
         # Load user
+        # TODO: Right now we aren't checking validity of provided id 
+        # and due to this it will throw error if invalid id is provided 
+        # need to fix it later. 
         user = SimpleLazyObject(lambda: User.objects.get(id=token['data']['id']))
 
         return (user, token)
+    
+    def authenticate_header(self, request):
+        return "Bearer"
 
+class SignedTokenAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        # Check if param have the token
+        if not (raw_token := request.query_params.get(settings.SIGNED_URL_AUTH_TOKEN_KEY)):
+            return
+        
+        try:
+            ts_signer = TimestampSigner()
+            token = ts_signer.unsign(raw_token, max_age=settings.SIGNED_URL_AUTH_MAX_AGE)
+            return SimpleLazyObject(lambda: User.objects.get(id=token)), {"token": token}
+        except BadSignature:
+            raise AuthenticationFailed('Invalid token')
+        except SignatureExpired:
+            raise AuthenticationFailed('Token expired')
+        
+        return
+
+    def authenticate_header(self, request):
+        return settings.SIGNED_URL_AUTH_TOKEN_KEY
 
 def login(request, user, in_body=False, in_cookie=True):
     response = Response()

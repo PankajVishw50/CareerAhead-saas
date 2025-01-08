@@ -7,7 +7,8 @@ from account.models import RefreshToken
 from util.dt import now
 
 class AccessTokenView(APIView):
-
+    authentication_classes = []
+    
     def get(self, request):
         # Check if it have refresh token
         if not (refresh_token := Token.get_refresh_token_from_request(request)):
