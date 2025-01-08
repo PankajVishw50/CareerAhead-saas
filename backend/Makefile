@@ -24,3 +24,7 @@ migrate:
 
 .PHONY: makemigrate
 makemigrate: makemigrations migrate
+
+.PHONY: collectstatic
+collectstatic: 
+	poetry run python3 manage.py collectstatic
