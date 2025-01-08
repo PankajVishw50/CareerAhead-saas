@@ -1,6 +1,6 @@
 from rest_framework.views import exception_handler  
 from account.auth import ErrorResponseTemplates  
-
+from django.conf import settings
 
 def api_exception_handler(exc, context):
     """Converts Exceptions into standard format
@@ -13,6 +13,11 @@ def api_exception_handler(exc, context):
         }
     } 
     """
+    # Ignore in debug mode
+    if not settings.DEBUG_ERROR_HANDLING:
+        return
+
+    # import ipdb;ipdb.set_trace()
     try:
         response = exception_handler(exc, context)
 

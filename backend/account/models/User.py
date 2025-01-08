@@ -43,6 +43,12 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('send_mail', True)
 
         user = self._create_user(email, password, **extra_fields)
+
+        # Create wallet
+        Wallet = apps.get_model('wallet.Wallet')
+        if not Wallet.objects.create_wallet(user):
+            user.delete()
+            return False
         return user 
     
     def create_superuser(self, email, password, **extra_fields):

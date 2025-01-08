@@ -2,7 +2,7 @@
 from . import BASE_DIR
 import os 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Email
 EMAIL_LOG = True
@@ -25,4 +25,5 @@ DATABASES = {
 }
 
 TOKEN_REFRESH_MAX_NUMBER_IN_DB = 50
+SIGNED_URL_AUTH_MAX_AGE = 60 * 10 # 10 minutes
 CORS_ALLOW_ALL_ORIGINS = True

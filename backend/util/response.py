@@ -31,4 +31,6 @@ class ErrorResponseTemplates:
     NOT_FOUND = _create_error_response(status.HTTP_404_NOT_FOUND, 'Not found')
     METHOD_NOT_ALLOWED = _create_error_response(status.HTTP_405_METHOD_NOT_ALLOWED, 'Method not allowed')
     CONFLICT = _create_error_response(status.HTTP_409_CONFLICT, 'Conflict')
+    BAD_GATEWAY = _create_error_response(status.HTTP_502_BAD_GATEWAY, 'Bad Gateway')
 
+    PAGINATION_NOT_FOUND = lambda max_page=None: _create_error_response(status.HTTP_404_NOT_FOUND, f"Invalid page." + f"Max page number is {max_page}" if max_page else "")()

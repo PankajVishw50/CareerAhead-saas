@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Payment Details</h1>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <td id='id'>{{ id }}</td>
+                        </tr>
+                        <tr>
+                            <th>User</th>
+                            <td id='user'>{{ user }}</td>
+                        </tr>
+                        <tr>
+                            <th>Wallet</th>
+                            <td id='wallet'>{{ wallet }}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <td id='amount'>{{ amount }}</td>
+                        </tr>
+                        <tr>
+                            <th>Currency</th>
+                            <td id='currency'>{{ currency }}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment ID</th>
+                            <td id='payment_id'>{{ payment_id|default:"Not Available" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Order ID</th>
+                            <td id='order_id'>{{ order_id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td id='status'>{{ status }}</td>
+                        </tr>
+                    </tbody>
+                </table>            
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary" id="rzp-button1">Pay Now</button>
+                </div>      
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Pass context data to JavaScript -->
+    <script>
+
+        const contextData = {
+            razorpay_username: "{{ razorpay_username }}",
+            razorpay_company_name: "{{ razorpay_company_name }}",
+            id: "{{ id }}",
+            user: "{{ user }}",
+            wallet: "{{ wallet }}",
+            amount: {{ amount }},
+            currency: "{{ currency }}",
+            payment_id: "{{ payment_id|default:"" }}",
+            order_id: "{{ order_id }}",
+            status: "{{ status }}"
+        };
+
+        function updatePaymentStatus(data) {
+            // Update the HTML with the received data
+            document.querySelector('#id').innerText = data.id;
+            document.querySelector('#user').innerText = data.user;
+            document.querySelector('#wallet').innerText = data.wallet;
+            document.querySelector('#amount').innerText = data.amount;
+            document.querySelector('#currency').innerText = data.currency;
+            document.querySelector('#payment_id').innerText = data.payment_id || "Not Available";
+            document.querySelector('#order_id').innerText = data.order_id;
+            document.querySelector('#status').innerText = data.status;
+
+            // Disable the pay button if the status is "Paid"
+            const payButton = document.getElementById('rzp-button1');
+            if (data.status === "Paid") {
+                payButton.disabled = true;
+                payButton.innerText = 'Payment Completed';
+                payButton.style.backgroundColor = 'green';
+            } else {
+                payButton.disabled = false;
+                payButton.innerText = 'Pay Now';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updatePaymentStatus(contextData);
+        });
+
+
+    </script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+
+
+    var options = {
+        "key": contextData.razorpay_username, // Enter the Key ID generated from the Dashboard
+        "amount": contextData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": contextData.currency,
+        "name": contextData.razorpay_company_name, //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": contextData.order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+        "handler": function (response){
+            // Extract the auth token from the URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const authToken = urlParams.get('token');
+
+            if (!authToken) {
+                console.error('Auth token is missing in the URL');
+                alert('Authorization token is missing!');
+                return;
+            }
+
+            const verifyUrl = `/api/wallet/recharges/${contextData.id}/verify?token=${authToken}`;
+
+            fetch(verifyUrl, {
+                method: 'POST', // Assuming verification requires POST request
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    payment_id: response.razorpay_payment_id,
+                    signature: response.razorpay_signature
+                })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Error: ${res.status} ${res.statusText}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log('Verification successful:', data);
+                alert('Payment Verified Successfully!');
+
+                updatePaymentStatus(data)
+            })
+
+            .catch(error => {
+                console.error('Error during verification:', error);
+                alert('Payment verification failed! Please try again.');
+            });
+        },
+        "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+            "name": "Gaurav Kumar", //your customer's name
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }  
+    };
+    console.log("options: ", options)
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+    </script>
+
+</body>
+</html>
