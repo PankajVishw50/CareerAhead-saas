@@ -1,8 +1,19 @@
-import os 
-from . import BASE_DIR
+import os
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = False
+SECRET_KEY = NotImplemented
 
+ROOT_URLCONF = 'careerahead.urls'
+WSGI_APPLICATION = 'careerahead.wsgi.application'
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+STATIC_URL = 'static/'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'account.User'
+STATIC_ROOT = 'static/'
+ALLOWED_HOSTS = ['localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,7 +42,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'careerahead.urls'
 
 TEMPLATES = [
     {
@@ -50,7 +60,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'careerahead.wsgi.application'
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -68,6 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
@@ -77,7 +87,6 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
-
 }
 
 
@@ -88,36 +97,18 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'careerahead.exceptions.api_exception_handler',
 }
 
+# Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+    }
+}
 
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# AWS S3 Settings
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
-AWS_S3_FILE_OVERWRITE = True 
-AWS_LOCATION = 'files/' 
-AWS_QUERYSTRING_AUTH = False
-
-AUTH_USER_MODEL = 'account.User'
 
 # EMAIL
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -130,39 +121,13 @@ EMAIL_DEBUG_REDIRECT = False
 EMAIL_DEBUG_RECEIVERS = []
 EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 60 * 24 # One Day 
 
-HOSTED_DOMAIN = os.getenv('HOSTED_DOMAIN')
-HOSTED_URL_PREFIX = os.getenv('HOSTED_URL_PREFIX')
+# 3rd party settings
+CORS_ALLOW_ALL_ORIGINS = True
 
-
-# Tokens config
-TOKEN_REFRESH_EXPIRY_TIME = (60 * 60 * 24) * 30 # 30 DAYS
-TOKEN_REFRESH_BYTES = 64
-TOKEN_REFRESH_KEY = os.getenv('TOKEN_REFRESH_KEY', '--rt-k')
-TOKEN_REFRESH_ID_KEY = os.getenv('TOKEN_REFRESH_ID_KEY', '_longtid')
-TOKEN_REFRESH_SECURE = True  # Only allows https network (except request from localhost domain)
-TOKEN_REFRESH_SAMESITE = 'lax' # available options: samesite, lax, none
-TOKEN_REFRESH_HTTP_ONLY = True 
-TOKEN_ACCESS_EXPIRY_TIME = 60 * 30 # 30 MINUTES 
-TOKEN_ACCESS_ALGORITHMS = ['HS256']
-TOKEN_REFRESH_MAX_NUMBER_IN_DB = 25
-SIGNED_URL_AUTH_MAX_AGE = 60 * 3 # 3 MINUTES
-SIGNED_URL_AUTH_TOKEN_KEY = 'token'
-
-ALLOWED_HOSTS = ['*']
-
-# Razorpay
-
-RAZORPAY_USERNAME = os.getenv('RAZORPAY_USERNAME')
-RAZORPAY_SECRET = os.getenv('RAZORPAY_SECRET')
-RAZORPAY_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET')
-RAZORPAY_BANKING_ACCOUNT_NUMBER = os.getenv('RAZORPAY_BANKING_ACCOUNT_NUMBER')
-
-
-PAGE_SIZE = 25
-MAX_PAGE_SIZE = 50
-MINIMUM_WITHDRAWL = 100
-MAXIMUM_WITHDRAWL = 10000
-
-DEBUG_ERROR_HANDLING = False
-
-STATIC_ROOT = 'staticfiles/'
+# AWS S3 Settings
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
+AWS_S3_FILE_OVERWRITE = True 
+AWS_LOCATION = 'files/' 
+AWS_QUERYSTRING_AUTH = False

@@ -55,7 +55,6 @@ class FundAccountsView(APIView):
 
     @active_wallet_required
     def post(self, request):
-        # import ipdb;ipdb.set_trace()
         account = FundAccountSerializer(data={**request.data, 'contact_id': request.user.wallet.contact_id})
 
         if not account.is_valid():

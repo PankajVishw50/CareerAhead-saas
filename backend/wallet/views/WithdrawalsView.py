@@ -18,7 +18,6 @@ class WithdrawalsView(APIView):
 
     @active_wallet_required
     def post(self, request): 
-
         try:
             amount = int(request.data['amount'])
             fund_account_id = request.data['fund_account_id']

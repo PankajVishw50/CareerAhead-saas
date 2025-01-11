@@ -1,17 +1,17 @@
 from pathlib import Path
 import dotenv
 import os
+from split_settings.tools import include, optional
 
 dotenv.load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
-# By default our project runs of Prod mode until specified 
-DEBUG = os.getenv("DEBUG", "FALSE").lower() in ('true', 't', '1')
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-from .base import *
+LOCAL_SETTING_PATH = os.getenv('LOCAL_SETTING_PATH', 'local/local.settings.py')
+LOCAL_SETTING_PATH = LOCAL_SETTING_PATH if os.path.isabs(LOCAL_SETTING_PATH) else str(BASE_DIR / LOCAL_SETTING_PATH)
 
-if DEBUG:
-    from .dev import * 
-else:
-    from .prod import * 
+include(
+    'base.settings.py',
+    'application.settings.py',
+    optional(LOCAL_SETTING_PATH)
+)

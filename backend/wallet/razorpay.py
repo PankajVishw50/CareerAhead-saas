@@ -80,7 +80,6 @@ class RazorPay:
         return (True, response_data)
 
     def create_fund_account(self, data):
-        # import ipdb;ipdb.set_trace()
         try:
             response = requests.post(
                 self.API_CREATE_FUND_ACCOUNT,
@@ -112,7 +111,6 @@ class RazorPay:
         return True
 
     def create_contact(self, user):
-        # import ipdb;ipdb.set_trace()
         
         data = {
             'name': user.name or user.email.split('@')[0] + '_' + user.id.hex[:8],

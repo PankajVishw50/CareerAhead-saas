@@ -15,7 +15,6 @@ class VerifyRecharge(APIView):
     @recharge_exists
     @active_wallet_required
     def post(self, request, recharge_id):
-        
         try:
             payment_id = request.data['payment_id']
             signature = request.data['signature']

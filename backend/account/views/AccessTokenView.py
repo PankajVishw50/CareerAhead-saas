@@ -9,7 +9,7 @@ from util.dt import now
 class AccessTokenView(APIView):
     authentication_classes = []
     
-    def get(self, request):
+    def post(self, request):
         # Check if it have refresh token
         if not (refresh_token := Token.get_refresh_token_from_request(request)):
             return ErrorResponseTemplates.UNAUTHORIZED('No refresh token found')

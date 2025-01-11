@@ -14,8 +14,7 @@ class RechargeView(APIView):
     renderer_classes = [JSONRenderer, TemplateHTMLRenderer] 
     template_name = 'wallet/recharge_template.html'
 
-    # @recharge_exists
+    @recharge_exists
     def get(self, request, recharge_id):
-        # serialized_data = RechargeSerializer(request.recharge)
-        serialized_data = RechargeSerializer(Recharge.objects.get(id=recharge_id))
+        serialized_data = RechargeSerializer(request.recharge)
         return Response(serialized_data.data, 200)

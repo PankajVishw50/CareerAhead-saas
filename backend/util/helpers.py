@@ -16,3 +16,10 @@ def get_page_meta(paginator, page):
         'totalPages': paginator.num_pages,
         'currentPage': page.number,
     }
+
+def deef_update(replacement, original):                                    
+    for key, value in replacement.items():                                 
+        if isinstance(value, dict) and key in original.keys():             
+            deef_update(value, original[key])                              
+            continue                                                                                    
+        original[key] = value

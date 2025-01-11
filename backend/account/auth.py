@@ -124,7 +124,6 @@ class Token:
 
 class TokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        # import ipdb;ipdb.set_trace()
         # Ignore if there is no token
         if not (_token := Token.get_authorization_token(request)):
             return None

@@ -13,13 +13,12 @@ def api_exception_handler(exc, context):
         }
     } 
     """
-    # Ignore in debug mode
-    if not settings.DEBUG_ERROR_HANDLING:
-        return
+    response = exception_handler(exc, context)
 
-    # import ipdb;ipdb.set_trace()
+    if not settings.EXCEPTION_RESTRUCTURE:
+        return response
+
     try:
-        response = exception_handler(exc, context)
 
         if response is not None:
             payload = {

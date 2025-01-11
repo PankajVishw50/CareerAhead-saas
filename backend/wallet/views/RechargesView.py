@@ -56,7 +56,6 @@ class RechargesView(APIView):
 
     @get_pagination_params
     def get(self, request):
-        # import ipdb;ipdb.set_trace()
 
         paginator = Paginator(request.user.recharge_set.all(), request.pagination.size)
         try:
