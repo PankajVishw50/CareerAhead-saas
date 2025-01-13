@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 from wallet.models import Recharge
 from util.response import ErrorResponseTemplates
 
@@ -7,7 +9,9 @@ def recharge_exists(func):
             # check if recharge_id is valid
             recharge = request.user.wallet.recharge_set.get(id=recharge_id)
         except Recharge.DoesNotExist:
-            return ErrorResponseTemplates.BAD_REQUEST('invalid recharge')
+            return ErrorResponseTemplates.NOT_FOUND('Recharge Not found')
+        except ValidationError:
+            return ErrorResponseTemplates.BAD_REQUEST()
         request.recharge = recharge
 
         return func(self, request, recharge_id, *args, **kwargs)

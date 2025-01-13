@@ -20,7 +20,7 @@ class AccessTokenView(APIView):
             refreshtk = RefreshToken.objects.get(code=refresh_token, expiration_on__gt=now)
 
         except RefreshToken.DoesNotExist:
-            return ErrorResponseTemplates.BAD_REQUEST()
+            return ErrorResponseTemplates.NOT_FOUND()
 
         # generate access token
         # passing user from refresh token instance 

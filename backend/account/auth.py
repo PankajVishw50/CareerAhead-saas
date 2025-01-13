@@ -158,7 +158,6 @@ class SignedTokenAuthentication(BaseAuthentication):
         except SignatureExpired:
             raise AuthenticationFailed('Token expired')
         
-        return
 
     def authenticate_header(self, request):
         return settings.SIGNED_URL_AUTH_TOKEN_KEY
