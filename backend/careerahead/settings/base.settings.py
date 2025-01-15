@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     'account',
     'wallet',
+    'counselling',
 ]
 
 MIDDLEWARE = [

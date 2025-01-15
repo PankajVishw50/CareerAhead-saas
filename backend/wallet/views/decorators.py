@@ -40,4 +40,3 @@ def active_wallet_required(func):
             return ErrorResponseTemplates.FORBIDDEN('please activate your wallet first.')
         return func(self, request, *args, **kwargs)
     return wrapper
-

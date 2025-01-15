@@ -15,7 +15,7 @@ tags:
     description: Authentication and Authorization related tasks
   - name: Wallet
   - name: Webhook
-  - name: Counsellor
+  - name: Counselling
 
 components:
   securitySchemes:
@@ -41,6 +41,7 @@ components:
 
   schemas:
     UUID:
+      readOnly: true
       description: UUID
       type: string
       format: uuid
@@ -69,6 +70,9 @@ components:
       description: UUID of counsellor
       type: string
       example: fa_Pc8QY1tRJ0xYAU
+    SlotId:
+      description: UUID of slot
+      type: string
 
     ListPayload:
       description: List of data
@@ -131,6 +135,32 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/FundAccount"
+    SlotsList:
+      description: Counselling Slot list
+      allOf:
+        - $ref: "#/components/schemas/ListPayload"
+        - type: object
+          properties:
+            items:
+              $ref: "#/components/schemas/Slot"
+    AvailableSlots:
+      description: Available slots
+      type: object
+      additionalProperties:
+        type: array
+        items: 
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/Slot'
+            - type: object
+              properties:
+                from_datetime:
+                  type: string
+                  format: date-time
+                to_datetime:
+                  type: string
+                  format: date-time
+
 
     VPAPayload:
       description: Vpa Payload
@@ -301,6 +331,50 @@ components:
         id:
           $ref: "#/components/schemas/CounsellorId"
 
+    Slot:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/SlotId'
+        days:
+          type: integer
+          example: 125
+          description: | 
+            Days in order (MTWTFSS) starting from LST bit 
+            to MST BIT
+          minimum: 1
+          maximum: 127
+        from_time:
+          type: integer
+          format: time
+          example: "14:30"
+        duration:
+          type: integer
+          example: 60
+          description: |
+            Provided value will be consider as minutes.
+            So. 60 -> 60 minutes -> 1 hour,
+            90 -> 90 minutes -> 1 hour and 30 minutes
+          minimum: 10
+        fee:
+          type: integer
+          example: 2000
+          description: |
+            Provided value will be consider as paise.
+            So, 1000 -> 1000 paise -> 1 rs,
+            55000 -> 55000 paise -> 55 rs
+        timezone:
+          type: string
+          readOnly: true
+          example: Asia/Kolkata
+          description: |
+            timezone as string of timezone name. 
+        is_active: 
+          type: boolean
+          readOnly: true
+          example: true
+
+
   parameters:
     RefreshTokenCookie:
       name: --rt-k
@@ -313,7 +387,7 @@ components:
       schema:
         type: string
         example: lwfjlewkfjlwekflwekfjoweifjwelkfewolkfjwo...
-
+    
     Pagination:
       name: Pagination
       in: query
@@ -340,7 +414,18 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/CounsellorId"
-
+    RechargeId:
+      name: recharge_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/RechargeId"
+    SlotId:
+      name: slot_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/SlotId"
   responses:
     EmptySuccessfullResponse:
       description: Successfull
@@ -577,6 +662,8 @@ paths:
       security:
         - BearerAuth: []
         - signedTokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/RechargeId'
       responses:
         "200":
           description: Successfull
@@ -596,12 +683,7 @@ paths:
       tags:
         - Wallet
       parameters:
-        - name: recharge_id
-          in: path
-          required: true
-          schema:
-            type: string
-            example: order_ifoejfklewfjoei
+        - $ref: '#/components/parameters/RechargeId'
       security:
         - BearerAuth: []
         - signedTokenAuth: []
@@ -761,9 +843,180 @@ paths:
         default:
           $ref: "#/components/responses/GeneralErrorResponse"
 
+  /counsellors:
+    get:
+      description: |
+        Get list of counsellors
+      tags:
+        - Counselling
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+
+  /counsellors/{counsellor_id}:
+    get:
+      description: |
+        Get details of a counsellor by their id.
+      tags:
+        - Counselling
+      operationId: getCounsellor
+      parameters:
+        - $ref: "#/components/parameters/CounsellorId"
+      responses:
+        "200":
           description: Successfully fetched counsellor details
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Counsellor"
 
+  /counsellors/{counsellor_id}/slots:
+    get:
+      description: Fethes the list of available slots
+      tags:
+        - Counselling
+      operationId: getSlots
+      parameters:
+        - $ref: "#/components/parameters/CounsellorId"
+      responses:
+        "200":
+          description: Successfull
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SlotsList"
+
+
+    post:
+      description: |
+        Create new slots for counsellors.  
+        Timezone will be auto assigned based on timezone 
+        of counsellor.
+        If any slot's timing overlaps with each other, whole operation
+        will be canceled.
+      tags:
+        - Counselling
+      parameters:
+        - $ref: '#/components/parameters/CounsellorId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Slot'
+      responses:
+        "200":
+          description: Sucessfully Created all slots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: boolean
+                    example: True
+                  slots:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Slot'
+    delete:
+      description: Deletes the slot
+      tags:
+        - Counselling
+      parameters:
+        - $ref: "#/components/parameters/CounsellorId"
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+
+  /counsellors/{counsellor_id}/slots/available:
+    get:
+      description: |
+        Slots which are available to book
+      tags:
+        - Counselling
+      parameters:
+        - $ref: "#/components/parameters/CounsellorId"
+        - name: dates
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: date
+        - name: timezone
+          in: query
+          required: false
+          schema:
+            type: string
+            example: Asia/Kolkata
+            default: utc
+            description: |
+              Provide timezone to get available slots according to 
+              your timezone. otherwise would be returned according to 
+              UTC format 
+      responses:
+        "200":
+          description: Successfully returned available slots
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableSlots'
+
+              example:
+                "2024-03-01":
+                  - id: "5407d276-4431-497b-82d8-f81e4179071c"
+                    from_datetime: "2024-03-01T12:00:00Z"
+                    to_datetime: "2024-03-01T12:30:00Z"
+                    timezone: 'Asia/Kolkata'
+                    from_time: "12:00" 
+                    to_time: "12:30" 
+                    duration: 30 
+                    fee: 43302
+                    is_active: true
+                    days: 3
+
+              
+                "2024-05-03":
+                  - id: "5407d276-4431-497b-82d8-f81e4179071c"
+                    from_datetime: "2024-05-01T12:00:00Z"
+                    to_datetime: "2024-05-01T12:30:00Z"
+                    timezone: 'Asia/Kolkata'
+                    from_time: "12:00" 
+                    to_time: "12:30" 
+                    duration: 30 
+                    fee: 4302
+                    is_active: true
+                    days: 125
+                "2024-02-01 12:03:02":
+                  - id: "5407d276-4431-497b-82d8-f81e4179071c"
+                    from_datetime: "2024-02-01T04:00:00Z"
+                    to_datetime: "2024-02-01T05:30:00Z"
+                    timezone: 'Asia/Kolkata'
+                    from_time: "04:00" 
+                    to_time: "05:30" 
+                    duration: 90 
+                    fee: 93315
+                    is_active: true
+                    days: 127
+
+  /counsellors/{counsellor_id}/slots/{slot_id}/book:
+    post:
+      description: |
+        Book the slot for counselling
+      tags:
+        - Counselling
+      operationId: bookSlot
+      parameters:
+        - $ref: "#/components/parameters/CounsellorId"
+        - $ref: "#/components/parameters/SlotId"
+      responses:
+        "201":
+          description: Successfully booked the slot
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+        

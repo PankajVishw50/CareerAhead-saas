@@ -23,5 +23,7 @@ urlpatterns = [
     path('api/', ([
         path('auth/', include('account.urls')),
         path('wallet/', include('wallet.urls')),
+        path('counsellors/', include('counselling.urls')),
     ], 'api', None)), 
+
 ]
