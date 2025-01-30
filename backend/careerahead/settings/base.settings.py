@@ -25,10 +25,12 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'django_extensions',
 
     'account',
     'wallet',
     'counselling',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +111,15 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
     }
 }
+
+# Django Extensions related settings
+SHELL_PLUS_PRINT_SQL = True
+SHELL_PLUS_PRE_IMPORTS = [
+    ('account.serializers', "*"),
+    ('wallet.serializers', "*"),
+    ('counselling.serializers', "*"),
+    ('chat.serializers', "*"),
+]
 
 
 # EMAIL

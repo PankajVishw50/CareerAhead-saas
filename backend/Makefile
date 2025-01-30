@@ -14,6 +14,10 @@ check:
 shell:
 	poetry run python3 manage.py shell
 
+.PHONY: shell_plus 
+shell_plus:
+	poetry run python3 manage.py shell_plus
+
 .PHONY: createsuperuser
 createsuperuser:
 	poetry run python3 manage.py createsuperuser

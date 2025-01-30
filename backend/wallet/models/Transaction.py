@@ -3,6 +3,25 @@ from django.db import models
 
 from wallet.models import Wallet
 
+class TransactionManager(models.Manager):
+
+    def create_transaction(self, sender, receiver, amount):
+
+        if not sender.wallet.debit(amount):
+            raise ValueError("failed to debit money from sender's wallet")
+        
+        if not receiver.credit(amount):
+            sender.credit(amount)
+            raise ValueError("failed to credit money to receiver's wallet")
+        
+        transaction = self.model(
+            sender=sender,
+            receiver=receiver,
+            amount=amount
+        )   
+        transaction.save()
+        return transaction     
+
 class Transaction(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     sender = models.ForeignKey(
@@ -24,6 +43,8 @@ class Transaction(UUIDPrimaryFieldModel, TimeMonitorModel):
         default=False
     )
 
+    objectrs = TransactionManager()
+
     def __str__(self):
-        return f"{self.sender.user.email} -> {self.receiver.user.email}: {self.amount}"
+        return f"{self.sender.user.email} -> {self.receiver.user.email}: {self.amount}"    
     

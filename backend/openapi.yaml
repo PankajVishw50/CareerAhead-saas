@@ -921,12 +921,37 @@ paths:
                     items:
                       $ref: '#/components/schemas/Slot'
     delete:
-      description: Deletes the slot
+      description: Deletes the slots in bulk
       tags:
         - Counselling
       parameters:
         - $ref: "#/components/parameters/CounsellorId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    disabled:
+                      type: boolean
+                      default: True
+                - type: array
+                  items:
+                    type: string
+                    format: uuid
+                    example: be99f5eb-d042-4181-9a59-3708f41a0064 
+
       responses:
+        "200":
+          description: | 
+            Successfully deleted all the slots which were specified
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Slot'
         default:
           $ref: "#/components/responses/GeneralErrorResponse"
 
@@ -1004,7 +1029,7 @@ paths:
                     is_active: true
                     days: 127
 
-  /counsellors/{counsellor_id}/slots/{slot_id}/book:
+  /counsellors/{counsellor_id}/slots/{slot_id}/sessions:
     post:
       description: |
         Book the slot for counselling
@@ -1014,9 +1039,70 @@ paths:
       parameters:
         - $ref: "#/components/parameters/CounsellorId"
         - $ref: "#/components/parameters/SlotId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from_datetime:
+                  type: string
+                  example: "2023-01-04T12:00:13+0530"
+              required:
+                - from_datetime
+                  
       responses:
         "201":
           description: Successfully booked the slot
         default:
           $ref: "#/components/responses/GeneralErrorResponse"
+
+  /counsellors/{counsellor_id}/slots/{slot_id}:
+    patch:
+      description: |
+        Disable or enable the Slot
+      tags:
+        - Counselling
+      parameters:
+        - $ref: '#/components/parameters/CounsellorId'
+        - $ref: '#/components/parameters/SlotId'
+      operationId: toggleSlot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                disable:
+                  type: boolean
+                  default: false
+              required:
+                - disable
+      responses:
+        "200":
+          description: Successfully performed toggle of slot State
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slot'
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+    delete:
+      description: |
+        Deletes the slot
+      tags:
+        - Counselling
+      parameters:
+        - $ref: '#/components/parameters/CounsellorId'
+        - $ref: '#/components/parameters/SlotId'
+      operationId: deleteSlot
+      responses:
+        "200":
+          description: Successfully deleted the slot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Slot"
+
+
         

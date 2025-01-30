@@ -88,6 +88,22 @@ class Wallet(UUIDPrimaryFieldModel, TimeMonitorModel):
         self.save()
         return self._is_active
 
+    def debit(self, amount):
+        if not self.have_balance(amount) or not self.is_active:
+            return False
+
+        self.balance -= amount
+        self.save()
+        return True
+    
+    def credit(self, amount):
+        if not self.is_active:
+            return False
+        
+        self.balance += amount
+        self.save()
+        return True
+
     def withdraw(self, amount):
         if not self.have_balance(amount) or not self.is_active:
             return False

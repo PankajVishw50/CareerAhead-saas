@@ -4,6 +4,28 @@ import datetime
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from counselling.models.Counsellor import Counsellor
 
+class SlotManager(models.Manager):
+
+    def all_valids(self, *args, **kwargs):
+        return self.filter(is_deleted=False, *args, **kwargs)
+    
+    def all_actives(self, *args, **kwargs):
+        return self.get_valids().filter(is_active=True, *args, **kwargs)
+
+    def all_inactives(self, *args, **kwargs):
+        return self.get_valids().filter(is_active=False, *args, **kwargs)
+    
+    def get_valid(self, *args, **kwargs):
+        return self.all_valids().get(*args, **kwargs)
+    
+    def get_active(self, *args, **kwargs):
+        return self.all_actives().get(*args, **kwargs)
+
+    def get_inactive(self, *args, **kwargs):
+        return self.all_inactives().get(*args, **kwargs)
+
+    
+
 class Slot(UUIDPrimaryFieldModel, TimeMonitorModel):
     ALL_DAYS = 0b1111111
 
@@ -47,6 +69,8 @@ class Slot(UUIDPrimaryFieldModel, TimeMonitorModel):
         db_default=False,
     )
 
+    objects = SlotManager()
+
     @property
     def to_time(self):
         _dt = datetime.datetime.combine(datetime.datetime.today(), self.from_time)
@@ -55,3 +79,30 @@ class Slot(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     def __str__(self):
         return f"{self.counsellor.user.email}: {self.from_time} - {self.to_time}"
+
+    def work_day(self, day: int) -> bool:
+        return (self.days & (2**day)) == day
+    
+    def deactivate(self):
+        if self.is_active == False:
+            return True
+    
+        self.is_active = False
+        self.save()
+        return True
+    
+    def activate(self):
+        if self.is_active == True:
+            return True
+    
+        self.is_active = True
+        self.save()
+        return True
+    
+    def delete(self):
+        if self.is_deleted == True:
+            return True
+
+        self.is_deleted = True
+        self.save()
+        return True

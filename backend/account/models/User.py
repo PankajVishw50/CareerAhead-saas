@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -15,6 +15,8 @@ class UserManager(BaseUserManager):
 
         if name := extra_fields.get('name'):
             extra_fields['name'] = self.model.normalize_username(name)
+        else:
+            extra_fields['name'] = self.model.normalize_username(email.split('@')[0])
 
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -23,13 +25,14 @@ class UserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         send_mail = extra_fields.pop('send_mail', False)
 
-        user = self._create_user_object(email, password, **extra_fields)
-        user.save()
-        EmailVerification = apps.get_model('account.EmailVerification')
-        emailverification = EmailVerification(
-            user=user,
-        )
-        emailverification.save()
+        with transaction.atomic():
+            user = self._create_user_object(email, password, **extra_fields)
+            user.save()
+            EmailVerification = apps.get_model('account.EmailVerification')
+            emailverification = EmailVerification(
+                user=user,
+            )
+            emailverification.save()
 
         if send_mail:
             user.send_verification_mail()
@@ -42,13 +45,14 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('send_mail', True)
 
-        user = self._create_user(email, password, **extra_fields)
+        with transaction.atomic():
+            user = self._create_user(email, password, **extra_fields)
 
-        # Create wallet
-        Wallet = apps.get_model('wallet.Wallet')
-        if not Wallet.objects.create_wallet(user):
-            user.delete()
-            return False
+            # Create wallet
+            Wallet = apps.get_model('wallet.Wallet')
+            wallet = Wallet.objects.create_wallet(user)
+
+
         return user 
     
     def create_superuser(self, email, password, **extra_fields):
@@ -56,8 +60,9 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('send_mail',  False)
 
-        user = self.create_user(email, password, **extra_fields)
-        user.emailverification.verify(force=True)
+        with transaction.atomic():
+            user = self.create_user(email, password, **extra_fields)
+            user.emailverification.verify(force=True)
         return user
 
 class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonitorModel):

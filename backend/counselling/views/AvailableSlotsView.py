@@ -18,8 +18,6 @@ class AvailableSlotsView(APIView):
 
     @counsellor_exists
     def get(self, request, counsellor_id):
-        # import ipdb;ipdb.set_trace()
-
         try:
             timezone = request.query_params.get("timezone", "UTC")
             tz = pytz.timezone(timezone)
@@ -77,8 +75,6 @@ class AvailableSlotsView(APIView):
             b_from_t = b_from_dt.time()
             b_to_t = b_to_dt.time()
                 
-            # import ipdb;ipdb.set_trace()
-
             with django_timezone.override(tz):
                 query = (
                     request.counsellor.slots.filter(

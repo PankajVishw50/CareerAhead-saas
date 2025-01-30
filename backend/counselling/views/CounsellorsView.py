@@ -14,7 +14,7 @@ class CounsellorsView(APIView):
 
     @get_pagination_params
     def get(self, request):
-        paginator = Paginator(Counsellor.objects.all_valid(), request.pagination.size)
+        paginator = Paginator(Counsellor.objects.all(), request.pagination.size)
 
         try:
             page = paginator.page(request.pagination.page)

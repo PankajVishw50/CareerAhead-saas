@@ -46,3 +46,17 @@ class Counsellor(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     def __str__(self):
         return self.user.email
+
+    def create_slot(self, fee, from_time, duration, **kwargs):
+        from counselling.models import Slot
+
+        return Slot.objects.create(
+            counsellor=self,
+            from_time=from_time,
+            duration=duration,
+            timezone=self.timezone,
+            is_active=True,
+            is_deleted=False,
+            fee=fee,
+            **kwargs,
+        )
