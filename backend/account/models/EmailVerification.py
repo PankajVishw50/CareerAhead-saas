@@ -4,7 +4,23 @@ from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from uuid import uuid4
 from util import get_email_expiration_time
 import datetime
+from account.tasks import send_mail
 import pytz 
+
+class EmailVerificationManager(models.Manager):
+    def create_emailverification(self, user, **kwargs):
+        sm = kwargs.pop('send_mail', True)
+
+        emailverification = self.create(user=user, *kwargs)
+        
+        if sm:
+            send_mail.delay(
+                subject="Email Verification",
+                message=f"This is you email otp: {emailverification.code}",
+                html_message=f"This is your email otp: <b>{emailverification.code}</b>",
+                recipient_list=[user.email],
+            )
+        return emailverification
 
 class EmailVerification(UUIDPrimaryFieldModel, TimeMonitorModel):
 
@@ -29,6 +45,8 @@ class EmailVerification(UUIDPrimaryFieldModel, TimeMonitorModel):
         null=True,
         blank=True,
     )
+
+    objects = EmailVerificationManager()
 
     def get_verification_link(self):
         return None  

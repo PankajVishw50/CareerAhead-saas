@@ -13,7 +13,7 @@ def mail(
         recipient_list = []
         if settings.EMAIL_DEBUG_REDIRECT:
             recipient_list = settings.EMAIL_DEBUG_RECEIVERS
-
+        
 
     mail_result = django_send_mail(
         subject=subject,
@@ -25,6 +25,7 @@ def mail(
     )
 
     if settings.EMAIL_LOG:
+        # TODO:: Add Proper Logging
         prefix = (
             'Successfully sent mail to'
             if mail_result 

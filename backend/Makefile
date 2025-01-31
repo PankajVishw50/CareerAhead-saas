@@ -40,3 +40,11 @@ collectstatic:
 .PHONY: test 
 test:
 	poetry run python3 manage.py test
+
+.PHONY: run-celery-multi
+run-celery-multi:
+	poetry run celery multi restart app -A careerahead worker -l info -c 2 \
+		--logfile=logs/celery.log --pidfile=logs/celery.pid
+
+.PHONY: run-all
+run-all: run-celery-multi runserver

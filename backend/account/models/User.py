@@ -29,13 +29,11 @@ class UserManager(BaseUserManager):
             user = self._create_user_object(email, password, **extra_fields)
             user.save()
             EmailVerification = apps.get_model('account.EmailVerification')
-            emailverification = EmailVerification(
+            emailverification = EmailVerification.objects.create_emailverification(
                 user=user,
+                send_mail=send_mail
             )
             emailverification.save()
-
-        if send_mail:
-            user.send_verification_mail()
 
         return user
     
@@ -45,6 +43,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('send_mail', True)
 
+        import ipdb;ipdb.set_trace()
         with transaction.atomic():
             user = self._create_user(email, password, **extra_fields)
 
