@@ -4,6 +4,9 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from util.mail import mail
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UserManager(BaseUserManager):
 
@@ -23,6 +26,7 @@ class UserManager(BaseUserManager):
         return user
         
     def _create_user(self, email, password, **extra_fields):
+        logger.info(f"Request for new user registeration: {email}")
         send_mail = extra_fields.pop('send_mail', False)
 
         with transaction.atomic():
@@ -35,6 +39,7 @@ class UserManager(BaseUserManager):
             )
             emailverification.save()
 
+        logger.info(f"User created: {email}")
         return user
     
     def create_user(self, email, password, **extra_fields):
@@ -43,7 +48,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('send_mail', True)
 
-        import ipdb;ipdb.set_trace()
+        # import ipdb;ipdb.set_trace()
         with transaction.atomic():
             user = self._create_user(email, password, **extra_fields)
 

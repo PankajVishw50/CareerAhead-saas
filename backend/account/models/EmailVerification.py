@@ -5,7 +5,10 @@ from uuid import uuid4
 from util import get_email_expiration_time
 import datetime
 from account.tasks import send_mail
-import pytz 
+import pytz
+import logging
+
+logger = logging.getLogger(__name__)
 
 class EmailVerificationManager(models.Manager):
     def create_emailverification(self, user, **kwargs):
@@ -20,6 +23,7 @@ class EmailVerificationManager(models.Manager):
                 html_message=f"This is your email otp: <b>{emailverification.code}</b>",
                 recipient_list=[user.email],
             )
+            logger.info(f"Mail Sent to {user.email}")
         return emailverification
 
 class EmailVerification(UUIDPrimaryFieldModel, TimeMonitorModel):

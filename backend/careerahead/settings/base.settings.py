@@ -100,6 +100,42 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'careerahead.exceptions.api_exception_handler',
 }
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": str(BASE_DIR / "logs/application.logs"), # type:ignore
+            "level": "DEBUG" if DEBUG else "INFO",
+            "formatter": "verbose",
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "WARNING",
+            "formatter": "simple",
+        }
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+
+    "loggers": {
+        "": {
+            "handlers": ["file", "console"],
+            "level": "DEBUG" if DEBUG else "INFO",
+        }
+    }
+}
+
+
 # Database
 DATABASES = {
     'default': {
