@@ -15,7 +15,7 @@ def api_exception_handler(exc, context):
     """
     response = exception_handler(exc, context)
 
-    if not settings.EXCEPTION_RESTRUCTURE:
+    if not settings.EXCEPTION_HANDLING:
         return response
 
     try:

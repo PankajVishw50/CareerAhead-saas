@@ -21,7 +21,9 @@ class WalletManager(models.Manager):
         return wallet
 
     
-    def create_wallet(self, user):
+    def create_wallet(self, user, **kwargs):
+        activate_wallet = kwargs.pop("activate_wallet", True)
+
         from wallet.razorpay import razorpay
         
         wallet = self.create_wallet_object(user)
@@ -30,7 +32,7 @@ class WalletManager(models.Manager):
         # background worker so this operation 
         # can be faster and user can get
         # response faster
-        if (contact_id := razorpay.create_contact(user)):
+        if activate_wallet and (contact_id := razorpay.create_contact(user)):
             wallet.contact_id = contact_id 
             wallet.is_active = True
         else:

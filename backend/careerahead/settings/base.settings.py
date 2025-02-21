@@ -5,6 +5,7 @@ SECRET_KEY = NotImplemented
 
 ROOT_URLCONF = 'careerahead.urls'
 WSGI_APPLICATION = 'careerahead.wsgi.application'
+ASGI_APPLICATION = "careerahead.asgi.application"
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -16,6 +17,8 @@ STATIC_ROOT = 'static/'
 ALLOWED_HOSTS = ['localhost']
 
 INSTALLED_APPS = [
+    "daphne", 
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -97,6 +100,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'account.auth.TokenAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'util.pagination.BasePagination',
+    "PAGE_SIZE": 20,
     'EXCEPTION_HANDLER': 'careerahead.exceptions.api_exception_handler',
 }
 
@@ -106,13 +111,13 @@ LOGGING = {
     "handlers": {
         "file": {
             "class": "logging.FileHandler",
-            "filename": str(BASE_DIR / "logs/application.logs"), # type:ignore
+            "filename": str(BASE_DIR / "logs/application.log"), # type:ignore
             "level": "DEBUG" if DEBUG else "INFO",
             "formatter": "verbose",
         },
         "console": {
             "class": "logging.StreamHandler",
-            "level": "WARNING",
+            "level": "DEBUG" if DEBUG else "WARNING",
             "formatter": "simple",
         }
     },
@@ -148,6 +153,11 @@ DATABASES = {
     }
 }
 
+# Fixtures
+FIXTURE_DIRS = [
+    "util/fixtures/"
+]
+
 # Django Extensions related settings
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRE_IMPORTS = [
@@ -156,6 +166,16 @@ SHELL_PLUS_PRE_IMPORTS = [
     ('counselling.serializers', "*"),
     ('chat.serializers', "*"),
 ]
+
+# Channel layer config
+CHANNEL_LAYERS = {
+     "default": {
+         "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+         "CONFIG": {
+             "host": "amqp://guest:guest@localhost",
+          },
+      },
+}
 
 
 # EMAIL
@@ -183,3 +203,10 @@ AWS_QUERYSTRING_AUTH = False
 # CELERY
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+# CELERY_BEAT_SCHEDULE = {
+#     "add-every-30-seconds": {
+#         "task": "account.tasks.add",
+#         "schedule": 5.0,
+#         "args": (15, 7)
+#     }
+# }

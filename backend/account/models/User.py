@@ -42,7 +42,7 @@ class UserManager(BaseUserManager):
         logger.info(f"User created: {email}")
         return user
     
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, email, password,  **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_active', True)
@@ -50,11 +50,13 @@ class UserManager(BaseUserManager):
 
         # import ipdb;ipdb.set_trace()
         with transaction.atomic():
+            wallet_data = extra_fields.pop("wallet", {})
+
             user = self._create_user(email, password, **extra_fields)
 
             # Create wallet
             Wallet = apps.get_model('wallet.Wallet')
-            wallet = Wallet.objects.create_wallet(user)
+            wallet = Wallet.objects.create_wallet(user, **wallet_data)
 
 
         return user 
@@ -106,10 +108,20 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
         db_default=False,
     )
 
+    online_channel = models.CharField(
+        max_length=60,
+        null=True,
+        blank=True,
+    )
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    @property
+    def is_online(self):
+        return bool(self.online_channel)
 
     def create_email_verification_code(self, force=False):
         from account.models import EmailVerification

@@ -2,4 +2,4 @@
 from .Counsellor import Counsellor 
 from .About import About
 from .Slot import Slot
-from .Session import Session
+from .CounsellingSession import CounsellingSession 

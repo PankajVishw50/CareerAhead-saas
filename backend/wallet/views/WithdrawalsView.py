@@ -97,6 +97,6 @@ class WithdrawalsView(APIView):
         
         serialized_data = WithdrawalSerializer(page.object_list, many=True)
         return Response({
-            'meta': get_page_meta(paginator, page),
+            'meta': get_page_meta(page),
             'items': serialized_data.data,
         })

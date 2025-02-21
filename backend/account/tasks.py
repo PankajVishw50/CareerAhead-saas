@@ -34,3 +34,6 @@ def send_mail(
     return output
 
 
+@shared_task
+def add(a, b):
+    return a + b

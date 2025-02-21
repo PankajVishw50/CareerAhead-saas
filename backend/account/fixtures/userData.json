@@ -1,0 +1,132 @@
+[
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440000",
+        "fields": {
+            "email": "user1@example.com",
+            "image": "profile/user1.jpg",
+            "name": "User One",
+            "gender": "Male",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": "channel_1"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440001",
+        "fields": {
+            "email": "user2@example.com",
+            "image": "profile/user2.jpg",
+            "name": "User Two",
+            "gender": "Female",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": "channel_2"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440002",
+        "fields": {
+            "email": "user3@example.com",
+            "image": "profile/user3.jpg",
+            "name": "User Three",
+            "gender": "Other",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": "channel_3"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440003",
+        "fields": {
+            "email": "user4@example.com",
+            "image": "profile/user4.jpg",
+            "name": "User Four",
+            "gender": "Male",
+            "is_active": true,
+            "is_staff": true,
+            "online_channel": "channel_4"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440004",
+        "fields": {
+            "email": "user5@example.com",
+            "image": "profile/user5.jpg",
+            "name": "User Five",
+            "gender": "Female",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": "channel_5"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440005",
+        "fields": {
+            "email": "user6@example.com",
+            "image": "profile/user6.jpg",
+            "name": "User Six",
+            "gender": "Male",
+            "is_active": false,
+            "is_staff": false,
+            "online_channel": "channel_6"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440006",
+        "fields": {
+            "email": "user7@example.com",
+            "image": "profile/user7.jpg",
+            "name": "User Seven",
+            "gender": "Other",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": "channel_7"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440007",
+        "fields": {
+            "email": "user8@example.com",
+            "image": "profile/user8.jpg",
+            "name": "User Eight",
+            "gender": "Female",
+            "is_active": true,
+            "is_staff": true,
+            "online_channel": "channel_8"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440008",
+        "fields": {
+            "email": "user9@example.com",
+            "image": "profile/user9.jpg",
+            "name": "User Nine",
+            "gender": "Male",
+            "is_active": false,
+            "is_staff": false,
+            "online_channel": "channel_9"
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "550e8400-e29b-41d4-a716-446655440009",
+        "fields": {
+            "email": "user10@example.com",
+            "image": "profile/user10.jpg",
+            "name": "User Ten",
+            "gender": "Female",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": "channel_10"
+        }
+    }
+]

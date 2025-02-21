@@ -23,6 +23,7 @@ class CounsellorManager(models.Manager):
 
         counsellor.save()
         return counsellor
+    
 
 class Counsellor(UUIDPrimaryFieldModel, TimeMonitorModel):
     class Meta:

@@ -1,0 +1,1226 @@
+[
+    {
+        "model": "auth.permission",
+        "pk": 1,
+        "fields": {
+            "name": "can add log entry",
+            "content_type": 1,
+            "codename": "add_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 2,
+        "fields": {
+            "name": "Can change log entry",
+            "content_type": 1,
+            "codename": "change_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 3,
+        "fields": {
+            "name": "Can delete log entry",
+            "content_type": 1,
+            "codename": "delete_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 4,
+        "fields": {
+            "name": "Can view log entry",
+            "content_type": 1,
+            "codename": "view_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 5,
+        "fields": {
+            "name": "Can add permission",
+            "content_type": 2,
+            "codename": "add_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 6,
+        "fields": {
+            "name": "Can change permission",
+            "content_type": 2,
+            "codename": "change_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 7,
+        "fields": {
+            "name": "Can delete permission",
+            "content_type": 2,
+            "codename": "delete_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 8,
+        "fields": {
+            "name": "Can view permission",
+            "content_type": 2,
+            "codename": "view_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 9,
+        "fields": {
+            "name": "Can add group",
+            "content_type": 3,
+            "codename": "add_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 10,
+        "fields": {
+            "name": "Can change group",
+            "content_type": 3,
+            "codename": "change_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 11,
+        "fields": {
+            "name": "Can delete group",
+            "content_type": 3,
+            "codename": "delete_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 12,
+        "fields": {
+            "name": "Can view group",
+            "content_type": 3,
+            "codename": "view_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 13,
+        "fields": {
+            "name": "Can add content type",
+            "content_type": 4,
+            "codename": "add_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 14,
+        "fields": {
+            "name": "Can change content type",
+            "content_type": 4,
+            "codename": "change_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 15,
+        "fields": {
+            "name": "Can delete content type",
+            "content_type": 4,
+            "codename": "delete_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 16,
+        "fields": {
+            "name": "Can view content type",
+            "content_type": 4,
+            "codename": "view_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 17,
+        "fields": {
+            "name": "Can add session",
+            "content_type": 5,
+            "codename": "add_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 18,
+        "fields": {
+            "name": "Can change session",
+            "content_type": 5,
+            "codename": "change_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 19,
+        "fields": {
+            "name": "Can delete session",
+            "content_type": 5,
+            "codename": "delete_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 20,
+        "fields": {
+            "name": "Can view session",
+            "content_type": 5,
+            "codename": "view_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 21,
+        "fields": {
+            "name": "Can add user",
+            "content_type": 6,
+            "codename": "add_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 22,
+        "fields": {
+            "name": "Can change user",
+            "content_type": 6,
+            "codename": "change_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 23,
+        "fields": {
+            "name": "Can delete user",
+            "content_type": 6,
+            "codename": "delete_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 24,
+        "fields": {
+            "name": "Can view user",
+            "content_type": 6,
+            "codename": "view_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 25,
+        "fields": {
+            "name": "Can add email verification",
+            "content_type": 7,
+            "codename": "add_emailverification"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 26,
+        "fields": {
+            "name": "Can change email verification",
+            "content_type": 7,
+            "codename": "change_emailverification"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 27,
+        "fields": {
+            "name": "Can delete email verification",
+            "content_type": 7,
+            "codename": "delete_emailverification"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 28,
+        "fields": {
+            "name": "Can view email verification",
+            "content_type": 7,
+            "codename": "view_emailverification"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 29,
+        "fields": {
+            "name": "Can add refresh token",
+            "content_type": 8,
+            "codename": "add_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 30,
+        "fields": {
+            "name": "Can change refresh token",
+            "content_type": 8,
+            "codename": "change_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 31,
+        "fields": {
+            "name": "Can delete refresh token",
+            "content_type": 8,
+            "codename": "delete_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 32,
+        "fields": {
+            "name": "Can view refresh token",
+            "content_type": 8,
+            "codename": "view_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 33,
+        "fields": {
+            "name": "Can add wallet",
+            "content_type": 9,
+            "codename": "add_wallet"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 34,
+        "fields": {
+            "name": "Can change wallet",
+            "content_type": 9,
+            "codename": "change_wallet"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 35,
+        "fields": {
+            "name": "Can delete wallet",
+            "content_type": 9,
+            "codename": "delete_wallet"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 36,
+        "fields": {
+            "name": "Can view wallet",
+            "content_type": 9,
+            "codename": "view_wallet"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 37,
+        "fields": {
+            "name": "Can add transaction",
+            "content_type": 10,
+            "codename": "add_transaction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 38,
+        "fields": {
+            "name": "Can change transaction",
+            "content_type": 10,
+            "codename": "change_transaction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 39,
+        "fields": {
+            "name": "Can delete transaction",
+            "content_type": 10,
+            "codename": "delete_transaction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 40,
+        "fields": {
+            "name": "Can view transaction",
+            "content_type": 10,
+            "codename": "view_transaction"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 41,
+        "fields": {
+            "name": "Can add recharge",
+            "content_type": 11,
+            "codename": "add_recharge"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 42,
+        "fields": {
+            "name": "Can change recharge",
+            "content_type": 11,
+            "codename": "change_recharge"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 43,
+        "fields": {
+            "name": "Can delete recharge",
+            "content_type": 11,
+            "codename": "delete_recharge"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 44,
+        "fields": {
+            "name": "Can view recharge",
+            "content_type": 11,
+            "codename": "view_recharge"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 45,
+        "fields": {
+            "name": "Can add withdrawal",
+            "content_type": 12,
+            "codename": "add_withdrawal"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 46,
+        "fields": {
+            "name": "Can change withdrawal",
+            "content_type": 12,
+            "codename": "change_withdrawal"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 47,
+        "fields": {
+            "name": "Can delete withdrawal",
+            "content_type": 12,
+            "codename": "delete_withdrawal"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 48,
+        "fields": {
+            "name": "Can view withdrawal",
+            "content_type": 12,
+            "codename": "view_withdrawal"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 49,
+        "fields": {
+            "name": "Can add counsellor",
+            "content_type": 13,
+            "codename": "add_counsellor"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 50,
+        "fields": {
+            "name": "Can change counsellor",
+            "content_type": 13,
+            "codename": "change_counsellor"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 51,
+        "fields": {
+            "name": "Can delete counsellor",
+            "content_type": 13,
+            "codename": "delete_counsellor"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 52,
+        "fields": {
+            "name": "Can view counsellor",
+            "content_type": 13,
+            "codename": "view_counsellor"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 53,
+        "fields": {
+            "name": "Can add about",
+            "content_type": 14,
+            "codename": "add_about"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 54,
+        "fields": {
+            "name": "Can change about",
+            "content_type": 14,
+            "codename": "change_about"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 55,
+        "fields": {
+            "name": "Can delete about",
+            "content_type": 14,
+            "codename": "delete_about"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 56,
+        "fields": {
+            "name": "Can view about",
+            "content_type": 14,
+            "codename": "view_about"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 57,
+        "fields": {
+            "name": "Can add slot",
+            "content_type": 15,
+            "codename": "add_slot"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 58,
+        "fields": {
+            "name": "Can change slot",
+            "content_type": 15,
+            "codename": "change_slot"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 59,
+        "fields": {
+            "name": "Can delete slot",
+            "content_type": 15,
+            "codename": "delete_slot"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 60,
+        "fields": {
+            "name": "Can view slot",
+            "content_type": 15,
+            "codename": "view_slot"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 61,
+        "fields": {
+            "name": "Can add counselling session",
+            "content_type": 16,
+            "codename": "add_counsellingsession"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 62,
+        "fields": {
+            "name": "Can change counselling session",
+            "content_type": 16,
+            "codename": "change_counsellingsession"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 63,
+        "fields": {
+            "name": "Can delete counselling session",
+            "content_type": 16,
+            "codename": "delete_counsellingsession"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 64,
+        "fields": {
+            "name": "Can view counselling session",
+            "content_type": 16,
+            "codename": "view_counsellingsession"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 65,
+        "fields": {
+            "name": "Can add chat",
+            "content_type": 17,
+            "codename": "add_chat"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 66,
+        "fields": {
+            "name": "Can change chat",
+            "content_type": 17,
+            "codename": "change_chat"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 67,
+        "fields": {
+            "name": "Can delete chat",
+            "content_type": 17,
+            "codename": "delete_chat"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 68,
+        "fields": {
+            "name": "Can view chat",
+            "content_type": 17,
+            "codename": "view_chat"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 69,
+        "fields": {
+            "name": "Can add message",
+            "content_type": 18,
+            "codename": "add_message"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 70,
+        "fields": {
+            "name": "Can change message",
+            "content_type": 18,
+            "codename": "change_message"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 71,
+        "fields": {
+            "name": "Can delete message",
+            "content_type": 18,
+            "codename": "delete_message"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 72,
+        "fields": {
+            "name": "Can view message",
+            "content_type": 18,
+            "codename": "view_message"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 1,
+        "fields": {
+            "app_label": "admin",
+            "model": "logentry"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 2,
+        "fields": {
+            "app_label": "auth",
+            "model": "permission"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 3,
+        "fields": {
+            "app_label": "auth",
+            "model": "group"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 4,
+        "fields": {
+            "app_label": "contenttypes",
+            "model": "contenttype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 5,
+        "fields": {
+            "app_label": "sessions",
+            "model": "session"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 6,
+        "fields": {
+            "app_label": "account",
+            "model": "user"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 7,
+        "fields": {
+            "app_label": "account",
+            "model": "emailverification"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 8,
+        "fields": {
+            "app_label": "account",
+            "model": "refreshtoken"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 9,
+        "fields": {
+            "app_label": "wallet",
+            "model": "wallet"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 10,
+        "fields": {
+            "app_label": "wallet",
+            "model": "transaction"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 11,
+        "fields": {
+            "app_label": "wallet",
+            "model": "recharge"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 12,
+        "fields": {
+            "app_label": "wallet",
+            "model": "withdrawal"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 13,
+        "fields": {
+            "app_label": "counselling",
+            "model": "counsellor"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 14,
+        "fields": {
+            "app_label": "counselling",
+            "model": "about"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 15,
+        "fields": {
+            "app_label": "counselling",
+            "model": "slot"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 16,
+        "fields": {
+            "app_label": "counselling",
+            "model": "counsellingsession"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 17,
+        "fields": {
+            "app_label": "chat",
+            "model": "chat"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 18,
+        "fields": {
+            "app_label": "chat",
+            "model": "message"
+        }
+    },
+    {
+        "model": "account.user",
+        "pk": "04c4c152-26c4-4c90-a58b-46699158545a",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$u8RnpEgkwFCJwXpEKa75UO$dQOWNY8ZPOlUxGBC02VRk+gyZ5MpGuuEL1EI+Fov84g=",
+            "last_login": null,
+            "is_superuser": false,
+            "created_at": "2025-02-15T05:07:44.513Z",
+            "modified_at": "2025-02-15T05:07:44.514Z",
+            "email": "pankaj@example.com",
+            "image": "profile/user-image.jpg",
+            "name": "pankaj",
+            "gender": "",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.user",
+        "pk": "801a81fc-623c-4253-93c9-44470790874e",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$670Dawu0MPOg383ndlSMuY$Jq/Yl0ZOwfL0q+f8wy5K+z1rnncDT5nIpH7mOoTDmDk=",
+            "last_login": null,
+            "is_superuser": false,
+            "created_at": "2025-02-16T21:14:47.684Z",
+            "modified_at": "2025-02-16T21:14:47.684Z",
+            "email": "mohak@example.com",
+            "image": "profile/user-image.jpg",
+            "name": "mohak",
+            "gender": "male",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.user",
+        "pk": "951f192b-018e-44aa-9473-1348e984dcdf",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$4NGOVS2Bc0A98m72TWuAjv$2HeZMttDTxaNx/hbdKEkKZBTUKsW7D/iHOAPqbKPa0E=",
+            "last_login": null,
+            "is_superuser": false,
+            "created_at": "2025-02-15T05:08:31.325Z",
+            "modified_at": "2025-02-15T05:08:31.325Z",
+            "email": "ravi@example.com",
+            "image": "profile/user-image.jpg",
+            "name": "ravi",
+            "gender": "other",
+            "is_active": true,
+            "is_staff": false,
+            "online_channel": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailverification",
+        "pk": "2d311533-633e-4077-8f46-d96c283812bf",
+        "fields": {
+            "created_at": "2025-02-16T21:14:47.740Z",
+            "modified_at": "2025-02-16T21:14:48.085Z",
+            "user": "801a81fc-623c-4253-93c9-44470790874e",
+            "code": "3e5a39f0-e49e-4967-b5de-99f3cce70f3c",
+            "verified": false,
+            "expiration_time": "2025-02-17T21:14:47.739Z",
+            "verification_time": null
+        }
+    },
+    {
+        "model": "account.emailverification",
+        "pk": "710b8f2f-8dde-4ae2-80e8-659b26040fab",
+        "fields": {
+            "created_at": "2025-02-15T05:08:31.335Z",
+            "modified_at": "2025-02-15T05:08:31.348Z",
+            "user": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "code": "2d6b5de8-da18-4123-b620-540cfd34dea5",
+            "verified": false,
+            "expiration_time": "2025-02-16T05:08:31.335Z",
+            "verification_time": null
+        }
+    },
+    {
+        "model": "account.emailverification",
+        "pk": "a3cf04dc-c677-4400-ae52-8c65ee6cb5a6",
+        "fields": {
+            "created_at": "2025-02-15T05:07:44.553Z",
+            "modified_at": "2025-02-15T05:07:44.786Z",
+            "user": "04c4c152-26c4-4c90-a58b-46699158545a",
+            "code": "9b014114-19f1-492a-84e1-0ad505bd067c",
+            "verified": false,
+            "expiration_time": "2025-02-16T05:07:44.552Z",
+            "verification_time": null
+        }
+    },
+    {
+        "model": "account.refreshtoken",
+        "pk": "1098815b-69e8-4c35-a6d7-bd68022f7c9d",
+        "fields": {
+            "created_at": "2025-02-15T05:10:16.860Z",
+            "modified_at": "2025-02-15T05:10:16.860Z",
+            "user": "04c4c152-26c4-4c90-a58b-46699158545a",
+            "code": "7HN4eCwdGMQt4oBPAI0WfkyICITysdleEhoobOGnTU_PiwT_2JIoh6mEiat5QYXsdyHcYTpQ7jzGD_gTwLKyUA",
+            "expiration_on": "2025-03-17T05:10:16.860Z"
+        }
+    },
+    {
+        "model": "account.refreshtoken",
+        "pk": "145b610e-1438-4d5b-97e4-37d37a01831e",
+        "fields": {
+            "created_at": "2025-02-15T05:13:36.637Z",
+            "modified_at": "2025-02-15T05:13:36.637Z",
+            "user": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "code": "StY6phx4RYH_xYhJ0L-YHJxg0Z5JPQbG7CWGqCsU11EcwxYtzMtNtTDFuJ4IXhJpCxVP6Hj5s1Yi5BAbGypdUw",
+            "expiration_on": "2025-03-17T05:13:36.637Z"
+        }
+    },
+    {
+        "model": "account.refreshtoken",
+        "pk": "97eaa5d1-520a-4b8a-9425-dada13cf49ab",
+        "fields": {
+            "created_at": "2025-02-15T05:13:36.646Z",
+            "modified_at": "2025-02-15T05:13:36.646Z",
+            "user": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "code": "lFbh2wHnctNjZDVkNfjTdEiMqz5SHkH519KiCrwnI26h6N5RCb5yfjfkqvOH9hDgWyDGrTY5eS0DAmfCN2iVYw",
+            "expiration_on": "2025-03-17T05:13:36.646Z"
+        }
+    },
+    {
+        "model": "account.refreshtoken",
+        "pk": "e51194b7-8753-461a-ac6c-8fe78d1f6cf8",
+        "fields": {
+            "created_at": "2025-02-15T05:10:16.854Z",
+            "modified_at": "2025-02-15T05:10:16.854Z",
+            "user": "04c4c152-26c4-4c90-a58b-46699158545a",
+            "code": "NVMqmcs5VfUJJwrn_rjujGuGTSmEic3mVc3a6Jhnz2wfxfD_SyEVG_UZamJ9OPuh4K9BZYfWeD6iXHl3BeHSRg",
+            "expiration_on": "2025-03-17T05:10:16.853Z"
+        }
+    },
+    {
+        "model": "wallet.wallet",
+        "pk": "179fcdd6-8307-4cc2-bc39-a23e86c87751",
+        "fields": {
+            "created_at": "2025-02-15T05:07:44.803Z",
+            "modified_at": "2025-02-15T05:07:45.723Z",
+            "user": "04c4c152-26c4-4c90-a58b-46699158545a",
+            "contact_id": "cont_PvT8n8E1isITZk",
+            "balance": 0,
+            "_is_active": true
+        }
+    },
+    {
+        "model": "wallet.wallet",
+        "pk": "6037f5f0-13ea-4e64-a5f2-c7b5cb85b2da",
+        "fields": {
+            "created_at": "2025-02-16T21:14:48.114Z",
+            "modified_at": "2025-02-16T21:14:49.471Z",
+            "user": "801a81fc-623c-4253-93c9-44470790874e",
+            "contact_id": "cont_PwWiAqwGzpZ63c",
+            "balance": 0,
+            "_is_active": true
+        }
+    },
+    {
+        "model": "wallet.wallet",
+        "pk": "ce5befc9-9805-4862-b491-119619e7dfed",
+        "fields": {
+            "created_at": "2025-02-15T05:08:31.363Z",
+            "modified_at": "2025-02-19T14:36:24.735Z",
+            "user": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "contact_id": "cont_PvT9IlFDHpDro9",
+            "balance": 10000,
+            "_is_active": true
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "1a6378f3-693c-40d3-a53f-f0b328066af9",
+        "fields": {
+            "created_at": "2025-02-15T06:48:13.357Z",
+            "modified_at": "2025-02-15T06:48:13.357Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "2de1f38a-0e96-4fb2-80f5-2e40e71bcf33",
+        "fields": {
+            "created_at": "2025-02-15T05:47:50.546Z",
+            "modified_at": "2025-02-15T05:47:50.547Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "45230e34-7689-4b5d-976e-8feaceeb9826",
+        "fields": {
+            "created_at": "2025-02-15T06:27:05.510Z",
+            "modified_at": "2025-02-15T06:27:05.510Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "73fe776b-d5c0-49fd-81f7-9044dc7d9be7",
+        "fields": {
+            "created_at": "2025-02-15T05:49:20.564Z",
+            "modified_at": "2025-02-15T05:49:20.564Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "885e5b43-01b2-47b3-b2e8-c530bbb11a06",
+        "fields": {
+            "created_at": "2025-02-15T06:52:28.221Z",
+            "modified_at": "2025-02-15T06:52:28.221Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "aafba72a-7e3b-4909-9bbe-ec6440f56ac4",
+        "fields": {
+            "created_at": "2025-02-19T06:36:41.167Z",
+            "modified_at": "2025-02-19T06:36:41.167Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "ca33b907-f1d2-4c82-a390-75ff11d24eb5",
+        "fields": {
+            "created_at": "2025-02-18T14:46:42.589Z",
+            "modified_at": "2025-02-18T14:46:42.589Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "df974cb1-9329-44b1-af46-fafa8ea91cc0",
+        "fields": {
+            "created_at": "2025-02-19T14:36:24.736Z",
+            "modified_at": "2025-02-19T14:36:24.736Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 400,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "ef27b12c-9124-4169-b62e-2581875f4d04",
+        "fields": {
+            "created_at": "2025-02-15T06:43:20.689Z",
+            "modified_at": "2025-02-15T06:43:20.689Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "f296141f-48db-4e4e-8224-ea5e5afefb6a",
+        "fields": {
+            "created_at": "2025-02-19T14:34:57.462Z",
+            "modified_at": "2025-02-19T14:34:57.462Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 400,
+            "refunded": false
+        }
+    },
+    {
+        "model": "wallet.transaction",
+        "pk": "fcb6d8f7-63fc-4c47-a5d0-b084a4b137aa",
+        "fields": {
+            "created_at": "2025-02-15T06:35:04.058Z",
+            "modified_at": "2025-02-15T06:35:04.058Z",
+            "sender": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "receiver": "ce5befc9-9805-4862-b491-119619e7dfed",
+            "amount": 350,
+            "refunded": false
+        }
+    },
+    {
+        "model": "counselling.counsellor",
+        "pk": "6f0c468b-cd5a-47fe-adde-7e74974ec8f0",
+        "fields": {
+            "created_at": "2025-02-15T05:08:39.551Z",
+            "modified_at": "2025-02-15T05:28:05.224Z",
+            "user": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "timezone": "Asia/Kolkata"
+        }
+    },
+    {
+        "model": "counselling.counsellor",
+        "pk": "be398107-0e70-41ea-9ee5-8bf3e8a98c40",
+        "fields": {
+            "created_at": "2025-02-16T21:15:09.926Z",
+            "modified_at": "2025-02-16T21:15:09.945Z",
+            "user": "801a81fc-623c-4253-93c9-44470790874e",
+            "timezone": "UTC"
+        }
+    },
+    {
+        "model": "counselling.about",
+        "pk": "d3c92642-0396-407f-adac-aecdb0062d60",
+        "fields": {
+            "created_at": "2025-02-15T05:08:39.569Z",
+            "modified_at": "2025-02-15T05:08:39.569Z",
+            "counsellor": "6f0c468b-cd5a-47fe-adde-7e74974ec8f0",
+            "introduction": "I am introduction",
+            "qualification": "I am 10th pass",
+            "speciality": "Yes, i am special",
+            "methodology": "I use best and test aujaar only"
+        }
+    },
+    {
+        "model": "counselling.about",
+        "pk": "fe609f65-d52e-453f-a822-3014146ea48f",
+        "fields": {
+            "created_at": "2025-02-16T21:15:09.938Z",
+            "modified_at": "2025-02-16T21:15:09.938Z",
+            "counsellor": "be398107-0e70-41ea-9ee5-8bf3e8a98c40",
+            "introduction": "I am introduction",
+            "qualification": "I am 10th pass",
+            "speciality": "Yes, i am special",
+            "methodology": "I use best and test aujaar only"
+        }
+    },
+    {
+        "model": "counselling.slot",
+        "pk": "263e3cc4-9b81-43e1-9992-ba6edc8c2eb9",
+        "fields": {
+            "created_at": "2025-02-19T14:33:10.771Z",
+            "modified_at": "2025-02-19T14:33:10.772Z",
+            "counsellor": "6f0c468b-cd5a-47fe-adde-7e74974ec8f0",
+            "from_time": "20:07:00",
+            "duration": "01:00:00",
+            "days": 125,
+            "fee": 400,
+            "timezone": "Asia/Kolkata",
+            "is_active": true,
+            "is_deleted": false
+        }
+    },
+    {
+        "model": "counselling.slot",
+        "pk": "4b05338a-89d4-4aba-bae1-20b30e017242",
+        "fields": {
+            "created_at": "2025-02-16T05:26:41.041Z",
+            "modified_at": "2025-02-15T05:26:41.041Z",
+            "counsellor": "6f0c468b-cd5a-47fe-adde-7e74974ec8f0",
+            "from_time": "12:24:00",
+            "duration": "00:01:00",
+            "days": 126,
+            "fee": 350,
+            "timezone": "Asia/Kolkata",
+            "is_active": true,
+            "is_deleted": false
+        }
+    },
+    {
+        "model": "counselling.slot",
+        "pk": "fcc695bb-c35a-43dc-93b7-793ff70a7a3a",
+        "fields": {
+            "created_at": "2025-02-15T05:26:41.016Z",
+            "modified_at": "2025-02-15T05:26:41.016Z",
+            "counsellor": "6f0c468b-cd5a-47fe-adde-7e74974ec8f0",
+            "from_time": "10:00:00",
+            "duration": "01:00:00",
+            "days": 125,
+            "fee": 400,
+            "timezone": "Asia/Kolkata",
+            "is_active": true,
+            "is_deleted": false
+        }
+    },
+    {
+        "model": "counselling.counsellingsession",
+        "pk": "8eec033b-d14e-4e37-b880-5eb62b92dd96",
+        "fields": {
+            "created_at": "2025-02-19T14:36:24.739Z",
+            "modified_at": "2025-02-19T14:36:24.739Z",
+            "user": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "counsellor": "6f0c468b-cd5a-47fe-adde-7e74974ec8f0",
+            "transaction": "df974cb1-9329-44b1-af46-fafa8ea91cc0",
+            "slot": "263e3cc4-9b81-43e1-9992-ba6edc8c2eb9",
+            "chat": "f16cb4a0-9591-4a02-930c-909563b2eb81",
+            "from_datetime": "2025-02-19T14:37:00Z",
+            "to_datetime": "2025-02-19T15:37:00Z"
+        }
+    },
+    {
+        "model": "chat.chat",
+        "pk": "f16cb4a0-9591-4a02-930c-909563b2eb81",
+        "fields": {
+            "created_at": "2025-02-19T14:36:24.737Z",
+            "modified_at": "2025-02-19T14:37:03.374Z",
+            "user_a": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "user_b": "951f192b-018e-44aa-9473-1348e984dcdf",
+            "type": "counselling",
+            "is_active": true
+        }
+    }
+]

@@ -65,7 +65,7 @@ class RechargesView(APIView):
         
         serialized_data = RechargeSerializer(page.object_list, many=True)
         return Response({
-            'meta': get_page_meta(paginator, page),
+            'meta': get_page_meta(page),
             'items': serialized_data.data,
         })
     

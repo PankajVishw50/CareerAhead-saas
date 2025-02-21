@@ -1,4 +1,6 @@
 from django.core.signing import dumps, loads
+from rest_framework import status
+from django.contrib.auth.models import AnonymousUser
 from django.conf import settings
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.authentication import BaseAuthentication
@@ -6,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from django.utils.functional import SimpleLazyObject
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+from channels.db import database_sync_to_async
 import jwt
 import secrets 
 import datetime
@@ -142,6 +145,42 @@ class TokenAuthentication(BaseAuthentication):
     
     def authenticate_header(self, request):
         return "Bearer"
+        
+class TokenAuthenticationMiddleware:    
+    def __init__(self, next_app):
+        self.next_app = next_app
+
+    async def __call__(self, scope, receive, send):
+        headers = {k.decode():v.decode() for k, v in scope.get("headers", [])}
+        # import ipdb;ipdb.set_trace()
+        class FakeRequest:
+            def __init__(self, headers):
+                self.headers = headers
+        frequest = FakeRequest(headers)
+
+        # Ignore if there is no token
+        try:
+            if not (_token := Token.get_authorization_token(frequest)):
+                raise Exception()
+            
+            # Parse token
+            if not (token := Token.decode_access_token(_token)):
+                raise Exception()
+
+            # Load user
+            # TODO: Right now we aren't checking validity of provided id 
+            # and due to this it will throw error if invalid id is provided 
+            # need to fix it later. 
+            scope['user'] = await User.objects.aget(id=token['data']['id'])
+        except:
+            await send({
+                "type": "websocket.close",
+                "code": 4403 # Websocket forbidden code
+            })
+            return
+
+        return await self.next_app(scope, receive, send)
+    
 
 class SignedTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):

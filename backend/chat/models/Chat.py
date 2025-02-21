@@ -15,8 +15,22 @@ class ChatManager(models.Manager):
         )
         chat.save()
         return chat
+    
+    def all_valids(self, **kwargs):
+        return self.filter(is_active=True, **kwargs)
+
+    def get_valid(self, **kwargs):
+        return self.all_valids().get(**kwargs)
+
+    def all_invalids(self, **kwargs):
+        return self.filter(is_active=False, **kwargs)
+
+    def get_invalid(self, **kwargs):
+        return self.all_invalids().get(**kwargs)
 
 class Chat(UUIDPrimaryFieldModel, TimeMonitorModel):
+    class Meta:
+        ordering = ['-created_at']
 
     user_a = models.ForeignKey(
         User,
@@ -38,5 +52,21 @@ class Chat(UUIDPrimaryFieldModel, TimeMonitorModel):
         default=True,
     )
 
-    obects = ChatManager()
+    objects = ChatManager()
 
+    def user_owns_chat(self, user):
+        if user == self.user_a or user == self.user_b:
+            return True
+        return False
+    
+    def new_message(self, sender, message):
+        from chat.models import Message
+
+        if not self.user_owns_chat(sender):
+            raise ValueError("sender do not have priviledge to send message in this chat")
+
+        return Message.objects.create(
+            chat=self,
+            msg=message,
+            sender=sender,
+        )

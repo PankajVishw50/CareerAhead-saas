@@ -10,13 +10,13 @@ class TransactionManager(models.Manager):
         if not sender.wallet.debit(amount):
             raise ValueError("failed to debit money from sender's wallet")
         
-        if not receiver.credit(amount):
-            sender.credit(amount)
+        if not receiver.wallet.credit(amount):
+            sender.wallet.credit(amount)
             raise ValueError("failed to credit money to receiver's wallet")
         
         transaction = self.model(
-            sender=sender,
-            receiver=receiver,
+            sender=sender.wallet,
+            receiver=receiver.wallet,
             amount=amount
         )   
         transaction.save()
@@ -43,7 +43,7 @@ class Transaction(UUIDPrimaryFieldModel, TimeMonitorModel):
         default=False
     )
 
-    objectrs = TransactionManager()
+    objects = TransactionManager()
 
     def __str__(self):
         return f"{self.sender.user.email} -> {self.receiver.user.email}: {self.amount}"    

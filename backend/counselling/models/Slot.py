@@ -1,5 +1,6 @@
 from django.db import models
 import datetime 
+from django.conf import settings
 
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from counselling.models.Counsellor import Counsellor
@@ -73,6 +74,10 @@ class Slot(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     @property
     def to_time(self):
+        if not isinstance(self.from_time, datetime.time) or not isinstance(self.duration, datetime.timedelta):
+            return NotImplementedError
+
+
         _dt = datetime.datetime.combine(datetime.datetime.today(), self.from_time)
         return (_dt + self.duration).time()
     
@@ -81,7 +86,7 @@ class Slot(UUIDPrimaryFieldModel, TimeMonitorModel):
         return f"{self.counsellor.user.email}: {self.from_time} - {self.to_time}"
 
     def work_day(self, day: int) -> bool:
-        return (self.days & (2**day)) == day
+        return (self.days & (2**day)) == (2**day)
     
     def deactivate(self):
         if self.is_active == False:

@@ -16,6 +16,7 @@ tags:
   - name: Wallet
   - name: Webhook
   - name: Counselling
+  - name: Chatting
 
 components:
   securitySchemes:
@@ -426,6 +427,25 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/SlotId"
+
+    Ordering:
+      name: order
+      in: query
+      schema:
+        type: string
+        default: desc
+        enum:
+          - asc
+          - desc
+    ChatId:
+      name: chat_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+
   responses:
     EmptySuccessfullResponse:
       description: Successfull
@@ -1105,4 +1125,60 @@ paths:
                 $ref: "#/components/schemas/Slot"
 
 
-        
+  /chats:
+    get:
+      description: | 
+        Fetches All available chats
+      tags:
+        - Chatting
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            default: available
+            enum:
+              - available
+              - all
+              - disabled
+        - $ref: "#/components/parameters/Ordering"
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+    
+  /chats/{chat_id}:
+    get:
+      description: | 
+        Fetches chat based on provided chat_id
+      tags:
+        - Chatting
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+  
+  /chats/{chat_id}/messages:
+    get:
+      description: | 
+        Fetches messages for specified chat_id
+      tags:
+        - Chatting
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+        - $ref: '#/components/parameters/Ordering'
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+      
+    post:
+      description: |
+        Sends new message
+      tags:
+        - Chatting
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralErrorResponse"
+    

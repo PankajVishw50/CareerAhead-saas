@@ -2,39 +2,25 @@ from django.test import TestCase, Client
 from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
+from django.http import HttpRequest
 
 from account.models import User
+from account.auth import login, Token, encrypt
+from util.tests.baseTest import BaseTestCase, UserAuthedTestCase, BaseAuthedTestCase
 
-class LoginTest(TestCase):
-    # Create User
-    user_one_data = {
-        "email": "sahil@example.com",
-        "password": "sahil" 
-    }
-    user_two_data = {
-        "email": "jatin@example.com",
-        "password": "jatin",
-    }
+class LoginTest(BaseTestCase):
+    fixtures = ["sampleData.json"]
 
-
-    def setUp(self):
-        self.user_one = User.objects.create_user(**self.user_one_data)
-        self.user_two = User.objects.create_user(**self.user_two_data)
-        
     def test_success_login_cookie(self):
         """Try to login to sahil
         with refresh_token returned in cookie (default behaviour)
         """
-        # import ipdb;ipdb.set_trace()
-        try:
-            response = self.client.post(
-                reverse("api:login"),
-                content_type="application/json",
-                data=self.user_one_data
-            )
-            data = response.json()
-        except ValueError:
-            pass
+        response = self.client.post(
+            reverse("api:login"),
+            content_type="application/json",
+            data=self.user1_data
+        )
+        data = response.json()
 
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/json', response.accepted_media_type)
@@ -44,7 +30,7 @@ class LoginTest(TestCase):
         self.assertTrue(response.cookies.get(settings.TOKEN_REFRESH_KEY))
 
     def test_success_login_body(self):
-        """Test Login to jatin with 
+        """Test Login with 
         refresh_token returned in body
         """
 
@@ -53,7 +39,7 @@ class LoginTest(TestCase):
                 reverse("api:login"),
                 content_type="application/json",
                 data={
-                    **self.user_two_data,
+                    **self.user1_data,
                     "in_body": True,
                     "in_cookie": False
                 }
@@ -70,23 +56,20 @@ class LoginTest(TestCase):
         self.assertFalse(response.cookies.get(settings.TOKEN_REFRESH_KEY))
 
     def test_success_login_body_2(self):
-        """Test Login to jatin with 
+        """Test Login with 
         refresh_token returned in body and also in cookie 
         """
 
-        try:
-            response = self.client.post(
-                reverse("api:login"),
-                content_type="application/json",
-                data={
-                    **self.user_two_data,
-                    "in_body": True,
-                    "in_cookie": True
-                }
-            )
-            data = response.json()
-        except ValueError:
-            pass 
+        response = self.client.post(
+            reverse("api:login"),
+            content_type="application/json",
+            data={
+                **self.user1_data,
+                "in_body": True,
+                "in_cookie": True
+            }
+        )
+        data = response.json()
 
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/json', response.accepted_media_type)
@@ -99,20 +82,16 @@ class LoginTest(TestCase):
         """Test Login to jatin with 
         refresh_token not returned
         """
-        # import ipdb;ipdb.set_trace()
-        try:
-            response = self.client.post(
-                reverse("api:login"),
-                content_type="application/json",
-                data={
-                    **self.user_two_data,
-                    "in_body": False,
-                    "in_cookie": False
-                }
-            )
-            data = response.json()
-        except ValueError:
-            pass 
+        response = self.client.post(
+            reverse("api:login"),
+            content_type="application/json",
+            data={
+                **self.user1_data,
+                "in_body": False,
+                "in_cookie": False
+            }
+        )
+        data = response.json()
 
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/json', response.accepted_media_type)
@@ -126,19 +105,16 @@ class LoginTest(TestCase):
         after successfull login
         """
 
-        try:
-            response = self.client.post(
-                reverse("api:login"),
-                content_type="application/json",
-                data={
-                    **self.user_two_data,
-                    "in_body": True,
-                    "in_cookie": False
-                }
-            )
-            data = response.json()
-        except ValueError:
-            pass 
+        response = self.client.post(
+            reverse("api:login"),
+            content_type="application/json",
+            data={
+                **self.user1_data,
+                "in_body": True,
+                "in_cookie": False
+            }
+        )
+        data = response.json()
 
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/json', response.accepted_media_type)
@@ -148,47 +124,17 @@ class LoginTest(TestCase):
         self.assertFalse(response.cookies.get(settings.TOKEN_REFRESH_KEY))
 
         # Access Protected view
-        try:
-            response = self.client.get(
-                reverse('api:signed-token'),
-                content_type="application/json",
-                HTTP_AUTHORIZATION=f"Bearer {data.get('access_token')}",
-            )
-            data = response.json()
-        except ValueError:
-            pass 
+        response = self.client.get(
+            reverse('api:signed-token'),
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {data.get('access_token')}",
+        )
+        data = response.json()
 
         self.assertEqual(200, response.status_code)
         self.assertTrue(data.get('token'))
 
-class AccessTokenTest(TestCase):
-    user_data = {
-        "email": "pankaj@example.com",
-        "password": "pankaj",
-    }
-
-    @classmethod
-    def setUpTestData(self):
-        self.authed_client = Client()
-        # Create user
-        self.user = User.objects.create_user(**self.user_data)
-
-        # Log user
-        response = self.authed_client.post(
-            reverse("api:login"),
-            data={
-                **self.user_data,
-                "in_body": True,
-                "in_cookie": True,
-            },
-            content_type="application/json",
-        )
-        json = response.json()
-        self.access_token = json['access_token']
-        self.refresh_token = json["refresh_token"]
-        self.bearer = f"Bearer {self.access_token}"
-
-        self.authed_client.defaults['HTTP_AUTHORIZATION'] = self.bearer
+class AccessTokenTest(UserAuthedTestCase):
 
     def test_get_access_token_pass_refresh_in_body(self):
         """Fetch access token        
@@ -237,33 +183,7 @@ class AccessTokenTest(TestCase):
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
-class LogoutTest(TestCase):
-    user_data = {
-        "email": "mehak@example.com",
-        "password": "mehak",
-    }
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.authed_client = Client()
-
-        User.objects.create_user(**cls.user_data)
-
-        response = cls.authed_client.post(
-            reverse("api:login"),
-            data={
-                **cls.user_data,
-                "in_body": True,
-                "in_cookie": True,
-            }
-        )
-        data = response.json()
-
-        cls.access_token = data['access_token']
-        cls.refresh_token = data['refresh_token']
-        cls.bearer = f"Bearer {cls.access_token}"
-
-        cls.authed_client.defaults['HTTP_AUTHORIZATION'] = cls.bearer
+class LogoutTest(UserAuthedTestCase):
 
     def test_logout_refresh_in_cookie(self):
 
@@ -381,34 +301,7 @@ class LogoutTest(TestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)    
 
-class SignedTokenTest(TestCase):
-    user_data = {
-        "email": "pankaj@example.com",
-        "password": "pankaj",
-    }
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.user = User.objects.create_user(**cls.user_data)
-
-        # Logs user
-        cls.authed_client = Client()
-
-        response = cls.authed_client.post(
-            reverse("api:login"),
-            data={
-                **cls.user_data,
-                "in_body": True,
-                "in_cookie": True,
-            }
-        )
-        data = response.json()
-
-        cls.access_token = data['access_token']
-        cls.refresh_token = data['refresh_token']
-        cls.bearer = f"Bearer {cls.access_token}"
-
-        cls.authed_client.defaults['HTTP_AUTHORIZATION'] = cls.bearer
+class SignedTokenTest(UserAuthedTestCase):
 
     def test_get_signed_token(self):
 

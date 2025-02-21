@@ -8,9 +8,9 @@ import pytz
 
 from util.response import ErrorResponseTemplates
 from counselling.views.decorators import counsellor_exists, slot_exists
-from counselling.models import Session
+from counselling.models import CounsellingSession
 from wallet.views.decorators import active_wallet_required
-from counselling.serializers import SessionSerializer
+from counselling.serializers import CounsellingSessionSerializer
 
 class SessionsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -19,6 +19,7 @@ class SessionsView(APIView):
     @counsellor_exists
     @slot_exists
     def post(self, request, counsellor_id, slot_id):
+        # import ipdb;ipdb.set_trace()
 
         try:
             from_datetime = request.data['from_datetime']
@@ -36,7 +37,7 @@ class SessionsView(APIView):
             )
 
         # Check if this slot is valid
-        c_from_dt = request.counsellor.tz.localize(from_dt)
+        c_from_dt = from_dt.astimezone(request.counsellor.tz) 
 
         if c_from_dt.time() != request.slot.from_time:
             return ErrorResponseTemplates.BAD_REQUEST("Invalid payload")
@@ -45,15 +46,15 @@ class SessionsView(APIView):
             return ErrorResponseTemplates.BAD_REQUEST("Slot not valid for specified day")
 
         # Check if any slot with conflicted time exists
-        u_from_dt = pytz.utc.localize(from_dt)
+        u_from_dt = from_dt.astimezone(pytz.utc)
         u_to_dt = u_from_dt + request.slot.duration
 
         u_from_t = u_from_dt.time()
         u_to_t = u_to_dt.time()
 
         conflicted_slots = request.counsellor.sessions.filter(
-            Q(from_datetime__range=(u_from_t, u_to_t)) 
-            | Q(to_datetime__range=(u_from_t, u_to_t))
+            Q(from_datetime__range=(u_from_dt, u_to_dt)) 
+            | Q(to_datetime__range=(u_from_dt, u_to_dt))
         ).count()
 
         if conflicted_slots > 0:
@@ -62,14 +63,12 @@ class SessionsView(APIView):
             )
         
         # Create a new session
-        session = Session.objects.create_session(
+        session = CounsellingSession.objects.create_session(
             request.user,
             request.counsellor,
             request.slot,
             from_dt,
         )
 
-        return Response({
-            SessionSerializer(session).data,
-        })
+        return Response(CounsellingSessionSerializer(session).data)
  

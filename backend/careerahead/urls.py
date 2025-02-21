@@ -24,6 +24,7 @@ urlpatterns = [
         path('auth/', include('account.urls')),
         path('wallet/', include('wallet.urls')),
         path('counsellors/', include('counselling.urls')),
+        path('chats/', include('chat.urls')),
     ], 'api', None)), 
 
 ]
