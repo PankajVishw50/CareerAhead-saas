@@ -120,8 +120,13 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
     objects = UserManager()
 
     @property
+<<<<<<< HEAD
     def is_online(self):
         return bool(self.online_channel)
+=======
+    def is_counsellor(self):
+        return hasattr(self, "counsellor")
+>>>>>>> f04280f ((Frontend) Setted Up Project with Basic Auth)
 
     def create_email_verification_code(self, force=False):
         from account.models import EmailVerification

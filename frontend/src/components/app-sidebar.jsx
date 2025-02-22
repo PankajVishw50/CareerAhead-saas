@@ -10,6 +10,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  LogIn
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -23,6 +24,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { NavLink } from "react-router"
 
 // This is sample data.
 const data = {
@@ -150,6 +152,11 @@ const data = {
       name: "Travel",
       url: "#",
       icon: Map,
+    },
+    {
+      name: "Login",
+      url: "/login",
+      icon: LogIn,
     },
   ],
 }

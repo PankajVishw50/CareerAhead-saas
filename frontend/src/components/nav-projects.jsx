@@ -1,4 +1,5 @@
 import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
+import {NavLink} from "react-router"
 
 import {
   DropdownMenu,
@@ -29,10 +30,10 @@ export function NavProjects({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
+              <NavLink to={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </NavLink>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

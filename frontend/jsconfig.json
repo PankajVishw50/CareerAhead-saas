@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+        "module": "ESNext",
+        "target": "ES6",
+        "allowSyntheticDefaultImports": true,
+
         "baseUrl": ".",
         "paths": {
         "@/*": ["./src/*"]

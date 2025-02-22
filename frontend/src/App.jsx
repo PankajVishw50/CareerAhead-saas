@@ -1,12 +1,33 @@
 import { useState } from 'react'
 import { Button } from './components/ui/button'
-import Dashboard from './layouts/Dashboard'
+import useColorMode from './hooks/useColorMode'
+import ProtectedLayout from './layouts/ProtectedLayout'
+import Login from './pages/Login'
+import { BrowserRouter, Routes, Route } from "react-router"
+import DashboardLayout from './layouts/DashboardLayout'
+import Index from './pages/Index'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {mode} = useColorMode()
 
   return (
-    <Dashboard></Dashboard>
+    <BrowserRouter>
+    <div className={
+      "main " + mode
+    }>
+        <Routes>
+          <Route path="/login" element={<Login/>} />
+
+          <Route element={<ProtectedLayout/>}>
+            <Route element={<DashboardLayout/>}>
+              <Route path="/" element={<Index/>} />
+            </Route>
+          </Route>
+            
+        </Routes>
+    </div>
+
+    </BrowserRouter>
   )
 }
 

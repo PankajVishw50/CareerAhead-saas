@@ -8,11 +8,16 @@ import path from "path"
 export default defineConfig({
   server: {
     port: 7600,
+    proxy: {
+      "/api": {
+        target: "http://localhost:7575",
+      }
+    }
   },
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"), 
+      "@": path.resolve(__dirname, "./src"),
     }
   }
 })

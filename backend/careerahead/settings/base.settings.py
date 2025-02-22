@@ -14,7 +14,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
 STATIC_ROOT = 'static/'
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', "localhost:7600"]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:7600",
+#     "http://127.0.0.1:7600",
+# ]
 
 INSTALLED_APPS = [
     "daphne", 
