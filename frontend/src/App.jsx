@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import { BrowserRouter, Routes, Route } from "react-router"
 import DashboardLayout from './layouts/DashboardLayout'
 import Index from './pages/Index'
+import MarketPage from './pages/MarketPage'
 
 function App() {
   const {mode} = useColorMode()
@@ -21,9 +22,10 @@ function App() {
           <Route element={<ProtectedLayout/>}>
             <Route element={<DashboardLayout/>}>
               <Route path="/" element={<Index/>} />
+              <Route path="/market" element={<MarketPage/>} />
             </Route>
           </Route>
-            
+
         </Routes>
     </div>
 

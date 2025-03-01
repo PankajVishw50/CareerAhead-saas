@@ -10,7 +10,8 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
-  LogIn
+  LogIn,
+  MapPin,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -57,6 +58,14 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
       items: [
+        {
+          title: "Login",
+          url: "/login",
+        },
+        {
+          title: "Market",
+          url: "/market",
+        },
         {
           title: "History",
           url: "#",
@@ -152,11 +161,6 @@ const data = {
       name: "Travel",
       url: "#",
       icon: Map,
-    },
-    {
-      name: "Login",
-      url: "/login",
-      icon: LogIn,
     },
   ],
 }
