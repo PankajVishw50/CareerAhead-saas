@@ -17,6 +17,10 @@ const urls = {
   access_token: {
     url: "/api/auth/token/access",
     get_url: () => urls.access_token.url,
+  },
+  counsellors: {
+    url: "/api/counsellors",
+    get_url: () => urls.counsellors.url,
   }
 }
 

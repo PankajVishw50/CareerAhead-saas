@@ -13,7 +13,7 @@ const AuthContextProvider = ({children}) => {
   const {make_request} = useRequest();
 
   const [user, setUser] = useState(null);
-  const [logged, setLogged] = useState(true);
+  const [logged, setLogged] = useState(null);
   const [token, setToken] = useState(null);
 
   const auth_request = async (url, options = { method: "GET" }) => {
@@ -93,7 +93,7 @@ const AuthContextProvider = ({children}) => {
 
   }
 
-  return <AuthContext.Provider value={{user, logged}}> {children} </AuthContext.Provider>
+  return <AuthContext.Provider value={{user, logged, auth_request}}> {children} </AuthContext.Provider>
 }
 
 export {

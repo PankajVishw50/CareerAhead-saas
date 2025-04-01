@@ -60,25 +60,31 @@ const useRequest = () => {
     }
   }
 
+  const get_url_query_params = (url, params) => {
+    const p = new URLSearchParams()
+
+    for (const [key, value] of Object.entries(params)) {
+        if (Array.isArray(value)) {
+          for (const val of value) {
+            p.append(key, val)
+          }
+        }else {
+          p.set(key, value)
+        }
+    }
+
+    return p
+
+  }
+
+  const get_url_query_params_string = (url, params) => {
+    return `${url}?${get_url_query_params(url, params).toString()}`;
+  }
+
   // Abort all requests if component unmounts
   useEffect(() => {
 
-
-
-
     return (() => {
-
-      // Get access token from local storage
-      const token = localStorage.getItem("access_token");
-
-      // Try to get access token from endpoint
-      if (!token){
-        ;
-      } else{
-        setToken(token);
-      }
-
-
       controllers.current.forEach(controller => {
         try {
           controller.abort();
@@ -90,7 +96,7 @@ const useRequest = () => {
     });
   }, []);
 
-  return { make_request };
+  return { make_request, get_url_query_params, get_url_query_params_string };
 
 }
 
