@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from account.auth import Token
 from rest_framework.response import Response
 from rest_framework import status
+from django.conf import settings
 
 from util.response import ErrorResponseTemplates
 from account.models import RefreshToken
@@ -10,6 +11,8 @@ from util.dt import now
 class LogoutView(APIView):
 
     def post(self, request):
+
+
         # Check the refresh token
         refresh_token = Token.get_refresh_token_from_cookie(request)
         _cookie_passed = False
@@ -36,10 +39,25 @@ class LogoutView(APIView):
         if _cookie_passed and refreshtk.user != request.user:
             return ErrorResponseTemplates.BAD_REQUEST('Invalid Payload')
 
+        response = Response()
+        response.status_code = status.HTTP_200_OK
+
         # Delete the refresh token
         refreshtk.delete()
 
-        return Response(None, status.HTTP_200_OK)
+        # Delete refresh token from client side
+        # This will unset refresh token cookie by expiring it.
+        response.set_cookie(
+            key=settings.TOKEN_REFRESH_KEY,
+            value="",
+            expires=0,
+            httponly=True,
+            secure=True,
+            samesite="LAX"
+        )
+
+
+        return response
 
         
 

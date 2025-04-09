@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router"
 import DashboardLayout from './layouts/DashboardLayout'
 import Index from './pages/Index'
 import MarketPage from './pages/MarketPage'
+import UnProtectedLayout from "@/layouts/UnProtectedLayout";
 
 function App() {
   const {mode} = useColorMode()
@@ -16,8 +17,10 @@ function App() {
     <div className={
       "main " + mode
     }>
-        <Routes>
-          <Route path="/login" element={<Login/>} />
+        <Routes utes>
+          <Route element={<UnProtectedLayout/>} >
+            <Route path="/login" element={<Login/>} />
+          </Route>
 
           <Route element={<ProtectedLayout/>}>
             <Route element={<DashboardLayout/>}>

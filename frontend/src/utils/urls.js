@@ -14,6 +14,10 @@ const urls = {
     url: "/api/auth/login",
     get_url: () => urls.login.url,
   },
+  logout: {
+    url: "/api/auth/logout",
+    get_url: () => urls.logout.url,
+  },
   access_token: {
     url: "/api/auth/token/access",
     get_url: () => urls.access_token.url,

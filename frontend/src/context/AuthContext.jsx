@@ -23,7 +23,7 @@ const AuthContextProvider = ({children}) => {
         ...options.headers,
         'Authorization': `Bearer ${token}`,
       }
-    }
+    } 
     return await make_request(url, post_options)
   };
 
@@ -90,10 +90,34 @@ const AuthContextProvider = ({children}) => {
     }
 
     return json
-
   }
 
-  return <AuthContext.Provider value={{user, logged, auth_request}}> {children} </AuthContext.Provider>
+  const login = (token) => {
+    setToken(token);
+    setLogged(true);
+  }
+
+  const logout = (token) => {
+    if (!logged){
+      return console.warn("Only logged user can logout");
+    }
+
+    const {response, json, error} = auth_request(
+      urls.logout.get_url(),
+      {
+        method: "POST",
+      }
+    )
+
+    if (error){
+      return console.warn("Failed to logout", error);
+    }
+
+    setLogged(false);
+    setToken(false);
+  }
+
+  return <AuthContext.Provider value={{user, logged, login, logout, auth_request}}> {children} </AuthContext.Provider>
 }
 
 export {
