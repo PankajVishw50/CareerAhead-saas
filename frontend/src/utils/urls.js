@@ -25,6 +25,10 @@ const urls = {
   counsellors: {
     url: "/api/counsellors",
     get_url: () => urls.counsellors.url,
+  },
+  counsellor: {
+    url: "/api/counsellors/:ID",
+    get_url: (id) => urls.counsellor.url.replace(":ID", id),
   }
 }
 

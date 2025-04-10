@@ -53,11 +53,15 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Pages",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
+        {
+          title: "Index",
+          url: "/",
+        },
         {
           title: "Login",
           url: "/login",
@@ -67,16 +71,8 @@ const data = {
           url: "/market",
         },
         {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Counsellor Post Page",
+          url: "/counsellors/b3753d2a-8f34-4876-8206-de6135570421",
         },
       ],
     },

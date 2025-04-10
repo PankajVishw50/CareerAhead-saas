@@ -8,6 +8,7 @@ import DashboardLayout from './layouts/DashboardLayout'
 import Index from './pages/Index'
 import MarketPage from './pages/MarketPage'
 import UnProtectedLayout from "@/layouts/UnProtectedLayout";
+import CounsellorPostPage from './pages/CounsellorPostPage'
 
 function App() {
   const {mode} = useColorMode()
@@ -17,7 +18,7 @@ function App() {
     <div className={
       "main " + mode
     }>
-        <Routes utes>
+        <Routes>
           <Route element={<UnProtectedLayout/>} >
             <Route path="/login" element={<Login/>} />
           </Route>
@@ -26,6 +27,7 @@ function App() {
             <Route element={<DashboardLayout/>}>
               <Route path="/" element={<Index/>} />
               <Route path="/market" element={<MarketPage/>} />
+              <Route path="/counsellors/:counsellor_id" element={<CounsellorPostPage/>} />
             </Route>
           </Route>
 

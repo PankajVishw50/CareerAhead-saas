@@ -1,17 +1,14 @@
-import profileUser from "@/assets/images/profileUser.png"
-import profileUser2 from "@/assets/images/profileUser2.png"
-import profileUser3 from "@/assets/images/profileUser3.png"
 import dummycounsellor from "@/assets/images/dummycounsellor.jpg"
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import {NavLink} from "react-router";
 
 export default function CounsellorCard({ counsellor }) {
   return (
-    <Card className="p-4 shadow-lg rounded-2xl border border-gray-200 w-min min-w-[400px]">
+    <Card className="p-4 pb-2 shadow-lg rounded-2xl border border-gray-200 w-min min-w-[400px]">
       <div className="flex items-center gap-4">
         <Avatar className="w-20 h-20">
           <AvatarImage src={dummycounsellor} alt={"Pankaj"} />
@@ -42,7 +39,9 @@ export default function CounsellorCard({ counsellor }) {
           <span>Min: ${100}</span>
           <span>Max: ${999}</span>
         </div>
-        <Button className="mt-4 w-full">View Profile</Button>
+        <Button className="mt-4 w-full" asChild>
+          <NavLink to={`/counsellors/${counsellor.id}`} >View Profile</NavLink>
+        </Button>
       </CardContent>
     </Card>
   );
