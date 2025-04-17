@@ -31,8 +31,6 @@ export function LoginForm({
     password: "",
   });
 
-  console.log(data);
-
   const handle_change = (e) => {
     setData(prev => {
       return {
@@ -56,11 +54,17 @@ export function LoginForm({
 
     setSearching(false);
     if (error){
-      console.error("Error in login form", error);
+      toast({
+        description: "Login Failed",
+        variant: "destructive"
+      })
       return;
     }
 
     login(json.access_token);
+    toast({
+      description: "Login Successfull",
+    })
     return navigate("/");
   }
 

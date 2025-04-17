@@ -11,7 +11,7 @@ from wallet.models import Withdrawal
 from wallet.serializers import WithdrawalSerializer
 from wallet.views.decorators import active_wallet_required
 from util.decorators import get_pagination_params
-from util.helpers import get_page_meta
+from util.helpers import paginated_response 
 
 class WithdrawalsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -96,7 +96,4 @@ class WithdrawalsView(APIView):
             return ErrorResponseTemplates.PAGINATION_NOT_FOUND(paginator.num_pages)
         
         serialized_data = WithdrawalSerializer(page.object_list, many=True)
-        return Response({
-            'meta': get_page_meta(page),
-            'items': serialized_data.data,
-        })
+        return Response(paginated_response(page, serialized_data.data))

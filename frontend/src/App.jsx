@@ -9,15 +9,15 @@ import Index from './pages/Index'
 import MarketPage from './pages/MarketPage'
 import UnProtectedLayout from "@/layouts/UnProtectedLayout";
 import CounsellorPostPage from './pages/CounsellorPostPage'
+import WalletPage from './pages/WalletPage'
+import {cn} from "@/lib/utils"
 
 function App() {
   const {mode} = useColorMode()
 
   return (
     <BrowserRouter>
-    <div className={
-      "main " + mode
-    }>
+    <div className={cn("main", mode)}>
         <Routes>
           <Route element={<UnProtectedLayout/>} >
             <Route path="/login" element={<Login/>} />
@@ -28,6 +28,7 @@ function App() {
               <Route path="/" element={<Index/>} />
               <Route path="/market" element={<MarketPage/>} />
               <Route path="/counsellors/:counsellor_id" element={<CounsellorPostPage/>} />
+              <Route path="/wallet" element={<WalletPage/>} />
             </Route>
           </Route>
 

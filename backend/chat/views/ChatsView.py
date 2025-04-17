@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from util.decorators import get_pagination_params, get_ordering_params
 from chat.serializers import ChatSerializer
-from util.helpers import get_page_meta
+from util.helpers import paginated_response
 
 class ChatsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -51,9 +51,6 @@ class ChatsView(APIView):
             return ErrorResponseTemplates.PAGINATION_NOT_FOUND(paginator.num_pages)
         
         chats_s = ChatSerializer(page, many=True)
-        return Response({
-            "meta": get_page_meta(page),
-            "items": chats_s.data,
-        })
+        return Response(paginated_response(page, chats_s.data))
 
                 

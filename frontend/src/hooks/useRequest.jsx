@@ -6,8 +6,6 @@ const useRequest = () => {
 
   const make_request = async (url, options = { method: 'GET' }) => {
 
-   // console.log(options);
-
     const controller = new AbortController()
     options.signal = controller.signal;
     let response = null;
@@ -24,8 +22,7 @@ const useRequest = () => {
         ;
       }
 
-      if (response.status !== 200) {
-        console.warn('response status was not 200')
+      if (!response.ok) {
         return {
           response,
           json,
@@ -43,7 +40,6 @@ const useRequest = () => {
           unmounted: true,
         }
       }
-      console.warn(e)
       return {
         response,
         json,

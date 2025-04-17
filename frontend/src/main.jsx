@@ -6,6 +6,8 @@ import { ColorModeContextProvider } from './context/ColorModeContext'
 import { AuthContextProvider } from './context/AuthContext'
 import { SettingsContextProvider } from './context/SettingsContext'
 import { LocalDBContextProvider } from './context/LocalDBContext'
+import { WalletContextProvider } from './context/WalletContext'
+import { Toaster } from './components/ui/toaster'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -13,7 +15,10 @@ createRoot(document.getElementById('root')).render(
       <ColorModeContextProvider>
         <LocalDBContextProvider>
           <AuthContextProvider>
-            <App />
+            <WalletContextProvider>
+              <App />
+              <Toaster />
+            </WalletContextProvider>
           </AuthContextProvider>
         </LocalDBContextProvider>
       </ColorModeContextProvider>

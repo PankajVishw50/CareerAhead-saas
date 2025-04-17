@@ -27,9 +27,25 @@ const urls = {
     get_url: () => urls.counsellors.url,
   },
   counsellor: {
-    url: "/api/counsellors/:ID",
-    get_url: (id) => urls.counsellor.url.replace(":ID", id),
-  }
+    url: "/api/counsellors/:counsellor_id",
+    get_url: (id) => urls.counsellor.url.replace(":counsellor_id", id),
+  },
+  available_slots: {
+    url: "/api/counsellors/:counsellor_id/slots/available",
+    get_url: (counsellor_id) => urls.available_slots.url.replace(":counsellor_id", counsellor_id),
+  },
+  recharges: {
+    url: "/api/wallet/recharges",
+    get_url: () => urls.recharges.url,
+  },
+  verify_recharge: {
+    url: "/api/wallet/recharges/:recharge_id/verify",
+    get_url: (recharge_id) => urls.verify_recharge.url.replace(":recharge_id", recharge_id),
+  },
+  wallet: {
+    url: "/api/wallet",
+    get_url: () => urls.wallet.url
+  },
 }
 
 export {

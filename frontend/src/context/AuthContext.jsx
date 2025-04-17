@@ -1,3 +1,4 @@
+import { toast } from "@/hooks/use-toast";
 import useRequest from "@/hooks/useRequest";
 import { useSettings } from "@/hooks/useSettings";
 import {createContext, useEffect, useState} from "react";
@@ -23,7 +24,7 @@ const AuthContextProvider = ({children}) => {
         ...options.headers,
         'Authorization': `Bearer ${token}`,
       }
-    } 
+    }
     return await make_request(url, post_options)
   };
 
@@ -50,7 +51,6 @@ const AuthContextProvider = ({children}) => {
     if (logged) {
       fetch_user()
       .then(data => {
-        console.log("user fetched: ", data)
         setUser(data);
       })
     }
@@ -66,8 +66,11 @@ const AuthContextProvider = ({children}) => {
       }
     );
 
-    if (response.status != 200 || error || !json.access_token) {
-      console.warn('Error fetching token', error);
+    if (error) {
+      toast({
+        description: "Failed to fetch token",
+        variant: "destructive"
+      })
       return;
     }
 
@@ -84,8 +87,11 @@ const AuthContextProvider = ({children}) => {
       }
     );
 
-    if (response.status != 200 || error || !json) {
-      console.warn('Error fetching token', error);
+    if (error) {
+      toast({
+        description: "Failed to fetch token",
+        variant: "destructive"
+      })
       return;
     }
 
@@ -99,7 +105,11 @@ const AuthContextProvider = ({children}) => {
 
   const logout = (token) => {
     if (!logged){
-      return console.warn("Only logged user can logout");
+      toast({
+        description: "No logged in user to logout",
+        variant: "destructive"
+      })
+      return;
     }
 
     const {response, json, error} = auth_request(
@@ -110,7 +120,11 @@ const AuthContextProvider = ({children}) => {
     )
 
     if (error){
-      return console.warn("Failed to logout", error);
+      toast({
+        description: "Failed to logout",
+        variant: "destructive"
+      })
+      return
     }
 
     setLogged(false);

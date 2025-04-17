@@ -18,6 +18,8 @@ import { useEffect, useState } from "react";
 import useLocalDB from "@/hooks/useLocalDB";
 import useAuth from "@/hooks/useAuth";
 import { urls } from "@/utils/urls";
+import CounsellorScheduleWindow from "@/components/CounsellorScheduleWindow"
+import { toast } from "@/hooks/use-toast";
 
 const CounsellorPostPage = () => {
   const {counsellor_id} = useParams();
@@ -36,7 +38,7 @@ const CounsellorPostPage = () => {
 
     // Fetch it from API
     (async () => {
-      const {response, json, error} = await auth_request(
+      const {json, error} = await auth_request(
         urls.counsellor.get_url(counsellor_id),
         {
           method: "GET",
@@ -44,7 +46,11 @@ const CounsellorPostPage = () => {
       );
 
       if (error) {
-        console.error("Error fetching counsellor data:", error);
+        toast({
+          description: "Failed to fetch counsellor",
+          variant: "destructive"
+        });
+        return
       }
 
       setCounsellor(json);
@@ -128,7 +134,7 @@ const CounsellorPostPage = () => {
 
           </TabsContent>
           <TabsContent value="tab2" forceMount={true} className={cn("mt-6 text-muted-foreground", activeTab === "tab2" ? "" : "hidden")}>
-            Content for Tab 2
+            { counsellor && <CounsellorScheduleWindow counsellor={counsellor} /> }
           </TabsContent>
           <TabsContent value="tab3" forceMount={true} className={cn("mt-6 text-muted-foreground", activeTab === "tab3" ? "" : "hidden")}>
             <TestCounter/>

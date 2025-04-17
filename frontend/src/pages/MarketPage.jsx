@@ -53,6 +53,7 @@ import CounsellorCard from "@/components/ui/CounsellorCard"
 
 import { SHA256 } from "crypto-js"
 import { get_array_index } from "@/utils/collections"
+import { toast } from "@/hooks/use-toast"
 
 const MarketPage = () => {
   const {auth_request } = useAuth();
@@ -96,7 +97,7 @@ const MarketPage = () => {
     }
 
     timeout.current = setTimeout(() => search_counsellors(0, true), 500);
-    
+
     return () => {
       if (timeout.current){
         clearTimeout(timeout.current)
@@ -113,7 +114,6 @@ const MarketPage = () => {
     // if (isSearching){
     //   return;
     // }
-    // console.log(e)
     setFilters(prev => {
       return {
         ...prev,
@@ -136,13 +136,13 @@ const MarketPage = () => {
     // Direction
     if (direction == -1){
       if (p <= 1){
-        return console.warn("can't go back");
+        return;
       }
       p -= 1;
     } else if (direction == 1){
       // TODO:Need to fix this}
       if (maxPage !== false & maxPage <= p){
-        return console.warn("no next page");
+        return;
       }
       p += 1;
     }
@@ -166,7 +166,10 @@ const MarketPage = () => {
       )
 
       if (error){
-        console.warn("Failed to search counsellor: ", error);
+        toast({
+          description: "Failed to search",
+          variant: "destructive"
+        })
         return;
       }
 
@@ -177,7 +180,7 @@ const MarketPage = () => {
           [hash.current]: {
             maxPage: json.totalPages,
             items: [...(prevD[hash.current] ? prevD[hash.current].items : []), ...items]
-          } 
+          }
         }
       });
       setMaxPage(json.totalPages);

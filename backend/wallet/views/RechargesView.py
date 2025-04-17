@@ -12,7 +12,7 @@ from wallet.razorpay import razorpay
 from wallet.models import Recharge
 from wallet.serializers import RechargeSerializer
 from wallet.views.decorators import active_wallet_required
-from util.helpers import get_page_meta
+from util.helpers import get_page_meta, paginated_response
 from util.decorators import get_pagination_params
 from account.auth import TokenAuthentication
 
@@ -56,7 +56,6 @@ class RechargesView(APIView):
 
     @get_pagination_params
     def get(self, request):
-
         paginator = Paginator(request.user.recharge_set.all(), request.pagination.size)
         try:
             page = paginator.page(request.pagination.page)
@@ -64,8 +63,5 @@ class RechargesView(APIView):
             return ErrorResponseTemplates.PAGINATION_NOT_FOUND(paginator.num_pages)
         
         serialized_data = RechargeSerializer(page.object_list, many=True)
-        return Response({
-            'meta': get_page_meta(page),
-            'items': serialized_data.data,
-        })
+        return Response(paginated_response(page, serialized_data.data))
     

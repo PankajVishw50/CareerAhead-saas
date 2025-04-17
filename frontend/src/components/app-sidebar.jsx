@@ -72,7 +72,7 @@ const data = {
         },
         {
           title: "Counsellor Post Page",
-          url: "/counsellors/b3753d2a-8f34-4876-8206-de6135570421",
+          url: "/counsellors/143d6dbf-9e43-4ab9-a72b-c031b2367908",
         },
       ],
     },
