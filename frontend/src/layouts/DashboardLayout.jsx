@@ -39,13 +39,13 @@ export default function DashboardLayout() {
           <div className="flex items-center gap-2 px-4 w-full">
             <SidebarTrigger className="dark:text-white -ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-              <div className="dark:text-white">{headerTitle}</div>
+              <div className="dark:text-white w-full">{headerTitle}</div>
             {/* <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="#">
                     Building Your Application
-                  </BreadcrumbLink>
+                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

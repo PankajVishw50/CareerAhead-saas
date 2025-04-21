@@ -54,10 +54,12 @@ import CounsellorCard from "@/components/ui/CounsellorCard"
 import { SHA256 } from "crypto-js"
 import { get_array_index } from "@/utils/collections"
 import { toast } from "@/hooks/use-toast"
+import { useOutletContext } from "react-router"
 
 const MarketPage = () => {
   const {auth_request } = useAuth();
   const {get_url_query_params_string} = useRequest();
+  const {setHeaderTitle} = useOutletContext();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -80,6 +82,14 @@ const MarketPage = () => {
 
   const hash = useRef();
   const timeout = useRef(null);
+
+  useEffect(() => {
+    setHeaderTitle("Search Counsellors");
+
+    return () => {
+      setHeaderTitle("");
+    }
+  }, [])
 
   useEffect(() => {
     const p = process_filters();

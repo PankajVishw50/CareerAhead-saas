@@ -19,7 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { toast } from "@/hooks/use-toast";
-
+import Spinner from "./ui/Spinner";
 
 const CounsellorScheduleWindow = ({counsellor}) => {
   const {auth_request} = useAuth();
@@ -28,6 +28,7 @@ const CounsellorScheduleWindow = ({counsellor}) => {
   const [slots, setSlots] = useState({});
   const [today] = useState(new Date());
   const [date, setDate] = useState(today);
+  const [booking, setBooking] = useState(false);
 
   useEffect(() => {
     fetch_slots(date);
@@ -114,6 +115,61 @@ const CounsellorScheduleWindow = ({counsellor}) => {
     return slots[formatted_date] || [];
   }
 
+
+  const book_slot = async () => {
+    // Check if there is slot
+    let d = date_formatted(date)
+    if (date_formatted(date) == date_formatted(today)) {
+      d = datetime_formatted(date)
+    }
+    const slot = slots[d]?.find((s) => s.id === selectedId)
+
+    if (!slot){
+      return toast({
+        description: "select valid slot",
+        variant: "destructive",
+      })
+    }
+
+    setBooking(true);
+    // Fetch
+    const {json, error} = await auth_request(
+      urls.session.get_url(counsellor.id, slot.id),
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from_datetime: slot.from_datetime,
+        })
+      }
+    )
+    setBooking(false);
+
+    if (error){
+      return toast({
+        description: "Failed to book slot",
+        variant: "destructive",
+      })
+    }
+
+    toast({
+      description: "Successfully Booked slot",
+    });
+
+    setSlots(prev => {
+      return {
+        ...prev,
+        [d]:[],
+      }
+    })
+    fetch_slots(date);
+    setSelectedId(null);
+
+  }
+
+
   return (
       <div className="w-full h-full">
         <div className="flex gap-2">
@@ -196,6 +252,19 @@ const CounsellorScheduleWindow = ({counsellor}) => {
             })
             : <div className="text-white">No Slots Available</div>
           }
+          </div>
+
+          <div className="flex justify-end mt-6">
+            <Button
+            disabled={selectedId === null || booking}
+            onClick={book_slot}
+            >
+              {
+                booking ? <Spinner spinning={booking}/>
+                : "Schedule"
+              }
+
+            </Button>
           </div>
 
         </div>

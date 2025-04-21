@@ -27,7 +27,7 @@ const CounsellorPostPage = () => {
   const {auth_request} = useAuth();
 
   const [counsellor, setCounsellor] = useState();
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [activeTab, setActiveTab] = useState("tab2");
 
   useEffect(() => {
     // Check if counsellor is available in LocalD

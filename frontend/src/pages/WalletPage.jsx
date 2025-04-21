@@ -109,7 +109,7 @@ const WalletPage = () => {
 
   const openRazorpay = (orderData, handler, modal_clossed_handler) => {
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_API_KEY, // 🔐 Replace with your Razorpay Key ID
+      key: import.meta.env.VITE_RAZORPAY_API_KEY,
       amount: orderData.amount, // amount in paise
       currency: orderData.currency,
       name: "CareerAhead Corp.",
