@@ -5,6 +5,8 @@ from util.models.shortcuts import User
 from chat.models.Chat import Chat
 
 class Message(UUIDPrimaryFieldModel, TimeMonitorModel):
+    # class Meta:
+    #     ordering = ["-created_at"]
 
     chat = models.ForeignKey(
         Chat,

@@ -50,6 +50,14 @@ const urls = {
     url: "/api/counsellors/:counsellor_id/slots/:slot_id/sessions",
     get_url: (counsellor_id, slot_id) => urls.session.url.replace(":counsellor_id", counsellor_id).replace(":slot_id", slot_id),
   },
+  messages: {
+    url: "/api/chats/:chat_id/messages",
+    get_url: (chat_id) => urls.messages.url.replace(":chat_id", chat_id),
+  },
+  chat: {
+    url: "/api/chats/:chat_id",
+    get_url: (chat_id) => urls.chat.url.replace(":chat_id", chat_id),
+  },
 }
 
 export {

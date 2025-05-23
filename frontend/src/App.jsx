@@ -11,6 +11,8 @@ import UnProtectedLayout from "@/layouts/UnProtectedLayout";
 import CounsellorPostPage from './pages/CounsellorPostPage'
 import WalletPage from './pages/WalletPage'
 import {cn} from "@/lib/utils"
+// import TestChatBox from './pages/TestChatBox'
+import ChatPage from './pages/ChatPage'
 
 function App() {
   const {mode} = useColorMode()
@@ -29,6 +31,8 @@ function App() {
               <Route path="/market" element={<MarketPage/>} />
               <Route path="/counsellors/:counsellor_id" element={<CounsellorPostPage/>} />
               <Route path="/wallet" element={<WalletPage/>} />
+              {/* <Route path="/chat-test" element={<TestChatBox/>} /> */}
+              <Route path="/chat" element={<ChatPage />} />
             </Route>
           </Route>
 

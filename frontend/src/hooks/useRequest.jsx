@@ -60,13 +60,13 @@ const useRequest = () => {
     const p = new URLSearchParams()
 
     for (const [key, value] of Object.entries(params)) {
-        if (Array.isArray(value)) {
-          for (const val of value) {
-            p.append(key, val)
-          }
-        }else {
-          p.set(key, value)
+      if (Array.isArray(value)) {
+        for (const val of value) {
+          p.append(key, val)
         }
+      } else {
+        p.set(key, value)
+      }
     }
 
     return p
@@ -81,6 +81,7 @@ const useRequest = () => {
   useEffect(() => {
 
     return (() => {
+      console.log("Request aborted due to unmount")
       controllers.current.forEach(controller => {
         try {
           controller.abort();

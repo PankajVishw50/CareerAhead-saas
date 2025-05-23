@@ -157,8 +157,10 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
         return token
         
 
-
-            
+    @property
+    def chats(self):
+        from chat.models.Chat import Chat
+        return Chat.objects.filter(models.Q(user_a=self) | models.Q(user_b=self))
 
     def send_verification_mail(self):
 
@@ -169,3 +171,9 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
             html_message='<h1>We are testing bro</h1>',
             fail_silently=True,
         )
+ 
+    def chats_valid(self):
+        return self.chats(is_active=True) 
+
+    def chats_invalid(self):
+        return self.chats(is_active=False) 

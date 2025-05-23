@@ -8,6 +8,7 @@ import { SettingsContextProvider } from './context/SettingsContext'
 import { LocalDBContextProvider } from './context/LocalDBContext'
 import { WalletContextProvider } from './context/WalletContext'
 import { Toaster } from './components/ui/toaster'
+import { ChatContextProvider } from './context/ChatContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,7 +17,9 @@ createRoot(document.getElementById('root')).render(
         <LocalDBContextProvider>
           <AuthContextProvider>
             <WalletContextProvider>
-              <App />
+              <ChatContextProvider>
+                <App />
+              </ChatContextProvider>
               <Toaster />
             </WalletContextProvider>
           </AuthContextProvider>

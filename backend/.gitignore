@@ -9,3 +9,6 @@ staticfiles/
 static/
 local/
 logs/
+resources/
+util/tooling
+pyrightconfig.json

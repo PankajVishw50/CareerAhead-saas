@@ -78,6 +78,14 @@ const data = {
           title: "Wallet",
           url: "/wallet",
         },
+        {
+          title: "Chat Test",
+          url: "/chat-test",
+        },
+        {
+          title: "Chat",
+          url: "/chat",
+        },
       ],
     },
     // {

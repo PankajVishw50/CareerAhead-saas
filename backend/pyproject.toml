@@ -3,7 +3,7 @@ name = "careerahead"
 version = "0.1.0"
 description = ""
 authors = ["Pankaj vishw <vishw.dev.1000@gmail.com>"]
-readme = "README.md"
+package-mode=false
 
 [tool.poetry.dependencies]
 python = "^3.12"

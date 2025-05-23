@@ -59,7 +59,7 @@ run-all: stop-all run-celery-multi run-celery-beat runserver
 stop-celery-multi:
 	poetry run celery multi stopwait careerahead01 \
 		--pidfile=logs/celery.pid
-
+	
 stop-celery-beat:
 	@if [ -f logs/celery-beat.pid ]; then \
 		PID=$$(cat logs/celery-beat.pid); \
