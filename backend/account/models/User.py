@@ -122,6 +122,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
     @property
     def is_online(self):
         return bool(self.online_channel)
+
     def is_counsellor(self):
         return hasattr(self, "counsellor")
 
@@ -173,7 +174,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
         )
  
     def chats_valid(self):
-        return self.chats(is_active=True) 
+        return self.chats.filter(is_active=True)
 
     def chats_invalid(self):
-        return self.chats(is_active=False) 
+        return self.chats.filter(is_active=False) 

@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework.views import APIView
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
@@ -15,11 +16,10 @@ from util.cursors import GeneralCursorPagination
 class ChatsView(APIView):
     permission_classes = [IsAuthenticated]
     filter_backends = [OrderingFilter]
-    ordering_fields = ["created_at"]
-    ordering = ["-created_at"]
+    ordering_fields = ["session_from_datetime", "created_at"]
+    ordering = ["-session_from_datetime"]
     
     @get_ordering_params
-    @get_pagination_params
     def get(self, request):
 
         VALID_TYPES = ["available", "all", "disabled"]
@@ -38,13 +38,18 @@ class ChatsView(APIView):
                     f"Invalid `type` value - should be one of these {VALID_TYPES}"
                 )
 
+        query = query.annotate(
+            session_from_datetime=F("session__from_datetime")
+        )
+
         paginator = GeneralCursorPagination()
         try:
-            # import ipdb;ipdb.set_trace()
             page = paginator.paginate_queryset(query, request, self)
         except Exception:
             return ErrorResponseTemplates.INTERNAL_SERVER_ERROR()
+    
 
+        # import ipdb;ipdb.set_trace()
         chats_s = ChatSerializer(page, many=True)
         return Response({
             **paginator.get_html_context(),

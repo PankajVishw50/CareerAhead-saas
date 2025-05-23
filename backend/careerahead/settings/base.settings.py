@@ -3,87 +3,82 @@ import os
 DEBUG = False
 SECRET_KEY = NotImplemented
 
-ROOT_URLCONF = 'careerahead.urls'
-WSGI_APPLICATION = 'careerahead.wsgi.application'
+ROOT_URLCONF = "careerahead.urls"
+WSGI_APPLICATION = "careerahead.wsgi.application"
 ASGI_APPLICATION = "careerahead.asgi.application"
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = 'static/'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'account.User'
-STATIC_ROOT = 'static/'
-ALLOWED_HOSTS = ['localhost', "localhost:7600"]
+STATIC_URL = "static/"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+AUTH_USER_MODEL = "account.User"
+STATIC_ROOT = "static/"
+ALLOWED_HOSTS = ["localhost", "localhost:7600"]
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:7600",
 #     "http://127.0.0.1:7600",
 # ]
 
 INSTALLED_APPS = [
-    "daphne", 
-    
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    'corsheaders',
-    'rest_framework',
-    'django_extensions',
-
-    'account',
-    'wallet',
-    'counselling',
-    'chat',
+    "daphne",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "corsheaders",
+    "rest_framework",
+    "django_extensions",
+    "account",
+    "wallet",
+    "counselling",
+    "chat",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', 
-    
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'careerahead.context.razorpay_context',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "careerahead.context.razorpay_context",
             ],
         },
     },
 ]
 
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -91,8 +86,7 @@ AUTH_PASSWORD_VALIDATORS = [
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-        },
+        "OPTIONS": {},
     },
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
@@ -101,12 +95,12 @@ STORAGES = {
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'account.auth.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "account.auth.TokenAuthentication",
     ],
-    'DEFAULT_PAGINATION_CLASS': 'util.pagination.BasePagination',
+    "DEFAULT_PAGINATION_CLASS": "util.pagination.BasePagination",
     "PAGE_SIZE": 20,
-    'EXCEPTION_HANDLER': 'careerahead.exceptions.api_exception_handler',
+    "EXCEPTION_HANDLER": "careerahead.exceptions.api_exception_handler",
 }
 
 LOGGING = {
@@ -115,7 +109,7 @@ LOGGING = {
     "handlers": {
         "file": {
             "class": "logging.FileHandler",
-            "filename": str(BASE_DIR / "logs/application.log"), # type:ignore
+            "filename": str(BASE_DIR / "logs/application.log"),  # type:ignore
             "level": "DEBUG" if DEBUG else "INFO",
             "formatter": "verbose",
         },
@@ -123,7 +117,7 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "level": "DEBUG" if DEBUG else "WARNING",
             "formatter": "simple",
-        }
+        },
     },
     "formatters": {
         "verbose": {
@@ -135,78 +129,75 @@ LOGGING = {
             "style": "{",
         },
     },
-
     "loggers": {
         "": {
             "handlers": ["file", "console"],
             "level": "DEBUG" if DEBUG else "INFO",
         }
-    }
+    },
 }
 
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
     }
 }
 
 # Fixtures
-FIXTURE_DIRS = [
-    "util/fixtures/"
-]
+FIXTURE_DIRS = ["util/fixtures/"]
 
 # Django Extensions related settings
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRE_IMPORTS = [
-    ('account.serializers', "*"),
-    ('wallet.serializers', "*"),
-    ('counselling.serializers', "*"),
-    ('chat.serializers', "*"),
+    ("account.serializers", "*"),
+    ("wallet.serializers", "*"),
+    ("counselling.serializers", "*"),
+    ("chat.serializers", "*"),
 ]
 
 # Channel layer config
 CHANNEL_LAYERS = {
-     "default": {
-         "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
-         "CONFIG": {
-             "host": "amqp://guest:guest@localhost",
-          },
-      },
+    "default": {
+        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "CONFIG": {
+            "host": "amqp://guest:guest@localhost",
+        },
+    },
 }
 
 
 # EMAIL
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 465))
-EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'true').lower() in ('true', 't', '1')
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 465))
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "true").lower() in ("true", "t", "1")
 EMAIL_LOG = False
 EMAIL_DEBUG_REDIRECT = False
 EMAIL_DEBUG_RECEIVERS = []
-EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 60 * 24 # One Day 
+EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 60 * 24  # One Day
 
 # 3rd party settings
 CORS_ALLOW_ALL_ORIGINS = True
 
 # AWS S3 Settings
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
-AWS_S3_FILE_OVERWRITE = True 
-AWS_LOCATION = 'files/' 
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+AWS_S3_FILE_OVERWRITE = True
+AWS_LOCATION = "files/"
 AWS_QUERYSTRING_AUTH = False
 
 # CELERY
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 # CELERY_BEAT_SCHEDULE = {
 #     "add-every-30-seconds": {
 #         "task": "account.tasks.add",

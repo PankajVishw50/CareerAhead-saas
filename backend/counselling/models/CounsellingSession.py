@@ -64,9 +64,10 @@ class CounsellingSession(UUIDPrimaryFieldModel, TimeMonitorModel):
         related_name="sessions",
     )
     
-    chat  = models.ForeignKey(
+    chat  = models.OneToOneField(
         Chat,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="session"
     )
 
     from_datetime = models.DateTimeField(

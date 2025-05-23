@@ -8,5 +8,9 @@ class ChatSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user_a", "user_b",
-            "type", "is_active"
+            "type", "is_active",
+            "session_from_datetime",
+            "created_at"
         ]
+
+    session_from_datetime = serializers.DateTimeField(source="session.from_datetime")

@@ -9,22 +9,23 @@ import { LocalDBContextProvider } from './context/LocalDBContext'
 import { WalletContextProvider } from './context/WalletContext'
 import { Toaster } from './components/ui/toaster'
 import { ChatContextProvider } from './context/ChatContext'
+import { ScreenModeContextProvider } from './context/ScreenModeContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <SettingsContextProvider>
-      <ColorModeContextProvider>
-        <LocalDBContextProvider>
-          <AuthContextProvider>
-            <WalletContextProvider>
-              <ChatContextProvider>
+    <ScreenModeContextProvider>
+      <SettingsContextProvider>
+        <ColorModeContextProvider>
+          <LocalDBContextProvider>
+            <AuthContextProvider>
+              <WalletContextProvider>
                 <App />
-              </ChatContextProvider>
-              <Toaster />
-            </WalletContextProvider>
-          </AuthContextProvider>
-        </LocalDBContextProvider>
-      </ColorModeContextProvider>
-    </SettingsContextProvider>
+                <Toaster />
+              </WalletContextProvider>
+            </AuthContextProvider>
+          </LocalDBContextProvider>
+        </ColorModeContextProvider>
+      </SettingsContextProvider>
+    </ScreenModeContextProvider>
   </StrictMode>
 )

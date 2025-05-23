@@ -22,6 +22,14 @@ const urls = {
     url: "/api/auth/token/access",
     get_url: () => urls.access_token.url,
   },
+  signed_token: {
+    url: "/api/auth/token/signed-token",
+    get_url: () => urls.signed_token.url,
+  },
+  ws_notification: {
+    url: "/ws/notification",
+    get_url: () => urls.ws_notification.url,
+  },
   counsellors: {
     url: "/api/counsellors",
     get_url: () => urls.counsellors.url,
@@ -57,6 +65,10 @@ const urls = {
   chat: {
     url: "/api/chats/:chat_id",
     get_url: (chat_id) => urls.chat.url.replace(":chat_id", chat_id),
+  },
+  chats: {
+    url: "/api/chats",
+    get_url: () => urls.chats.url,
   },
 }
 

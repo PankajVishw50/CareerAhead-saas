@@ -15,6 +15,7 @@ import { urls } from "@/utils/urls"
 import useAuth from "@/hooks/useAuth"
 import { useNavigate } from "react-router";
 import Spinner from "@/components/ui/Spinner";
+import { toast } from "@/hooks/use-toast"
 
 export function LoginForm({
   className,
@@ -22,8 +23,8 @@ export function LoginForm({
 }) {
 
   const [searching, setSearching] = useState(false);
-  const {make_request} = useRequest();
-  const {login} = useAuth();
+  const { make_request } = useRequest();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [data, setData] = useState({
@@ -44,7 +45,7 @@ export function LoginForm({
     e.preventDefault();
 
     setSearching(true);
-    const {response, json, error} = await make_request(urls.login.get_url(), {
+    const { response, json, error } = await make_request(urls.login.get_url(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +54,7 @@ export function LoginForm({
     });
 
     setSearching(false);
-    if (error){
+    if (error) {
       toast({
         description: "Login Failed",
         variant: "destructive"
@@ -109,10 +110,10 @@ export function LoginForm({
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
-                  value={data.email}
-                  onChange={handle_change}
-                  name="email"
-                  id="email" type="email" placeholder="pankaj@example.com" required />
+                    value={data.email}
+                    onChange={handle_change}
+                    name="email"
+                    id="email" type="email" placeholder="pankaj@example.com" required />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
@@ -122,19 +123,19 @@ export function LoginForm({
                     </a>
                   </div>
                   <Input
-                  name="password"
-                  value={data.password}
-                  onChange={handle_change}
-                  id="password" type="password" required />
+                    name="password"
+                    value={data.password}
+                    onChange={handle_change}
+                    id="password" type="password" required />
                 </div>
                 <Button type="submit" className="w-full"
-                disabled={searching}
+                  disabled={searching}
                 >
                   {
                     searching ? (
-                      <Spinner spinning={true} className="text-black"/>
+                      <Spinner spinning={true} className="text-black" />
                     )
-                    : "Login"
+                      : "Login"
                   }
                 </Button>
               </div>

@@ -5,7 +5,7 @@ runserver:
 .PHONY: runserver-all
 runserver-all:
 	poetry run python3 manage.py runserver 0.0.0.0:7575
-	
+
 .PHONY: check 
 check:
 	poetry run python3 manage.py check

@@ -11,22 +11,26 @@ import os
 
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.auth import AuthMiddlewareStack
+from channels.auth import AuthMiddlewareStack, CookieMiddleware, SessionMiddleware
 from channels.security.websocket import AllowedHostsOriginValidator
 
+from chat.middlewares import WebSocketLoggerMiddleware
 from chat.routing import websocket_urlpatterns
-from account.auth import TokenAuthenticationMiddleware
+from account.auth import WebSocketTokenAuthenticationMiddleware
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerahead.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerahead.settings")
 
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            TokenAuthenticationMiddleware(
-                URLRouter(websocket_urlpatterns),
-            )
-        )
-    )
-    
-})
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": WebSocketLoggerMiddleware(
+            CookieMiddleware(
+                SessionMiddleware(
+                    WebSocketTokenAuthenticationMiddleware(
+                        URLRouter(websocket_urlpatterns)
+                    ),
+                )
+            ),
+        ),
+    }
+)

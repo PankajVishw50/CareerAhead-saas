@@ -10,34 +10,35 @@ import MarketPage from './pages/MarketPage'
 import UnProtectedLayout from "@/layouts/UnProtectedLayout";
 import CounsellorPostPage from './pages/CounsellorPostPage'
 import WalletPage from './pages/WalletPage'
-import {cn} from "@/lib/utils"
-// import TestChatBox from './pages/TestChatBox'
+import { cn } from "@/lib/utils"
 import ChatPage from './pages/ChatPage'
 
 function App() {
-  const {mode} = useColorMode()
+  const { mode } = useColorMode()
 
   return (
     <BrowserRouter>
-    <div className={cn("main", mode)}>
+      <div className={cn("main", mode)}>
         <Routes>
-          <Route element={<UnProtectedLayout/>} >
-            <Route path="/login" element={<Login/>} />
+          {/* <Route element={<MaxScreenLayout />}> */}
+          <Route element={<UnProtectedLayout />} >
+            <Route path="/login" element={<Login />} />
           </Route>
 
-          <Route element={<ProtectedLayout/>}>
-            <Route element={<DashboardLayout/>}>
-              <Route path="/" element={<Index/>} />
-              <Route path="/market" element={<MarketPage/>} />
-              <Route path="/counsellors/:counsellor_id" element={<CounsellorPostPage/>} />
-              <Route path="/wallet" element={<WalletPage/>} />
+          <Route element={<ProtectedLayout />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/market" element={<MarketPage />} />
+              <Route path="/counsellors/:counsellor_id" element={<CounsellorPostPage />} />
+              <Route path="/wallet" element={<WalletPage />} />
               {/* <Route path="/chat-test" element={<TestChatBox/>} /> */}
               <Route path="/chat" element={<ChatPage />} />
             </Route>
           </Route>
 
+          {/* </Route> */}
         </Routes>
-    </div>
+      </div>
 
     </BrowserRouter>
   )

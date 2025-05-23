@@ -54,6 +54,10 @@ class Chat(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     objects = ChatManager()
 
+    # @property
+    # def session_from_datetime(self):
+    #     return self.session.from_datetime
+
     def user_owns_chat(self, user):
         if user == self.user_a or user == self.user_b:
             return True

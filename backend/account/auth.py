@@ -1,5 +1,7 @@
 from django.core.signing import dumps, loads
 from rest_framework import status
+from rest_framework.request import Request
+from django.test import RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.conf import settings
 from rest_framework.authentication import BaseAuthentication
@@ -10,22 +12,30 @@ from django.utils.functional import SimpleLazyObject
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from channels.db import database_sync_to_async
 import jwt
-import secrets 
+import secrets
 import datetime
-import pytz 
+import pytz
+import logging
+from urllib.parse import parse_qs
 
 from util.response import ErrorResponseTemplates
 from account.serializers import UserSerializer
 from account.models import User
 
+logger = logging.getLogger(__name__)
+
+
 def encrypt(text: str) -> str:
     return dumps(text)
+
 
 def decrypt(text: str) -> str:
     return loads(text)
 
+
 def get_user_access_token(user, payload: dict = {}):
     return Token.generate_access_token(UserSerializer(user).data, payload)
+
 
 class Token:
     TOKEN_REFRESH_EXPIRY_TIME = settings.TOKEN_REFRESH_EXPIRY_TIME
@@ -34,8 +44,8 @@ class Token:
     TOKEN_REFRESH_ID_KEY = settings.TOKEN_REFRESH_ID_KEY
     TOKEN_REFRESH_SECURE = settings.TOKEN_REFRESH_SECURE
     TOKEN_REFRESH_SAMESITE = settings.TOKEN_REFRESH_SAMESITE
-    TOKEN_REFRESH_HTTP_ONLY = True 
-    TOKEN_ACCESS_EXPIRY_TIME = 60 * 30 # 30 MINUTES 
+    TOKEN_REFRESH_HTTP_ONLY = True
+    TOKEN_ACCESS_EXPIRY_TIME = 60 * 30  # 30 MINUTES
     TOKEN_ACCESS_ALGORITHMS = settings.TOKEN_ACCESS_ALGORITHMS
 
     token_refresh_expiry_time_td = datetime.timedelta(seconds=TOKEN_REFRESH_EXPIRY_TIME)
@@ -46,20 +56,22 @@ class Token:
 
     @staticmethod
     def _get_authorization_header(request):
-        return request.headers.get('Authorization') or request.headers.get('authorization')
+        return request.headers.get("Authorization") or request.headers.get(
+            "authorization"
+        )
 
     @staticmethod
     def get_authorization_token(request):
         try:
-            bearer, token = Token._get_authorization_header(request).split(' ')
-            
-            if bearer.lower() == 'bearer' and token:
-                return token 
+            bearer, token = Token._get_authorization_header(request).split(" ")
+
+            if bearer.lower() == "bearer" and token:
+                return token
 
         except:
-            return False 
+            return False
 
-        return False  
+        return False
 
     @staticmethod
     def generate_refresh_expiry_time(now=None):
@@ -73,11 +85,13 @@ class Token:
     @staticmethod
     def decode_access_token(raw_token: str):
         try:
-            payload = jwt.decode(raw_token, settings.SECRET_KEY, Token.TOKEN_ACCESS_ALGORITHMS)
+            payload = jwt.decode(
+                raw_token, settings.SECRET_KEY, Token.TOKEN_ACCESS_ALGORITHMS
+            )
             return payload
         except:
-            pass 
-        return 
+            pass
+        return
 
     @staticmethod
     def generate_access_token(data: dict, payload={}) -> str:
@@ -85,10 +99,11 @@ class Token:
         token = jwt.encode(
             {
                 **payload,
-                'data': data, 
-                'iat': datetime.datetime.now(pytz.utc),
-                'exp': datetime.datetime.now(pytz.utc) + Token.token_access_expiry_time_td,
-            }, 
+                "data": data,
+                "iat": datetime.datetime.now(pytz.utc),
+                "exp": datetime.datetime.now(pytz.utc)
+                + Token.token_access_expiry_time_td,
+            },
             settings.SECRET_KEY,
             Token.TOKEN_ACCESS_ALGORITHMS[0],
         )
@@ -103,27 +118,30 @@ class Token:
             max_age=Token.token_refresh_expiry_time_td,
             secure=Token.TOKEN_REFRESH_SECURE,
             httponly=Token.TOKEN_REFRESH_HTTP_ONLY,
-            samesite=Token.TOKEN_REFRESH_SAMESITE
+            samesite=Token.TOKEN_REFRESH_SAMESITE,
         )
         return response
-    
+
     @staticmethod
     def get_refresh_token_from_cookie(request, refresh_token_key=None):
         try:
             refresh_token_key = refresh_token_key or Token.TOKEN_REFRESH_KEY
-            if not (refresh_token := request.COOKIES.get(refresh_token_key)) :
+            if not (refresh_token := request.COOKIES.get(refresh_token_key)):
                 return False
-            
+
             return decrypt(refresh_token)
 
         except:
-            pass 
+            pass
 
         return False
 
     @staticmethod
     def get_refresh_token_from_request(request):
-        return Token.get_refresh_token_from_cookie(request) or request.data.get('refresh_token')
+        return Token.get_refresh_token_from_cookie(request) or request.data.get(
+            "refresh_token"
+        )
+
 
 class TokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -133,73 +151,94 @@ class TokenAuthentication(BaseAuthentication):
 
         # Parse token
         if not (token := Token.decode_access_token(_token)):
-            raise AuthenticationFailed('Invalid Token')
+            raise AuthenticationFailed("Invalid Token")
 
         # Load user
-        # TODO: Right now we aren't checking validity of provided id 
-        # and due to this it will throw error if invalid id is provided 
-        # need to fix it later. 
-        user = SimpleLazyObject(lambda: User.objects.get(id=token['data']['id']))
+        # TODO: Right now we aren't checking validity of provided id
+        # and due to this it will throw error if invalid id is provided
+        # need to fix it later.
+        user = SimpleLazyObject(lambda: User.objects.get(id=token["data"]["id"]))
 
         return (user, token)
-    
+
     def authenticate_header(self, request):
         return "Bearer"
-        
-class TokenAuthenticationMiddleware:    
+
+
+class WebSocketTokenAuthenticationMiddleware:
     def __init__(self, next_app):
         self.next_app = next_app
 
     async def __call__(self, scope, receive, send):
-        headers = {k.decode():v.decode() for k, v in scope.get("headers", [])}
-        # import ipdb;ipdb.set_trace()
-        class FakeRequest:
-            def __init__(self, headers):
-                self.headers = headers
-        frequest = FakeRequest(headers)
+        factory = RequestFactory()
 
-        # Ignore if there is no token
+        path = scope.get("path")
+        qs = parse_qs(scope.get("query_string", b"").decode())
+        headers = {k.decode(): v.decode() for k, v in scope.get("headers", [])}
+
+        d_req = factory.get(path, headers=headers, query_params=qs)
+        f_req = Request(d_req)
+
         try:
-            if not (_token := Token.get_authorization_token(frequest)):
-                raise Exception()
-            
-            # Parse token
-            if not (token := Token.decode_access_token(_token)):
-                raise Exception()
+            # Try to authenticated using signature authentication
+            signed_auth = SignedTokenAuthentication()
+            user = signed_auth.authenticate(f_req)
+            scope["user"] = (
+                user[0] if isinstance(user, tuple) and len(user) >= 1 else None
+            )
 
-            # Load user
-            # TODO: Right now we aren't checking validity of provided id 
-            # and due to this it will throw error if invalid id is provided 
-            # need to fix it later. 
-            scope['user'] = await User.objects.aget(id=token['data']['id'])
+            if not user:
+                # Try to authenticated using Authorization Header
+                if not (_token := Token.get_authorization_token(f_req)):
+                    raise Exception()
+
+                # Parse token
+                if not (token := Token.decode_access_token(_token)):
+                    raise Exception()
+
+                # Load user
+                # todo: right now we aren't checking validity of provided id
+                # and due to this it will throw error if invalid id is provided
+                # need to fix it later.
+                scope["user"] = await User.objects.aget(id=token["data"]["id"])
+
         except:
-            await send({
-                "type": "websocket.close",
-                "code": 4403 # Websocket forbidden code
-            })
+            await send(
+                {"type": "websocket.close", "code": 4403}  # Websocket forbidden code
+            )
+
+            # logger.warning(
+            #     f"Websocket request failed for path: {scope.get("path", "")}"
+            # )
             return
 
         return await self.next_app(scope, receive, send)
-    
+
 
 class SignedTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
         # Check if param have the token
-        if not (raw_token := request.query_params.get(settings.SIGNED_URL_AUTH_TOKEN_KEY)):
+        if not (
+            raw_token := request.query_params.get(settings.SIGNED_URL_AUTH_TOKEN_KEY)
+        ):
             return
-        
+
         try:
             ts_signer = TimestampSigner()
-            token = ts_signer.unsign(raw_token, max_age=settings.SIGNED_URL_AUTH_MAX_AGE)
-            return SimpleLazyObject(lambda: User.objects.get(id=token)), {"token": token}
-        except BadSignature:
-            raise AuthenticationFailed('Invalid token')
+            token = ts_signer.unsign(
+                raw_token, max_age=settings.SIGNED_URL_AUTH_MAX_AGE
+            )
+            return SimpleLazyObject(lambda: User.objects.get(id=token)), {
+                "token": token
+            }
         except SignatureExpired:
-            raise AuthenticationFailed('Token expired')
-        
+            raise AuthenticationFailed("Token expired")
+        except BadSignature:
+            raise AuthenticationFailed("Invalid token")
 
     def authenticate_header(self, request):
         return settings.SIGNED_URL_AUTH_TOKEN_KEY
+
 
 def login(request, user, in_body=False, in_cookie=True):
     response = Response()
@@ -212,7 +251,7 @@ def login(request, user, in_body=False, in_cookie=True):
                 "Failed to generate refresh_token. It could be due to max refresh token limit is reached."
                 "Try to logout from previous devices"
             ),
-            {}
+            {},
         )
 
     # Create Access Token
@@ -221,16 +260,11 @@ def login(request, user, in_body=False, in_cookie=True):
     if in_cookie:
         Token.set_refresh_token_cookie(response, refresh_token.code)
 
-
     response.data = {
-        'access_token': access_token,
+        "access_token": access_token,
     }
 
     if in_body:
-        response.data['refresh_token'] = refresh_token.code
+        response.data["refresh_token"] = refresh_token.code
 
-    return (
-        True,
-        response,
-        response.data 
-    )
+    return (True, response, response.data)

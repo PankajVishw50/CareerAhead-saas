@@ -28,6 +28,7 @@ const useRequest = () => {
           json,
           error: true,
           unmounted: false,
+          controller: controller,
         }
       }
 
@@ -38,6 +39,7 @@ const useRequest = () => {
           json,
           error: e,
           unmounted: true,
+          controller: controller,
         }
       }
       return {
@@ -45,6 +47,7 @@ const useRequest = () => {
         json,
         error: e,
         unmounted: false,
+        controller: controller,
       }
     }
 
@@ -53,6 +56,7 @@ const useRequest = () => {
       json,
       error: false,
       unmounted: false,
+      controller: null,
     }
   }
 
@@ -81,17 +85,16 @@ const useRequest = () => {
   useEffect(() => {
 
     return (() => {
-      console.log("Request aborted due to unmount")
-      controllers.current.forEach(controller => {
-        try {
-          controller.abort();
+          controllers.current.forEach(controller => {
+            try {
+                controller.abort();
         } catch {
-          ;
-        }
+              ;
+    }
       });
-      controllers.current = [];
+controllers.current = [];
     });
-  }, []);
+    }, []);
 
   return { make_request, get_url_query_params, get_url_query_params_string };
 
