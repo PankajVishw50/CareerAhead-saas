@@ -26,6 +26,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavLink } from "react-router"
+import useAuth from "@/hooks/useAuth"
 
 // This is sample data.
 const data = {

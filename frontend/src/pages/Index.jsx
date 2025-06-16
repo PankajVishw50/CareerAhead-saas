@@ -1,16 +1,16 @@
 import useAuth from "@/hooks/useAuth";
-import {Button} from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 const Index = () => {
 
-  const {logout} = useAuth();
+  const { logout } = useAuth();
   return (
     <div>
-      <Button onClick={logout}>
-        Logout
-      </Button>
+      {/* <Button onClick={logout}> */}
+      {/*   Logout */}
+      {/* </Button> */}
     </div>
 
   )
 }
-export default Index 
+export default Index
