@@ -48,6 +48,7 @@ const ChatBox = ({ chat_id = null }) => {
   const chat_messages = get_messages(activeChat).slice().reverse();
   const chat = get_chat(activeChat);
   const is_chat_active = chat && chat.is_active;
+  const now = new Date();
 
 
   const msgFetchMetaRef = useRef({
@@ -83,7 +84,7 @@ const ChatBox = ({ chat_id = null }) => {
       ...chatsMeta[chat_id],
     }
 
-    if (chatsMeta[activeChat]?.fetch_counter <= 0 && !chatsMeta[activeChat]?.fetching) {
+    if (chatsMeta[activeChat]?.fetch_counter <= 0 && !chatsMeta[activeChat]?.fetching && chatsMeta[activeChat].nextFetchUrl) {
       AllowMsgFetch.current = true;
     }
   }, [chatsMeta]);
@@ -239,7 +240,13 @@ const ChatBox = ({ chat_id = null }) => {
                   value={input}
                   onKeyDown={handleKeyDown}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder={is_chat_active ? "Type your message here..." : "Chat is disabled. You are not allowed to send message"}
+                  // placeholder={is_chat_active ? "Type your message here..." : "Chat is disabled. You are not allowed to send message"}
+                  placeholder={
+                    is_chat_active ? "Type your message here...." : (
+                      chat && chat.session_from_datetime_dt > now ? `Session will start at ${format(chat.session_from_datetime_dt, "yyyy-MM-dd HH:mm a")}`
+                        : "Chat is disabled. You are not allowed to send message"
+                    )
+                  }
                   className="min-h-12 resize-none rounded-lg bg-background border-0 p-3 shadow-none focus-visible:ring-0"
                   disabled={!is_chat_active}
                 ></ChatInput>
