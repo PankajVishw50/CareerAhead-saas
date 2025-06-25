@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { createContext } from "react";
+import { useEffect, useState, createContext } from "react";
 import { SettingsContextProvider } from "./SettingsContext";
 
 const ScreenModeContext = createContext({
@@ -35,7 +34,6 @@ const ScreenModeContextProvider = ({ children }) => {
     }
 
     Object.entries(queries).forEach(element => {
-      console.log(element)
       const [, query] = element;
       query.addEventListener("change", update_mode);
     });

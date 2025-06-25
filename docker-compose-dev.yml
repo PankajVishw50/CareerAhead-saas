@@ -1,0 +1,26 @@
+
+services:
+  backend:
+    build:
+      target: dev
+
+  frontend:
+    image: careerahead-frontend
+    init: true
+    user: node
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      target: dev
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /app
+      # - type: volume 
+      #   target: /app/node_modules
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "7600:7600"

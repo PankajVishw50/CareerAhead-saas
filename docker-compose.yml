@@ -1,0 +1,77 @@
+services:
+  backend:
+    image: careerahead-backend
+    init: true
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      target: prod
+    networks:
+      - backend
+    ports:
+      - "7575:7575"
+    volumes:
+      - "./backend:/careerahead-saas-backend"
+      - type: volume 
+        target: /careerahead-saas-backend/pids
+    depends_on:
+      - backend_db_setup
+      - postgres 
+      - rabbitmq
+      - redis
+    command: sh -c  "make rm-pids; make run-all"
+  
+  backend_db_setup:
+    image: careerahead-backend-setup
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      target: prod
+    networks:
+      - backend
+    depends_on:
+      - postgres 
+    command: sh -c "make migrate; make load-dummy-data;" 
+
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    env_file: postgres.env 
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+    volumes:
+      - "pg_data:/var/lib/postgresql/data"
+
+  rabbitmq:
+    image: rabbitmq:4.1.1
+    restart: unless-stopped
+    env_file: rabbitmq.env
+    networks:
+      - backend
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - "rabbitmq_data:/var/lib/rabbitmq"
+
+  redis:
+    image: redis:8.0-bookworm
+    restart: unless-stopped
+    volumes:
+      - "redis_data:/data"
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+volumes:
+  pg_data:
+  rabbitmq_data:
+  redis_data:
+
+networks:
+  backend:
+  frontend:

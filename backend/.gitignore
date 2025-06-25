@@ -12,3 +12,4 @@ logs/
 resources/
 util/tooling
 pyrightconfig.json
+pids/

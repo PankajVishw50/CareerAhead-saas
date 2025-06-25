@@ -6,6 +6,14 @@ runserver:
 runserver-all:
 	poetry run python3 manage.py runserver 0.0.0.0:7575
 
+runserver-debug:
+	poetry run python3 manage.py runserver localhost:7576
+
+run-gunicorn:
+	poetry run python3 -m gunicorn \
+		--pid pids/gunicorn-server.pid \
+		$(ARGS)
+
 .PHONY: check 
 check:
 	poetry run python3 manage.py check
@@ -33,10 +41,6 @@ migrate:
 .PHONY: makemigrate
 makemigrate: makemigrations migrate
 
-.PHONY: collectstatic
-collectstatic: 
-	poetry run python3 manage.py collectstatic
-
 .PHONY: test 
 test:
 	poetry run python3 manage.py test
@@ -45,24 +49,31 @@ test:
 run-celery-multi:
 	poetry run celery multi start careerahead01 -A careerahead worker -l DEBUG -c 2 \
 		--logfile=logs/celery.log \
-		--pidfile=logs/celery.pid
+		--pidfile=pids/celery.pid
 
 run-celery-beat:
 	poetry run celery -A careerahead beat -l DEBUG \
 		--logfile=logs/celery-beat.log \
-		--pidfile=logs/celery-beat.pid \
+		--pidfile=pids/celery-beat.pid \
 		--detach
 
+.PHONY: run-all-except-gunicorn
+run-all-except-gunicorn: stop-all run-celery-multi run-celery-beat
+
 .PHONY: run-all
-run-all: stop-all run-celery-multi run-celery-beat runserver
+run-all: run-all-except-gunicorn run-gunicorn
+
+
+load-dummy-data:
+	poetry run python3 manage.py loaddata full_fixture.json
 
 stop-celery-multi:
 	poetry run celery multi stopwait careerahead01 \
-		--pidfile=logs/celery.pid
+		--pidfile=pids/celery.pid
 	
 stop-celery-beat:
-	@if [ -f logs/celery-beat.pid ]; then \
-		PID=$$(cat logs/celery-beat.pid); \
+	@if [ -f pids/celery-beat.pid ]; then \
+		PID=$$(cat pids/celery-beat.pid); \
 		if kill -0 $$PID 2>/dev/null; then \
 			kill $$PID && echo "Celery Beat stopped"; \
 		else \
@@ -74,3 +85,8 @@ stop-celery-beat:
 
 
 stop-all: stop-celery-multi stop-celery-beat
+
+# Utils rules
+rm-pids:
+	rm -f pids/*.pid
+

@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    ports:
+      - "7600:7600"
+    depends_on:
+      - db
+    links:
+        - db
+
+  db:
+    image: postgres:14.1
+    environment:
+      POSTGRES_USER: "careerahead-user"
+      POSTGRES_PASSWORD: "careerahead-user-password"
+
+    ports:
+      - "5432:5432"
+

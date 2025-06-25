@@ -22,6 +22,7 @@ ALLOWED_HOSTS = ["localhost", "localhost:7600"]
 
 INSTALLED_APPS = [
     "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -165,13 +166,12 @@ SHELL_PLUS_PRE_IMPORTS = [
 # Channel layer config
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "host": "amqp://guest:guest@localhost",
+            "hosts": [("redis", 6379)],
         },
     },
 }
-
 
 # EMAIL
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")

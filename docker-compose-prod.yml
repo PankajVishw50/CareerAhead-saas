@@ -1,0 +1,34 @@
+
+services:
+  backend:
+    environment:
+      LOCAL_SETTING_PATH: local/local.production.settings.py
+
+  frontend-builder:
+    image: careerahead-frontend-builder
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      target: prod
+    networks:
+      - frontend
+
+  nginx:
+    image: careerahead-nginx
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./nginx.Dockerfile
+    volumes:
+      - type: bind
+        source: nginx.conf
+        target: /etc/nginx/nginx.conf
+      - "./frontend/dist:/careerahead-frontend-static"
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend-builder
+      - backend

@@ -11,10 +11,10 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "/api": {
-        target: "http://localhost:7575",
+        target: "http://backend:7575",
       },
       "/ws": {
-        target: "ws://localhost:7575",
+        target: "ws://backend:7575",
         ws: true
       },
     }

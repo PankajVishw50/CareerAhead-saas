@@ -47,6 +47,10 @@ def load_serialized_event(type=None):
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
         # update user to online status
+        # import ipdb
+        #
+        # ipdb.set_trace()
+
         self.user = self.scope["user"]
         self.user.online_channel = self.channel_name
         self.user.save()

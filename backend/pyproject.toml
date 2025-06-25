@@ -25,11 +25,14 @@ celery = "^5.4.0"
 channels = {extras = ["daphne"], version = "^4.2.0"}
 channels-rabbitmq = "^4.0.1"
 django-filter = "^25.1"
-
+channels-redis = "^4.2.1"
+uvicorn-worker = "^0.3.0"
+uvicorn = {extras = ["standard"], version = "^0.34.3"}
 
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"
 flower = "^2.0.1"
+watchfiles = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core"]

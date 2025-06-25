@@ -1,12 +1,17 @@
 from django.db import models, transaction
 from django.apps import apps
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from util.mail import mail
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 class UserManager(BaseUserManager):
 
@@ -16,37 +21,36 @@ class UserManager(BaseUserManager):
 
         email = self.normalize_email(email)
 
-        if name := extra_fields.get('name'):
-            extra_fields['name'] = self.model.normalize_username(name)
+        if name := extra_fields.get("name"):
+            extra_fields["name"] = self.model.normalize_username(name)
         else:
-            extra_fields['name'] = self.model.normalize_username(email.split('@')[0])
+            extra_fields["name"] = self.model.normalize_username(email.split("@")[0])
 
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         return user
-        
+
     def _create_user(self, email, password, **extra_fields):
         logger.info(f"Request for new user registeration: {email}")
-        send_mail = extra_fields.pop('send_mail', False)
+        send_mail = extra_fields.pop("send_mail", False)
 
         with transaction.atomic():
             user = self._create_user_object(email, password, **extra_fields)
             user.save()
-            EmailVerification = apps.get_model('account.EmailVerification')
+            EmailVerification = apps.get_model("account.EmailVerification")
             emailverification = EmailVerification.objects.create_emailverification(
-                user=user,
-                send_mail=send_mail
+                user=user, send_mail=send_mail
             )
             emailverification.save()
 
         logger.info(f"User created: {email}")
         return user
-    
-    def create_user(self, email, password,  **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('send_mail', True)
+
+    def create_user(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("send_mail", True)
 
         # import ipdb;ipdb.set_trace()
         with transaction.atomic():
@@ -55,36 +59,34 @@ class UserManager(BaseUserManager):
             user = self._create_user(email, password, **extra_fields)
 
             # Create wallet
-            Wallet = apps.get_model('wallet.Wallet')
+            Wallet = apps.get_model("wallet.Wallet")
             wallet = Wallet.objects.create_wallet(user, **wallet_data)
 
+        return user
 
-        return user 
-    
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('send_mail',  False)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("send_mail", False)
 
         with transaction.atomic():
             user = self.create_user(email, password, **extra_fields)
             user.emailverification.verify(force=True)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonitorModel):
 
     class Genders(models.TextChoices):
-        male = 'Male'
-        female = 'Female'
-        other = 'Other'
+        male = "Male"
+        female = "Female"
+        other = "Other"
 
-    email = models.EmailField(
-        unique=True
-    )
+    email = models.EmailField(unique=True)
 
     image = models.ImageField(
-        upload_to='profile/',
-        default='profile/user-image.jpg', 
+        upload_to="profile/",
+        default="profile/user-image.jpg",
     )
 
     name = models.CharField(
@@ -109,12 +111,12 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
     )
 
     online_channel = models.CharField(
-        max_length=60,
+        max_length=120,
         null=True,
         blank=True,
     )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = UserManager()
@@ -128,6 +130,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
 
     def create_email_verification_code(self, force=False):
         from account.models import EmailVerification
+
         if self.emailverification:
             if force:
                 self.emailverification.delete()
@@ -142,39 +145,38 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
     def create_refresh_token(self):
         """After validating properly, it created refresh token
         in db otherwise returns False
-        
+
         """
 
         from account.models import RefreshToken
+
         # Check if there are not more than x tokens already
         if self.tokens.count() >= settings.TOKEN_REFRESH_MAX_NUMBER_IN_DB:
             return False
 
         # Create new token
-        token = RefreshToken(
-            user=self
-        )
+        token = RefreshToken(user=self)
         token.save()
         return token
-        
 
     @property
     def chats(self):
         from chat.models.Chat import Chat
+
         return Chat.objects.filter(models.Q(user_a=self) | models.Q(user_b=self))
 
     def send_verification_mail(self):
 
         return mail(
-            subject='Testing', 
-            message='We are testing bro', 
+            subject="Testing",
+            message="We are testing bro",
             recipient_list=[self.email],
-            html_message='<h1>We are testing bro</h1>',
+            html_message="<h1>We are testing bro</h1>",
             fail_silently=True,
         )
- 
+
     def chats_valid(self):
         return self.chats.filter(is_active=True)
 
     def chats_invalid(self):
-        return self.chats.filter(is_active=False) 
+        return self.chats.filter(is_active=False)
