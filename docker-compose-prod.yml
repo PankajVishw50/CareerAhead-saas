@@ -10,6 +10,8 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
       target: prod
+    volumes:
+      - "./frontend/dist/:/app/dist/"
     networks:
       - frontend
 

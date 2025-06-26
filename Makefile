@@ -51,4 +51,11 @@ clean:
 %-sh:
 	$(MAKE) prefix-all ARGS="exec $* sh"
 
+logs:
+	$(MAKE) prefix-all ARGS="logs -f"
+	
+logs-d:
+	$(MAKE) prefix-all ARGS="logs"
 
+%-logs:
+	$(MAKE) prefix-all ARGS="logs -f $*"

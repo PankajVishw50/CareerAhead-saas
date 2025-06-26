@@ -1,4 +1,4 @@
-FROM python:3.12.3-bullseye AS base 
+FROM python:3.12.11-slim-bullseye AS base
 
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE="careerahead.settings"
@@ -10,7 +10,7 @@ RUN mkdir -p pids
 ENV PATH="/root/.local/bin:$PATH"
 
 RUN apt-get update && \
-  apt-get install -y curl
+  apt-get install -y curl make
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
 COPY ./pyproject.toml ./poetry.lock ./ 
@@ -19,8 +19,6 @@ COPY ./pyproject.toml ./poetry.lock ./
 
 # Development Image
 FROM base AS dev
-
-RUN apt-get install -y vim curl less tree htop net-tools
 
 RUN poetry sync --all-groups
 COPY . .

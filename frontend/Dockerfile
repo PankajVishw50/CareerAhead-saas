@@ -1,4 +1,4 @@
-FROM node:18.9.1-bullseye-slim AS base
+FROM node:lts-alpine3.21  AS base
 
 WORKDIR /app/
 
