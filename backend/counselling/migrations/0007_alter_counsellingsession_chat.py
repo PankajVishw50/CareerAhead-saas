@@ -7,14 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0002_alter_chat_options_alter_message_chat'),
-        ('counselling', '0006_alter_counsellingsession_chat'),
+        ("chat", "0002_alter_chat_options_alter_message_chat"),
+        ("counselling", "0006_alter_counsellingsession_chat"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='counsellingsession',
-            name='chat',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='session', to='chat.chat'),
+            model_name="counsellingsession",
+            name="chat",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="session",
+                to="chat.chat",
+            ),
         ),
     ]

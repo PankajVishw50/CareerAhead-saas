@@ -7,6 +7,7 @@ from counselling.models import Counsellor
 from counselling.serializers import CounsellorSerializer
 from counselling.filters import CounsellorModelFilterSet
 
+
 class CounsellorsListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Counsellor.objects.all()

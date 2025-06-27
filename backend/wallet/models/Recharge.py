@@ -5,6 +5,7 @@ from util.models.shortcuts import User
 from wallet.models import Wallet
 from util.helpers import generate_random_string
 
+
 class RechargeManager(models.Manager):
     def create_recharge(self, user, wallet, amount, currency, order_id):
         recharge = self.create(
@@ -16,16 +17,17 @@ class RechargeManager(models.Manager):
         )
         return recharge
 
+
 class Recharge(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     class Meta:
-        ordering = ['-modified_at']
+        ordering = ["-modified_at"]
 
     class StatusChoices(models.TextChoices):
-        created = 'Created'
-        attempted = 'Attempted'
-        paid = 'Paid'
-        failed = 'failed'
+        created = "Created"
+        attempted = "Attempted"
+        paid = "Paid"
+        failed = "failed"
 
     user = models.ForeignKey(
         User,
@@ -37,9 +39,8 @@ class Recharge(UUIDPrimaryFieldModel, TimeMonitorModel):
         on_delete=models.CASCADE,
     )
 
-    amount = models.IntegerField(
-    )
-    
+    amount = models.IntegerField()
+
     currency = models.CharField(
         max_length=6,
     )
@@ -52,7 +53,7 @@ class Recharge(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     order_id = models.CharField(
         max_length=60,
-        unique=True, 
+        unique=True,
     )
 
     status = models.CharField(
@@ -70,21 +71,21 @@ class Recharge(UUIDPrimaryFieldModel, TimeMonitorModel):
     def complete_payment(self, payment_id):
         if self.status == self.StatusChoices.paid:
             if self.payment_id == payment_id:
-                return True 
-            return False 
-        
-        self.status = self.StatusChoices.paid 
+                return True
+            return False
+
+        self.status = self.StatusChoices.paid
         self.payment_id = payment_id
         self.save()
 
         # Add money to wallet
-        self.wallet.balance += self.amount 
+        self.wallet.balance += self.amount
         self.wallet.save()
         return True
 
-
     def verify_signature(self, payment_id, signature):
         from wallet.razorpay import razorpay
+
         if not razorpay.verify_signature(self.order_id, payment_id, signature):
             return False
         return self.complete_payment(payment_id)

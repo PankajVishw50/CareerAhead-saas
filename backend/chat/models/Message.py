@@ -4,6 +4,7 @@ from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from util.models.shortcuts import User
 from chat.models.Chat import Chat
 
+
 class Message(UUIDPrimaryFieldModel, TimeMonitorModel):
     # class Meta:
     #     ordering = ["-created_at"]
@@ -19,8 +20,7 @@ class Message(UUIDPrimaryFieldModel, TimeMonitorModel):
         on_delete=models.CASCADE,
     )
 
-    msg = models.TextField(
-    )
+    msg = models.TextField()
 
     seen = models.BooleanField(
         default=False,

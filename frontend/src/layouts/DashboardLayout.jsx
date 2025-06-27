@@ -14,17 +14,18 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Outlet } from "react-router"
+import { MessageCircleMore } from "lucide-react"
 import { Sun, Moon, BadgeIndianRupee } from "lucide-react";
-import {Button} from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import useColorMode from "@/hooks/useColorMode"
 import ThemeModeToggle from "@/components/ThemeModeToggle"
 import { Badge } from "@/components/ui/badge"
-import {NavLink} from "react-router";
-import {useState} from "react";
+import { NavLink } from "react-router";
+import { useState } from "react";
 import WalletAmountBadge from "@/components/WalletAmountBadge"
 
 export default function DashboardLayout() {
-  const {mode, toggleMode} = useColorMode();
+  const { mode, toggleMode } = useColorMode();
   const [headerTitle, setHeaderTitle] = useState("");
 
 
@@ -39,7 +40,7 @@ export default function DashboardLayout() {
           <div className="flex items-center gap-2 px-4 w-full">
             <SidebarTrigger className="dark:text-white -ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-              <div className="dark:text-white w-full">{headerTitle}</div>
+            <div className="dark:text-white w-full">{headerTitle}</div>
             {/* <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
@@ -54,8 +55,15 @@ export default function DashboardLayout() {
               </BreadcrumbList>
             </Breadcrumb> */}
             <div className="dark:text-white px-2 py-0 w-full flex justify-end gap-3 items-stretch">
-              <WalletAmountBadge/>
-              <ThemeModeToggle/>
+              {/* <Button variant="ghost" asChild> */}
+              <NavLink to="/chat"
+                className="flex items-center p-2 rounded-md hover:text-blue-500 hover:scale-110 active:scale-95 active:text-blue-700 transition-transform duration-200"
+              >
+                <MessageCircleMore />
+              </NavLink>
+              {/* </Button> */}
+              <WalletAmountBadge />
+              <ThemeModeToggle />
               {/* <Button variant="outlined"
               onClick={() => {
                 toggleMode();
@@ -71,7 +79,7 @@ export default function DashboardLayout() {
         </header>
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <Outlet context={{setHeaderTitle}} />
+          <Outlet context={{ setHeaderTitle }} />
 
           {/* Skeleton */}
           {/* <div className="grid auto-rows-min gap-4 md:grid-cols-3">

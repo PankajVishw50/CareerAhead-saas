@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+
 class BaseNotificationEventSerializer(serializers.Serializer):
     type = serializers.ChoiceField(
         choices=["message.new", "message.seen"],
     )
+
 
 class ChatNotificationSerializer(serializers.Serializer):
     chat_id = serializers.CharField(required=True)
@@ -14,8 +16,8 @@ class NotificationEventSerializer(BaseNotificationEventSerializer):
     payload = serializers.DictField(required=True)
 
     def validated(self, data):
-        payload_data = data.get('payload', {})
-        type_value = data.get('type')
+        payload_data = data.get("payload", {})
+        type_value = data.get("type")
 
         # Mapping of serializers
         serializer_mapping = {
@@ -30,8 +32,7 @@ class NotificationEventSerializer(BaseNotificationEventSerializer):
 
         if not payload_serialized.is_valid():
             raise serializers.validationError(payload_serialized.errors)
-        
-        data['payload'] = payload_serialized.data
+
+        data["payload"] = payload_serialized.data
 
         return data
-        

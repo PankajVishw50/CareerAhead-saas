@@ -7,6 +7,7 @@ import pytz
 
 logger = logging.getLogger()
 
+
 @shared_task(bind=True, retry_kwargs={"max_retries": 3, "default_retry_delay": 0})
 def update_session_chat(
     self,
@@ -19,9 +20,8 @@ def update_session_chat(
         chat = session.chat
 
         # Check if need to update
-        now = datetime.datetime.now(pytz.utc) 
+        now = datetime.datetime.now(pytz.utc)
 
-    
         if (
             now >= (session.from_datetime - datetime.timedelta(seconds=10))
             and now < session.to_datetime
@@ -32,10 +32,14 @@ def update_session_chat(
 
         chat.save()
     except CounsellingSession.DoesNotExist as e:
-        logger.error(f"Session {session_id} not found. No retry. Error: {e}", exc_info=True)
+        logger.error(
+            f"Session {session_id} not found. No retry. Error: {e}", exc_info=True
+        )
         return 0
     except Exception as e:
-        logger.exception(f"Unexpected error updating chat for session {session_id}. Retrying... Error: {e}")
+        logger.exception(
+            f"Unexpected error updating chat for session {session_id}. Retrying... Error: {e}"
+        )
         raise self.retry(exc=e)
 
     logger.debug(f"Session's ({session.id}) chat is updated with {chat.__dict__}")

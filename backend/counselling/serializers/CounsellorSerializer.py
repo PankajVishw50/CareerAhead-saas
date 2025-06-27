@@ -4,16 +4,14 @@ from counselling.serializers.AboutSerializer import AboutSerializer
 from counselling.models import Counsellor
 from account.serializers import UserSerializer
 
+
 class CounsellorSerializer(serializers.ModelSerializer):
     about = AboutSerializer()
     user = UserSerializer()
-    
+
     class Meta:
         model = Counsellor
-        fields = [
-            "id",
-            'user', 'about'
-        ]
+        fields = ["id", "user", "about"]
         read_only_fields = [
             "id",
         ]

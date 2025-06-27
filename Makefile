@@ -30,6 +30,9 @@ prefix-all:
 %-restart:
 	$(MAKE) prefix-$(*) ARGS="restart"
 
+%-up:
+	$(MAKE) prefix-$(*) ARGS="up -d $(ARGS)"
+
 clean-prod:
 	$(MAKE) prefix-prod ARGS="down"
 
@@ -52,7 +55,7 @@ clean:
 	$(MAKE) prefix-all ARGS="exec $* sh"
 
 logs:
-	$(MAKE) prefix-all ARGS="logs -f"
+	$(MAKE) prefix-all ARGS="logs -f $(ARGS)"
 	
 logs-d:
 	$(MAKE) prefix-all ARGS="logs"

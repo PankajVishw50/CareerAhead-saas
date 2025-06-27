@@ -7,6 +7,4 @@ from chat.views.decorators import chat_exists
 class ChatView(APIView):
     @chat_exists
     def get(self, request, chat_id):
-        return Response(
-            ChatSerializer(request.chat).data
-        )
+        return Response(ChatSerializer(request.chat).data)

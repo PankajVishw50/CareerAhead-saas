@@ -13,12 +13,13 @@ from chat.serializers import ChatSerializer
 from util.helpers import paginated_response
 from util.cursors import GeneralCursorPagination
 
+
 class ChatsView(APIView):
     permission_classes = [IsAuthenticated]
     filter_backends = [OrderingFilter]
     ordering_fields = ["session_from_datetime", "created_at"]
     ordering = ["-session_from_datetime"]
-    
+
     @get_ordering_params
     def get(self, request):
 
@@ -30,28 +31,27 @@ class ChatsView(APIView):
             case "available":
                 query = request.user.chats_valid()
             case "disabled":
-                query = request.user.chats_invalid() 
+                query = request.user.chats_invalid()
             case "all":
-                query = request.user.chats 
+                query = request.user.chats
             case _:
                 return ErrorResponseTemplates.BAD_REQUEST(
                     f"Invalid `type` value - should be one of these {VALID_TYPES}"
                 )
 
-        query = query.annotate(
-            session_from_datetime=F("session__from_datetime")
-        )
+        query = query.annotate(session_from_datetime=F("session__from_datetime"))
 
         paginator = GeneralCursorPagination()
         try:
             page = paginator.paginate_queryset(query, request, self)
         except Exception:
             return ErrorResponseTemplates.INTERNAL_SERVER_ERROR()
-    
 
         # import ipdb;ipdb.set_trace()
         chats_s = ChatSerializer(page, many=True)
-        return Response({
-            **paginator.get_html_context(),
-            "items": chats_s.data,
-        })
+        return Response(
+            {
+                **paginator.get_html_context(),
+                "items": chats_s.data,
+            }
+        )

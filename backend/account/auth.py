@@ -101,8 +101,9 @@ class Token:
                 **payload,
                 "data": data,
                 "iat": datetime.datetime.now(pytz.utc),
-                "exp": datetime.datetime.now(pytz.utc)
-                + Token.token_access_expiry_time_td,
+                "exp": (
+                    datetime.datetime.now(pytz.utc) + Token.token_access_expiry_time_td
+                ),
             },
             settings.SECRET_KEY,
             Token.TOKEN_ACCESS_ALGORITHMS[0],

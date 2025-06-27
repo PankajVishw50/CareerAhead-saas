@@ -1,5 +1,4 @@
-
-from .Counsellor import Counsellor 
+from .Counsellor import Counsellor
 from .About import About
 from .Slot import Slot
-from .CounsellingSession import CounsellingSession 
+from .CounsellingSession import CounsellingSession

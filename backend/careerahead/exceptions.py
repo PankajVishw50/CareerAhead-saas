@@ -1,6 +1,7 @@
-from rest_framework.views import exception_handler  
-from account.auth import ErrorResponseTemplates  
+from rest_framework.views import exception_handler
+from account.auth import ErrorResponseTemplates
 from django.conf import settings
+
 
 def api_exception_handler(exc, context):
     """Converts Exceptions into standard format
@@ -11,7 +12,7 @@ def api_exception_handler(exc, context):
             "message": "bad request",
             "messages": ["invalid payload", "no `name` parameter passed"]
         }
-    } 
+    }
     """
     response = exception_handler(exc, context)
 
@@ -22,15 +23,19 @@ def api_exception_handler(exc, context):
 
         if response is not None:
             payload = {
-                'status_code': response.status_code,
-                'message': response.data if isinstance(response.data, str) else 'Something went wrong',
+                "status_code": response.status_code,
+                "message": (
+                    response.data
+                    if isinstance(response.data, str)
+                    else "Something went wrong"
+                ),
             }
 
             if isinstance(response.data, dict):
-                payload['message'] = response.data.get('detail', 'Something went wrong')
+                payload["message"] = response.data.get("detail", "Something went wrong")
             elif isinstance(response.data, list):
-                payload['messages'] = response.data 
-                            
+                payload["messages"] = response.data
+
             response.data = {
                 "error": {
                     **payload,
@@ -39,6 +44,6 @@ def api_exception_handler(exc, context):
 
             return response
     except:
-        pass 
+        pass
 
     return ErrorResponseTemplates.INTERNAL_SERVER_ERROR()

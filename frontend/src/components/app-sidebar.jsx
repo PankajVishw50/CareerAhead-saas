@@ -73,15 +73,11 @@ const data = {
         },
         {
           title: "Counsellor Post Page",
-          url: "/counsellors/143d6dbf-9e43-4ab9-a72b-c031b2367908",
+          url: "/counsellors/d61c717c-6b72-43e6-bbf0-12d25b060a97",
         },
         {
           title: "Wallet",
           url: "/wallet",
-        },
-        {
-          title: "Chat Test",
-          url: "/chat-test",
         },
         {
           title: "Chat",

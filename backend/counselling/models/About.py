@@ -2,6 +2,7 @@ from django.db import models
 
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 
+
 class About(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     MAX_LENGTH = 1024 * 10
@@ -19,11 +20,9 @@ class About(UUIDPrimaryFieldModel, TimeMonitorModel):
         max_length=MAX_LENGTH,
     )
 
-    
     speciality = models.TextField(
         max_length=MAX_LENGTH,
     )
-
 
     methodology = models.TextField(
         max_length=MAX_LENGTH,

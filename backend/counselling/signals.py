@@ -9,6 +9,7 @@ from util.decorators import disable_for_loaddata
 
 logger = logging.getLogger()
 
+
 @receiver(post_save, sender=CounsellingSession)
 @disable_for_loaddata
 def create_background_worker_for_session_chat_update(sender, **kwargs):
@@ -19,13 +20,9 @@ def create_background_worker_for_session_chat_update(sender, **kwargs):
     logger.debug(f"Signal for CounsellinSession: {instance.__dict__}")
 
     # Schedule to Enable chat
-    update_session_chat.apply_async(
-        (instance.id, ),
-        eta=instance.from_datetime
-    )
+    update_session_chat.apply_async((instance.id,), eta=instance.from_datetime)
 
     # Schedule to Disable chat
     update_session_chat.apply_async(
-        (instance.id, ),
-        eta=instance.to_datetime + datetime.timedelta(seconds=1)
+        (instance.id,), eta=instance.to_datetime + datetime.timedelta(seconds=1)
     )

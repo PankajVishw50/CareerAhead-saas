@@ -4,7 +4,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-@shared_task(bind=True, autoretry_for=(Exception,), retry_kwargs={"max_retries": 3, "countdown":5})
+
+@shared_task(
+    bind=True,
+    autoretry_for=(Exception,),
+    retry_kwargs={"max_retries": 3, "countdown": 5},
+)
 def send_mail(
     self,
     subject: str,
@@ -25,11 +30,15 @@ def send_mail(
         )
 
         if output is not 1:
-            logger.warning(f"Failed to sent mail to {recipient_list} with output being {output}")
+            logger.warning(
+                f"Failed to sent mail to {recipient_list} with output being {output}"
+            )
     except Exception as e:
-        logger.exception(f"Attempting to send mail to {recipient_list} with exception {e}", exc_info=True)
+        logger.exception(
+            f"Attempting to send mail to {recipient_list} with exception {e}",
+            exc_info=True,
+        )
         raise Exception()
-
 
     return output
 

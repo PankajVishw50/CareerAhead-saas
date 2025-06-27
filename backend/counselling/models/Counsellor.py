@@ -4,6 +4,7 @@ import pytz
 from util.models.base_models import TimeMonitorModel, UUIDPrimaryFieldModel
 from util.models.shortcuts import User
 
+
 class CounsellorManager(models.Manager):
 
     # Method to create counsellor
@@ -23,11 +24,11 @@ class CounsellorManager(models.Manager):
 
         counsellor.save()
         return counsellor
-    
+
 
 class Counsellor(UUIDPrimaryFieldModel, TimeMonitorModel):
     class Meta:
-        ordering = ['-modified_at']
+        ordering = ["-modified_at"]
 
     user = models.OneToOneField(
         to=User,

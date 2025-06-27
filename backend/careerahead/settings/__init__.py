@@ -15,4 +15,3 @@ LOCAL_SETTING_PATH = (
 )
 
 include("base.settings.py", "application.settings.py", optional(LOCAL_SETTING_PATH))
-

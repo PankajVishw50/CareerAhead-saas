@@ -13,6 +13,9 @@ class SignedTokenView(APIView):
         t_signer = TimestampSigner()
         token = t_signer.sign(request.user.id)
 
-        return Response({
-            'token': token,
-        }, status.HTTP_200_OK) 
+        return Response(
+            {
+                "token": token,
+            },
+            status.HTTP_200_OK,
+        )

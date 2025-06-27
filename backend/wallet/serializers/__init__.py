@@ -1,4 +1,4 @@
 from .WalletSerializer import WalletSerializer
 from .RechargeSerializer import RechargeSerializer
 from .FundAccountSerializer import FundAccountSerializer
-from .WithdrawalSerializer import WithdrawalSerializer  
+from .WithdrawalSerializer import WithdrawalSerializer

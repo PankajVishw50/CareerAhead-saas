@@ -1,74 +1,52 @@
-from django.conf import settings
-from django.db.models import Q
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 import datetime
-import pytz 
-
-from util.response import ErrorResponseTemplates
-from counselling.views.decorators import counsellor_exists, slot_exists
+from django.db.models import Q
+import pytz
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from counselling.models import CounsellingSession
-from wallet.views.decorators import active_wallet_required
 from counselling.serializers import CounsellingSessionSerializer
+from util.cursors import GeneralCursorPagination
+from util.response import ErrorResponseTemplates
+
 
 class SessionsView(APIView):
-    permission_classes = [IsAuthenticated]
+    permissions_classes = [IsAuthenticated]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["from_datetime", "created_at"]
+    ordering = ["-from_datetime"]
 
-    @active_wallet_required
-    @counsellor_exists
-    @slot_exists
-    def post(self, request, counsellor_id, slot_id):
-        # import ipdb;ipdb.set_trace()
+    def get(self, request):
 
+        query = request.user.sessions.all()
+        type_of = request.query_params.get("type", "all")
+        now = datetime.datetime.now(pytz.utc)
+
+        match type_of:
+            case "active":
+                query = query.filter(Q(from_datetime__lte=now) & Q(to_datetime__gt=now))
+            case "upcoming":
+                query = query.filter(Q(to_datetime__gt=now))
+            case "old":
+                query = query.filter(to_datetime__lte=now)
+            case "all":
+                query = query
+            case _:
+                return ErrorResponseTemplates.BAD_REQUEST(
+                    f"Invalid `type` value - should be one of these {VALID_TYPES}"
+                )
+
+        paginator = GeneralCursorPagination()
         try:
-            from_datetime = request.data['from_datetime']
-            from_dt = datetime.datetime.strptime(from_datetime, settings.FORMAT_DATETIME_ZONE)
-            
-        except ValueError:
-            return ErrorResponseTemplates.BAD_REQUEST(
-                "Invalid Payload: valid `from_datetime` is required"
-            )
-        
-        # Check balance
-        if request.user.wallet.balance < request.slot.fee:
-            return ErrorResponseTemplates.BAD_GATEWAY(
-                "Insufficient balance"
-            )
+            page = paginator.paginate_queryset(query, request, self)
+        except Exception:
+            return ErrorResponseTemplates.INTERNAL_SERVER_ERROR()
 
-        # Check if this slot is valid
-        c_from_dt = from_dt.astimezone(request.counsellor.tz) 
-
-        if c_from_dt.time() != request.slot.from_time:
-            return ErrorResponseTemplates.BAD_REQUEST("Invalid payload")
-        
-        if not request.slot.work_day(c_from_dt.weekday()):
-            return ErrorResponseTemplates.BAD_REQUEST("Slot not valid for specified day")
-
-        # Check if any slot with conflicted time exists
-        u_from_dt = from_dt.astimezone(pytz.utc)
-        u_to_dt = u_from_dt + request.slot.duration
-
-        u_from_t = u_from_dt.time()
-        u_to_t = u_to_dt.time()
-
-        conflicted_slots = request.counsellor.sessions.filter(
-            Q(from_datetime__range=(u_from_dt, u_to_dt)) 
-            | Q(to_datetime__range=(u_from_dt, u_to_dt))
-        ).count()
-
-        if conflicted_slots > 0:
-            return ErrorResponseTemplates.BAD_GATEWAY(
-                "Slot is not available for specified date"
-            )
-        
-        # Create a new session
-        session = CounsellingSession.objects.create_session(
-            request.user,
-            request.counsellor,
-            request.slot,
-            from_dt,
+        query_s = CounsellingSessionSerializer(page, many=True)
+        return Response(
+            {
+                **paginator.get_html_context(),
+                "items": query_s.data,
+            }
         )
-
-        return Response(CounsellingSessionSerializer(session).data)
- 

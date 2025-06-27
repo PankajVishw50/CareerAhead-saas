@@ -9,6 +9,7 @@ from counselling.views.decorators import counsellor_exists
 from counselling.models import Counsellor
 from util.response import ErrorResponseTemplates
 
+
 class CounsellorView(APIView):
     permission_classes = [IsAuthenticated]
 

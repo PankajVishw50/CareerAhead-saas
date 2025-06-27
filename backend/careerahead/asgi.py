@@ -23,7 +23,6 @@ from chat.middlewares import WebSocketLoggerMiddleware
 from chat.routing import websocket_urlpatterns
 from account.auth import WebSocketTokenAuthenticationMiddleware
 
-
 application = ProtocolTypeRouter(
     {
         "http": asgi_application,

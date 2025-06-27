@@ -16,66 +16,146 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Wallet',
+            name="Wallet",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('contact_id', models.CharField(blank=True, max_length=30, null=True)),
-                ('balance', models.IntegerField(db_default=0, default=0)),
-                ('_is_active', models.BooleanField(default=False)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("contact_id", models.CharField(blank=True, max_length=30, null=True)),
+                ("balance", models.IntegerField(db_default=0, default=0)),
+                ("_is_active", models.BooleanField(default=False)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Transaction',
+            name="Transaction",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('amount', models.PositiveIntegerField()),
-                ('refunded', models.BooleanField(default=False)),
-                ('receiver', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='received_transaction', to='wallet.wallet')),
-                ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sent_transaction', to='wallet.wallet')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("amount", models.PositiveIntegerField()),
+                ("refunded", models.BooleanField(default=False)),
+                (
+                    "receiver",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="received_transaction",
+                        to="wallet.wallet",
+                    ),
+                ),
+                (
+                    "sender",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="sent_transaction",
+                        to="wallet.wallet",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Recharge',
+            name="Recharge",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('amount', models.IntegerField()),
-                ('currency', models.CharField(max_length=6)),
-                ('payment_id', models.CharField(blank=True, max_length=60, null=True)),
-                ('order_id', models.CharField(max_length=60, unique=True)),
-                ('status', models.CharField(choices=[('Created', 'Created'), ('Attempted', 'Attempted'), ('Paid', 'Paid'), ('failed', 'Failed')], db_default='Created', default='Created', max_length=16)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='wallet.wallet')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("amount", models.IntegerField()),
+                ("currency", models.CharField(max_length=6)),
+                ("payment_id", models.CharField(blank=True, max_length=60, null=True)),
+                ("order_id", models.CharField(max_length=60, unique=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("Created", "Created"),
+                            ("Attempted", "Attempted"),
+                            ("Paid", "Paid"),
+                            ("failed", "Failed"),
+                        ],
+                        db_default="Created",
+                        default="Created",
+                        max_length=16,
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "wallet",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="wallet.wallet"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-modified_at'],
+                "ordering": ["-modified_at"],
             },
         ),
         migrations.CreateModel(
-            name='Withdrawal',
+            name="Withdrawal",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('payout_id', models.CharField(max_length=30)),
-                ('amount', models.PositiveIntegerField()),
-                ('state', models.CharField(choices=[('Pending', 'Pending'), ('Done', 'Done'), ('Failed', 'Failed')], default='Pending', max_length=16)),
-                ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='wallet.wallet')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("payout_id", models.CharField(max_length=30)),
+                ("amount", models.PositiveIntegerField()),
+                (
+                    "state",
+                    models.CharField(
+                        choices=[
+                            ("Pending", "Pending"),
+                            ("Done", "Done"),
+                            ("Failed", "Failed"),
+                        ],
+                        default="Pending",
+                        max_length=16,
+                    ),
+                ),
+                (
+                    "wallet",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="wallet.wallet"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

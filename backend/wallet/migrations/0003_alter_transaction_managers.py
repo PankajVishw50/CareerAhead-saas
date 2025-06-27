@@ -6,13 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wallet', '0002_alter_transaction_managers'),
+        ("wallet", "0002_alter_transaction_managers"),
     ]
 
     operations = [
         migrations.AlterModelManagers(
-            name='transaction',
-            managers=[
-            ],
+            name="transaction",
+            managers=[],
         ),
     ]

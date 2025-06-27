@@ -16,51 +16,86 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Counsellor',
+            name="Counsellor",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('timezone', models.CharField(default='UTC', max_length=32)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("timezone", models.CharField(default="UTC", max_length=32)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-modified_at'],
+                "ordering": ["-modified_at"],
             },
         ),
         migrations.CreateModel(
-            name='About',
+            name="About",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('introduction', models.TextField(max_length=10240)),
-                ('qualification', models.TextField(max_length=10240)),
-                ('speciality', models.TextField(max_length=10240)),
-                ('methodology', models.TextField(max_length=10240)),
-                ('counsellor', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='counselling.counsellor')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("introduction", models.TextField(max_length=10240)),
+                ("qualification", models.TextField(max_length=10240)),
+                ("speciality", models.TextField(max_length=10240)),
+                ("methodology", models.TextField(max_length=10240)),
+                (
+                    "counsellor",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="counselling.counsellor",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Slot',
+            name="Slot",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('from_time', models.TimeField()),
-                ('duration', models.DurationField()),
-                ('days', models.PositiveSmallIntegerField(db_default=127, default=127)),
-                ('fee', models.PositiveIntegerField(db_default=0, default=0)),
-                ('timezone', models.CharField(max_length=32)),
-                ('is_active', models.BooleanField(db_default=True, default=True)),
-                ('is_deleted', models.BooleanField(db_default=False, default=False)),
-                ('counsellor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='slots', related_query_name='slots', to='counselling.counsellor')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("from_time", models.TimeField()),
+                ("duration", models.DurationField()),
+                ("days", models.PositiveSmallIntegerField(db_default=127, default=127)),
+                ("fee", models.PositiveIntegerField(db_default=0, default=0)),
+                ("timezone", models.CharField(max_length=32)),
+                ("is_active", models.BooleanField(db_default=True, default=True)),
+                ("is_deleted", models.BooleanField(db_default=False, default=False)),
+                (
+                    "counsellor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="slots",
+                        related_query_name="slots",
+                        to="counselling.counsellor",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-modified_at'],
+                "ordering": ["-modified_at"],
             },
         ),
     ]

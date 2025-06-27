@@ -41,4 +41,3 @@ class LoginView(APIView):
         logged, response, data = login(request, user, in_body, in_cookie)
 
         return response
-

@@ -7,15 +7,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0002_alter_chat_options_alter_message_chat'),
-        ('counselling', '0003_alter_session_counsellor'),
-        ('wallet', '0003_alter_transaction_managers'),
+        ("chat", "0002_alter_chat_options_alter_message_chat"),
+        ("counselling", "0003_alter_session_counsellor"),
+        ("wallet", "0003_alter_transaction_managers"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Session',
-            new_name='CounsellingSession',
+            old_name="Session",
+            new_name="CounsellingSession",
         ),
     ]

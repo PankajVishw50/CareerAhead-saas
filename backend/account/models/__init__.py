@@ -3,7 +3,7 @@ from .EmailVerification import EmailVerification
 from .RefreshToken import RefreshToken
 
 __all__ = [
-    User, 
+    User,
     EmailVerification,
     RefreshToken,
 ]

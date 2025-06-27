@@ -1,24 +1,19 @@
-from django.db import models 
+from django.db import models
 from django.conf import settings
 
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 
+
 class WithdrawalManager(models.Manager):
     def validate_amount(self, amount):
-        if (
-            amount < settings.MINIMUM_WITHDRAWL
-            or amount > settings.MAXIMUM_WITHDRAWL
-        ):
+        if amount < settings.MINIMUM_WITHDRAWL or amount > settings.MAXIMUM_WITHDRAWL:
             return False
         return True
-        
+
     def create_withdrawal(self, wallet, amount):
 
         # Validate amount and enough balance
-        if (
-            not self.validate_amount(amount)
-            or not wallet.have_balance(amount)
-        ):
+        if not self.validate_amount(amount) or not wallet.have_balance(amount):
             return False
 
         withdrawal = self.model(
@@ -30,14 +25,14 @@ class WithdrawalManager(models.Manager):
 
 
 class Withdrawal(UUIDPrimaryFieldModel, TimeMonitorModel):
-    
+
     class StateChoices(models.TextChoices):
-        pending = 'Pending'
-        done = 'Done'
-        failed = 'Failed'
+        pending = "Pending"
+        done = "Done"
+        failed = "Failed"
 
     wallet = models.ForeignKey(
-        'Wallet',
+        "Wallet",
         on_delete=models.CASCADE,
     )
 
@@ -45,8 +40,7 @@ class Withdrawal(UUIDPrimaryFieldModel, TimeMonitorModel):
         max_length=30,
     )
 
-    amount = models.PositiveIntegerField(
-    )
+    amount = models.PositiveIntegerField()
 
     state = models.CharField(
         max_length=16,
@@ -71,13 +65,13 @@ class Withdrawal(UUIDPrimaryFieldModel, TimeMonitorModel):
         self.wallet.balance += self.amount
         self.wallet.save()
         return True
-    
+
     def withdrawal_done(self):
-        # Check if it's not already 
+        # Check if it's not already
         # in done state
         if self.state == self.StateChoices.done:
             return True
-        
+
         # Remove money from wallet
         # if it was in failed state
         if self.state == self.StateChoices.failed:
@@ -87,5 +81,5 @@ class Withdrawal(UUIDPrimaryFieldModel, TimeMonitorModel):
             self.wallet.save()
 
         self.state = self.StateChoices.done
-        self.save() 
-        return True       
+        self.save()
+        return True

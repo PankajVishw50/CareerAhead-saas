@@ -10,12 +10,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class EmailVerificationManager(models.Manager):
     def create_emailverification(self, user, **kwargs):
-        sm = kwargs.pop('send_mail', True)
+        sm = kwargs.pop("send_mail", True)
 
         emailverification = self.create(user=user, *kwargs)
-        
+
         if sm:
             send_mail.delay(
                 subject="Email Verification",
@@ -26,10 +27,11 @@ class EmailVerificationManager(models.Manager):
             logger.info(f"Mail Sent to {user.email}")
         return emailverification
 
+
 class EmailVerification(UUIDPrimaryFieldModel, TimeMonitorModel):
 
     user = models.OneToOneField(
-        to='account.User', 
+        to="account.User",
         on_delete=models.CASCADE,
     )
 
@@ -53,23 +55,19 @@ class EmailVerification(UUIDPrimaryFieldModel, TimeMonitorModel):
     objects = EmailVerificationManager()
 
     def get_verification_link(self):
-        return None  
-
+        return None
 
     def verify(self, code=None, time=None, force=False):
         time = time or datetime.datetime.now(pytz.utc)
 
-        if (
-            (self.code.hex == code and time < self.expiration_time)
-            or force
-        ):
-            self.verified = True 
-            self.verification_time = time if time > self.expiration_time else datetime.datetime.now(pytz.utc)
-            return True 
-        
-        return False 
+        if (self.code.hex == code and time < self.expiration_time) or force:
+            self.verified = True
+            self.verification_time = (
+                time if time > self.expiration_time else datetime.datetime.now(pytz.utc)
+            )
+            return True
+
+        return False
 
     def __str__(self):
         return f"{self.user.email}"
-
-    
