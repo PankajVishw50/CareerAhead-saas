@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import useAuth from "@/hooks/useAuth";
-import {urls} from "@/utils/urls";
-import {get_param_url} from "@/utils/collections";
+import { urls } from "@/utils/urls";
+import { get_param_url } from "@/utils/collections";
 import { date_formatted, datetime_formatted, timezone_formatted } from "@/utils/date";
 import { format } from "date-fns";
 import { ChevronRight, ChevronLeft } from "lucide-react"
@@ -21,8 +21,8 @@ import {
 import { toast } from "@/hooks/use-toast";
 import Spinner from "./ui/Spinner";
 
-const CounsellorScheduleWindow = ({counsellor}) => {
-  const {auth_request} = useAuth();
+const CounsellorScheduleWindow = ({ counsellor }) => {
+  const { auth_request } = useAuth();
 
   const [selectedId, setSelectedId] = useState(null);
   const [slots, setSlots] = useState({});
@@ -36,8 +36,8 @@ const CounsellorScheduleWindow = ({counsellor}) => {
   }, [date]);
 
   const _fetch_slots = async (dates, timezone) => {
-    const {json, error} = await auth_request(
-      get_param_url(urls.available_slots.get_url(counsellor.id), {dates: dates, timezone: timezone}),
+    const { json, error } = await auth_request(
+      get_param_url(urls.available_slots.get_url(counsellor.id), { dates: dates, timezone: timezone }),
       {
         method: "GET",
       }
@@ -92,7 +92,7 @@ const CounsellorScheduleWindow = ({counsellor}) => {
       // Check if date is today
       // In which case we need to pass datetime
       // otherwise date only
-      if (new_date_formatted === date_formatted()){
+      if (new_date_formatted === date_formatted()) {
         dates.push(datetime_formatted(new_date))
       } else {
         dates.push(date_formatted(new_date));
@@ -124,7 +124,7 @@ const CounsellorScheduleWindow = ({counsellor}) => {
     }
     const slot = slots[d]?.find((s) => s.id === selectedId)
 
-    if (!slot){
+    if (!slot) {
       return toast({
         description: "select valid slot",
         variant: "destructive",
@@ -133,8 +133,8 @@ const CounsellorScheduleWindow = ({counsellor}) => {
 
     setBooking(true);
     // Fetch
-    const {json, error} = await auth_request(
-      urls.session.get_url(counsellor.id, slot.id),
+    const { json, error } = await auth_request(
+      urls.counsellor_sessions.get_url(counsellor.id, slot.id),
       {
         method: "POST",
         headers: {
@@ -147,7 +147,7 @@ const CounsellorScheduleWindow = ({counsellor}) => {
     )
     setBooking(false);
 
-    if (error){
+    if (error) {
       return toast({
         description: "Failed to book slot",
         variant: "destructive",
@@ -161,7 +161,7 @@ const CounsellorScheduleWindow = ({counsellor}) => {
     setSlots(prev => {
       return {
         ...prev,
-        [d]:[],
+        [d]: [],
       }
     })
     fetch_slots(date);
@@ -171,104 +171,104 @@ const CounsellorScheduleWindow = ({counsellor}) => {
 
 
   return (
-      <div className="w-full h-full">
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon"
+    <div className="w-full h-full">
+      <div className="flex gap-2">
+        <Button variant="outline" size="icon"
           onClick={() => {
             const d = new Date(date);
             d.setDate(d.getDate() - 1);
             setDate(d);
           }}
           disabled={date_formatted(date) == date_formatted(today)}
-          >
-            <ChevronLeft />
-          </Button>
+        >
+          <ChevronLeft />
+        </Button>
 
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[240px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon />
-                {/* {date ? format(date, "PPP") : <span>Pick a date</span>} */}
-                {date_formatted(date)}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                disabled={(date) => date < new Date((new Date()).setHours(0, 0, 0, 0))} // Disabled Past days
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-[240px] justify-start text-left font-normal",
+                !date && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon />
+              {/* {date ? format(date, "PPP") : <span>Pick a date</span>} */}
+              {date_formatted(date)}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              disabled={(date) => date < new Date((new Date()).setHours(0, 0, 0, 0))} // Disabled Past days
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
 
-          <Button variant="outline" size="icon"
+        <Button variant="outline" size="icon"
           onClick={() => {
             const d = new Date(date);
             d.setDate(d.getDate() + 1);
             setDate(d);
           }}
-          >
-            <ChevronRight />
-          </Button>
+        >
+          <ChevronRight />
+        </Button>
 
-        </div>
+      </div>
 
-        <div>
-          <div className="flex gap-4 p-4 flex-wrap justify-center">
-            {get_slots(date) ? get_slots(date).map((slot) => {
-              const isSelected = selectedId === slot.id;
+      <div>
+        <div className="flex gap-4 p-4 flex-wrap justify-center">
+          {get_slots(date) ? get_slots(date).map((slot) => {
+            const isSelected = selectedId === slot.id;
 
-              return (
-                <Card
-                  key={slot.id}
-                  onClick={() => setSelectedId(slot.id)}
-                  className={cn(
-                    "cursor-pointer transition-shadow hover:shadow-lg border-2 max-w-xs",
-                    isSelected ? "border-blue-500 bg-gray-900" : "border-gray-200"
-                  )}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-lg font-semibold">
-                          {format(slot.from_datetime, "hh:mm a")} - {format(slot.to_datetime, "hh:mm a")} ({slot.duration.slice(0,5)} hrs)
-                        </p>
-                        <p className="text-sm text-green-500">Fee: ₹{slot.fee}</p>
-                        {/* <p className="text-sm text-gray-400">Timezone: {slot.timezone}</p> */}
-                      </div>
-                      {/* {isSelected && <Check className="text-blue-500 w-5 h-5" />} */}
+            return (
+              <Card
+                key={slot.id}
+                onClick={() => setSelectedId(slot.id)}
+                className={cn(
+                  "cursor-pointer transition-shadow hover:shadow-lg border-2 max-w-xs",
+                  isSelected ? "border-blue-500 bg-gray-900" : "border-gray-200"
+                )}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-lg font-semibold">
+                        {format(slot.from_datetime, "hh:mm a")} - {format(slot.to_datetime, "hh:mm a")} ({slot.duration.slice(0, 5)} hrs)
+                      </p>
+                      <p className="text-sm text-green-500">Fee: ₹{slot.fee}</p>
+                      {/* <p className="text-sm text-gray-400">Timezone: {slot.timezone}</p> */}
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })
+                    {/* {isSelected && <Check className="text-blue-500 w-5 h-5" />} */}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
             : <div className="text-white">No Slots Available</div>
           }
-          </div>
+        </div>
 
-          <div className="flex justify-end mt-6">
-            <Button
+        <div className="flex justify-end mt-6">
+          <Button
             disabled={selectedId === null || booking}
             onClick={book_slot}
-            >
-              {
-                booking ? <Spinner spinning={booking}/>
+          >
+            {
+              booking ? <Spinner spinning={booking} />
                 : "Schedule"
-              }
+            }
 
-            </Button>
-          </div>
-
+          </Button>
         </div>
+
       </div>
+    </div>
   )
 }
 

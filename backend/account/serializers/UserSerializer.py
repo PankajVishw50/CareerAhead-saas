@@ -17,3 +17,15 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "is_counsellor",
         ]
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "name",
+            "email",
+            "image",
+            "gender",
+        ]

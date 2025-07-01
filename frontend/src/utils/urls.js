@@ -54,9 +54,13 @@ const urls = {
     url: "/api/wallet",
     get_url: () => urls.wallet.url
   },
-  session: {
+  counsellor_sessions: {
     url: "/api/counsellors/:counsellor_id/slots/:slot_id/sessions",
-    get_url: (counsellor_id, slot_id) => urls.session.url.replace(":counsellor_id", counsellor_id).replace(":slot_id", slot_id),
+    get_url: (counsellor_id, slot_id) => urls.counsellor_sessions.url.replace(":counsellor_id", counsellor_id).replace(":slot_id", slot_id),
+  },
+  sessions: {
+    url: "/api/counsellors/sessions",
+    get_url: () => urls.sessions.url,
   },
   messages: {
     url: "/api/chats/:chat_id/messages",

@@ -1,5 +1,1 @@
-from .UserSerializer import UserSerializer
-
-__all__ = [
-    "UserSerializer",
-]
+from .UserSerializer import UserSerializer, UserProfileSerializer

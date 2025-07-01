@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from counselling.serializers.AboutSerializer import AboutSerializer
 from counselling.models import Counsellor
-from account.serializers import UserSerializer
+from account.serializers import UserSerializer, UserProfileSerializer
 
 
 class CounsellorSerializer(serializers.ModelSerializer):
@@ -21,3 +21,20 @@ class CounsellorSerializer(serializers.ModelSerializer):
 
         counsellor = Counsellor.objects.create_counsellor(**validated_data)
         return counsellor
+
+
+class CounsellorProfileSerializer(serializers.ModelSerializer):
+    about = AboutSerializer()
+    user = UserProfileSerializer()
+
+    class Meta:
+        model = Counsellor
+        fields = ["id", "user", "about"]
+
+
+class CounsellorProfileMinmialSerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer()
+
+    class Meta:
+        model = Counsellor
+        fields = ["id", "user"]

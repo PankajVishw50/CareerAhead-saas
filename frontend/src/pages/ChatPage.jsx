@@ -1,8 +1,8 @@
 import ChatBox from "@/components/ChatBox";
 
-const ChatPage = () => {
+const ChatPage = ({ chat_id = null }) => {
   return (
-    <ChatBox />
+    <ChatBox chat_id={chat_id} />
   )
 }
 
