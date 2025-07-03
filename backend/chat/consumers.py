@@ -1,4 +1,6 @@
 from channels.generic.websocket import WebsocketConsumer
+from django.db import transaction
+from django.db.models import F
 from rest_framework.response import Response
 import json
 from django.core.exceptions import ValidationError
@@ -46,23 +48,36 @@ def load_serialized_event(type=None):
 
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
-        # update user to online status
-        # import ipdb
-        #
-        # ipdb.set_trace()
-
         self.user = self.scope["user"]
-        self.user.online_channel = self.channel_name
-        self.user.save()
 
-        self.accept()
-        self.send(f"HI, {self.scope['user'].email}")
+        # Join group
+        async_to_sync(
+            self.channel_layer.group_add,
+        )(
+            self.user.id.hex,
+            self.channel_name,
+        )
+
+        with transaction.atomic():
+            # Updating active devices
+            # Using `F` to prevent race condition
+            self.user.active_devices = F("active_devices") + 1
+            self.user.save()
+
+            self.accept()
+            self.send(f"HI, {self.scope['user'].email}")
 
         logger.info(f"Websocket accepted")
 
     def disconnect(self, close_code):
-        # update user to offline status
-        self.user.online_channel = None
+        # Leave Group
+        async_to_sync(self.channel_layer.group_discard)(
+            self.user.id.hex,
+            self.channel_name,
+        )
+        # Updating active devices
+        # Using `F` to prevent race condition
+        self.user.active_devices = F("active_devices") - 1
         self.user.save()
 
     def _get_notification_serializer(self, text_data):
@@ -80,8 +95,6 @@ class NotificationConsumer(WebsocketConsumer):
 
     @load_serialized_event(None)
     def receive(self, text_data):
-        # import ipdb;ipdb.set_trace()
-
         result, data = self._get_notification_serializer(text_data)
         if not result:
             self.send(text_data=json.dumps(invalid_type_response(data)))
@@ -106,7 +119,6 @@ class NotificationConsumer(WebsocketConsumer):
 
     @load_serialized_event("message.new")
     def message_new(self, event):
-        # import ipdb;ipdb.set_trace()
         # Check if provided_chat id is valid
         try:
             chat = Chat.objects.get(id=self.event_data["payload"]["chat_id"])
@@ -157,16 +169,15 @@ class NotificationConsumer(WebsocketConsumer):
         response_data = serializer_uuid_dict(
             send_response("new_message", message_s.data)
         )
-        self._chat_broadcast(chat, response_data)
+        self._broadcast_chat(chat, response_data)
 
-    def _chat_broadcast(self, chat, text_data):
-        # Send user a
+    def _broadcast_chat(self, chat, text_data):
         for user in [chat.user_a, chat.user_b]:
             if not user.is_online:
                 continue
 
-            async_to_sync(self.channel_layer.send)(
-                user.online_channel,
+            async_to_sync(self.channel_layer.group_send)(
+                user.id.hex,
                 {
                     "type": "send.client",
                     "text": json.dumps(
@@ -180,8 +191,6 @@ class NotificationConsumer(WebsocketConsumer):
 
     @load_serialized_event("message.seen")
     def message_seen(self, event):
-        # import ipdb;ipdb.set_trace()
-
         try:
             chat = Chat.objects.get(id=self.event_data["payload"]["chat_id"])
 
@@ -226,8 +235,8 @@ class NotificationConsumer(WebsocketConsumer):
             message.sender if message.sender != self.user else message.receiver
         )
         if message_sender.is_online:
-            async_to_sync(self.channel_layer.send)(
-                message_sender.online_channel,
+            async_to_sync(self.channel_layer.group_send)(
+                message_sender.id.hex,
                 {
                     "type": "send.client",
                     "text": json.dumps(

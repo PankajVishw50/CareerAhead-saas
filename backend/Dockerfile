@@ -23,7 +23,7 @@ FROM base AS dev
 RUN poetry sync --all-groups
 COPY . .
 
-CMD ["sh", "-c", "make rm-pids; make run-all-except-gunicorn; make run-gunicorn ARGS='--reload --worker-class util.uvicornworker.RestartableUvicornWorker'"]
+CMD ["sh", "-c", "make rm-pids; make run-all-except-gunicorn; make run-gunicorn ARGS='--reload --workers 2 --worker-class util.uvicornworker.RestartableUvicornWorker'"]
 
 # Production Image
 FROM base AS prod

@@ -69,7 +69,7 @@ const WebSocketContextProvider = ({ children }) => {
     return (() => {
       _ws.close();
       console.log("Connection closed by unmounting")
-    })
+    });
 
   }, [signedToken]);
 

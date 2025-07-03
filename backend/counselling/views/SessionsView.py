@@ -19,7 +19,7 @@ class SessionsView(APIView):
 
     def get(self, request):
 
-        query = request.user.sessions.all()
+        query = request.user.all_sessions.all()
         type_of = request.query_params.get("type", "all")
         now = datetime.datetime.now(pytz.utc)
 

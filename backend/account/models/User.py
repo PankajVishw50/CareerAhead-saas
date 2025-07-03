@@ -110,10 +110,9 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
         db_default=False,
     )
 
-    online_channel = models.CharField(
-        max_length=120,
-        null=True,
-        blank=True,
+    active_devices = models.PositiveSmallIntegerField(
+        db_default=0,
+        default=0,
     )
 
     USERNAME_FIELD = "email"
@@ -123,7 +122,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
 
     @property
     def is_online(self):
-        return bool(self.online_channel)
+        return self.active_devices > 0
 
     def is_counsellor(self):
         return hasattr(self, "counsellor")
@@ -164,6 +163,14 @@ class User(AbstractBaseUser, PermissionsMixin, UUIDPrimaryFieldModel, TimeMonito
         from chat.models.Chat import Chat
 
         return Chat.objects.filter(models.Q(user_a=self) | models.Q(user_b=self))
+
+    @property
+    def all_sessions(self):
+        from counselling.models import CounsellingSession
+
+        return CounsellingSession.objects.filter(
+            models.Q(user=self) | models.Q(counsellor__user=self)
+        )
 
     def send_verification_mail(self):
 

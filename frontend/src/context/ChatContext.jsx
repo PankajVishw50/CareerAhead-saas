@@ -440,7 +440,7 @@ const ChatContextProvider = ({ children }) => {
   const add_messages = (chat_id, nmessages, start = true) => {
     const ids = new Set(get_messages(chat_id).map(chat => chat.id));
 
-    const pnmessages = nmessages.filter(item => !ids.has(item.id));
+    const pnmessages = nmessages?.filter(item => !ids.has(item.id));
     const filtered_messages = pnmessages.map(pnmessage => {
       return {
         ...pnmessage,
