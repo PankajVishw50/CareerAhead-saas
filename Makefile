@@ -60,5 +60,11 @@ logs:
 logs-d:
 	$(MAKE) prefix-all ARGS="logs"
 
+primary-logs:
+	$(MAKE) prefix-all ARGS="logs -f backend frontend"
+
+secondary-logs:
+	$(MAKE) prefix-all ARGS="logs -f rabbitmq postgres redis backend_db_setup nginx frontend-builder"
+
 %-logs:
 	$(MAKE) prefix-all ARGS="logs -f $*"
