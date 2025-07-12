@@ -23,4 +23,5 @@ class CounsellingSessionSerializer(serializers.ModelSerializer):
             "from_datetime",
             "to_datetime",
             "fee",
+            "type",
         ]

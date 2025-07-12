@@ -1,4 +1,6 @@
+import datetime
 from django.db import models, transaction as db_transaction
+import pytz
 
 from util.models.base_models import UUIDPrimaryFieldModel, TimeMonitorModel
 from util.models.shortcuts import User
@@ -59,6 +61,21 @@ class CounsellingSession(UUIDPrimaryFieldModel, TimeMonitorModel):
     to_datetime = models.DateTimeField()
 
     objects = CounsellingSessionManager()
+
+    @property
+    def type(self):
+        now = datetime.datetime.now(pytz.utc)
+
+        _type = ""
+        match "":
+            case _ if self.from_datetime <= now and self.to_datetime > now:
+                _type = "active"
+            case _ if self.from_datetime > now:
+                _type = "upcoming"
+            case _ if self.to_datetime <= now:
+                _type = "old"
+
+        return _type
 
     def __str__(self):
         return f"{self.user} - {self.counsellor}: {self.from_datetime}"

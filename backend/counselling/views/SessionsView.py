@@ -27,7 +27,7 @@ class SessionsView(APIView):
             case "active":
                 query = query.filter(Q(from_datetime__lte=now) & Q(to_datetime__gt=now))
             case "upcoming":
-                query = query.filter(Q(to_datetime__gt=now))
+                query = query.filter(Q(from_datetime__gt=now))
             case "old":
                 query = query.filter(to_datetime__lte=now)
             case "all":

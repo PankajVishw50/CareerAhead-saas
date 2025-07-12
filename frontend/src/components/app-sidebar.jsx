@@ -83,6 +83,10 @@ const data = {
           title: "Chat",
           url: "/chat",
         },
+        {
+          title: "Sessions",
+          url: "/sessions",
+        },
       ],
     },
     // {

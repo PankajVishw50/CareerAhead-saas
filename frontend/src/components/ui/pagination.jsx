@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button";
 
-import {NavLink} from "react-router";
+import { NavLink } from "react-router";
 
 const Pagination = ({
   className,
@@ -46,7 +46,7 @@ const PaginationLink = ({
       size,
     }), className)}
     {...props}>
-      {children}
+    {children}
   </NavLink>
 )
 PaginationLink.displayName = "PaginationLink"
