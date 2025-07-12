@@ -30,6 +30,7 @@ const MAX_RETRIES = 3;
 
 const SessionsWindow = ({
   type = "active",
+  params = {},
   background_color = "bg-[#c8b6ff]/10",
   hover_background_color = "hover:bg-[#c8b6ff]/20"
 }) => {
@@ -156,7 +157,10 @@ const SessionsWindow = ({
         {
           isHovered ?
             (
-              <NavLink to="/chat" className="flex gap-2 justify-center items-center flex-1 h-full">
+              <NavLink to={{
+                pathname: "/sessions",
+                search: params,
+              }} className="flex gap-2 justify-center items-center flex-1 h-full">
                 <span>
                   See All
                 </span>
@@ -165,7 +169,7 @@ const SessionsWindow = ({
               </NavLink>
             ) : (
               <Badge variant="ghost" className=" m-5 border-white/25 flex  gap-2 justify-center w-full text-sm py-2">
-                {capitalize(type)} Chats
+                {capitalize(type)} Sessions
 
                 {
                   sessions.length > 0 && (

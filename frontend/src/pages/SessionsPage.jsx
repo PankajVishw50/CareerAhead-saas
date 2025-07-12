@@ -32,11 +32,14 @@ import { Badge } from "@/components/ui/badge";
 import { capitalize } from "@/utils/helpers";
 import { toast } from "@/hooks/use-toast";
 import SessionCard from "@/components/SessionCard";
+import useSearchParams from "@/hooks/useSearchParams";
 
 const MAX_PAGE_SIZE = 25;
+const AVAILABLE_TYPES = ["all", "upcoming", "active", "old"]
 
 const SessionPage = () => {
   const { auth_request } = useAuth();
+  const { searchParams, setSearchParams } = useSearchParams();
 
   const [sessions, setSessions] = useState([]);
   const [page, setPage] = useState(1);
@@ -46,6 +49,47 @@ const SessionPage = () => {
   const [isFetching, setIsFetching] = useState(false);
   const fetching = useRef(isFetching);
   const [types, setTypes] = useState(["all"]);
+
+  // Set types from search params
+  useEffect(() => {
+    console.log("Here")
+
+    if (!searchParams.types) {
+      return;
+    }
+
+    for (const t of searchParams.types) {
+      update_types(t);
+    }
+
+  }, [])
+
+  useEffect(() => {
+    let no_change = true
+
+    if (searchParams.types) {
+      for (const type of types) {
+        if (!searchParams.types.includes("type")) {
+          no_change = false
+          break;
+        }
+      }
+    } else {
+      no_change = false
+    }
+
+    if (no_change) {
+      return;
+    }
+
+    setSearchParams(prev => {
+      return {
+        ...prev,
+        types: types,
+      }
+    });
+
+  }, [types])
 
   useEffect(() => {
     // Ignore if already fetching or no next page
@@ -116,6 +160,31 @@ const SessionPage = () => {
     setFetchCounter(prev => prev - 1);
   }
 
+  const update_types = (value) => {
+    if (!AVAILABLE_TYPES.includes(value)) {
+      return;
+    }
+
+    setTypes(prev => {
+      if (prev.includes(value)) {
+        return prev
+      }
+
+      if (value == "all") {
+        return ["all"]
+      }
+
+      const _types = [...prev]
+      const all_i = _types.findIndex(v => v == "all")
+      if (all_i != -1) {
+        _types.splice(all_i, 1);
+      }
+      return [..._types, value]
+    })
+
+
+  }
+
   const update_isFetching = (val = false) => {
     if (isFetching != val) {
       setIsFetching(val);
@@ -133,7 +202,6 @@ const SessionPage = () => {
   const psessions = get_sessions_for_types(types)
   const [si, ei] = get_array_index(page, size);
 
-  console.log(si, ei)
 
   return (
     <div className="dark:text-white m-2 gap-5 flex flex-col">
@@ -150,23 +218,7 @@ const SessionPage = () => {
             "bg-black text-foreground h-full"
           )}>
             <Select
-              onValueChange={(value) => {
-                if (types.includes(value)) {
-                  return;
-                }
-                if (value == "all") {
-                  setTypes([value]);
-                  return;
-                }
-                setTypes(prev => {
-                  const _types = [...prev]
-                  const all_i = types.findIndex(v => v == "all")
-                  if (all_i != -1) {
-                    _types.splice(all_i, 1);
-                  }
-                  return [..._types, value]
-                })
-              }}
+              onValueChange={update_types}
               value=""
             // defaultValue="something"
             >
