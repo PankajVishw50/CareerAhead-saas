@@ -28,6 +28,7 @@ urlpatterns = [
                 path("wallet/", include("wallet.urls")),
                 path("counsellors/", include("counselling.urls")),
                 path("chats/", include("chat.urls")),
+                path("users/", include("user.urls")),
             ],
             "api",
             None,

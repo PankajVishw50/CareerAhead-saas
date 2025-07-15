@@ -37,13 +37,13 @@ import useSearchParams from "@/hooks/useSearchParams";
 const MAX_PAGE_SIZE = 25;
 const AVAILABLE_TYPES = ["all", "upcoming", "active", "old"]
 
-const SessionPage = () => {
+const SessionsPage = () => {
   const { auth_request } = useAuth();
   const { searchParams, setSearchParams } = useSearchParams();
 
   const [sessions, setSessions] = useState([]);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(2);
+  const [size, setSize] = useState(10);
   const [fetchCounter, setFetchCounter] = useState(3);
   const [nextFetchUrl, setNextFetchUrl] = useState(get_param_url(urls.sessions.get_url(), { type: "all", size: size }));
   const [isFetching, setIsFetching] = useState(false);
@@ -52,7 +52,6 @@ const SessionPage = () => {
 
   // Set types from search params
   useEffect(() => {
-    console.log("Here")
 
     if (!searchParams.types) {
       return;
@@ -205,7 +204,7 @@ const SessionPage = () => {
 
   return (
     <div className="dark:text-white m-2 gap-5 flex flex-col">
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-col md:flex-row gap-2">
 
         <div
           className={cn(
@@ -260,7 +259,6 @@ const SessionPage = () => {
                     </Badge>
                     <X data-type={type} className="absolute right-1 top-1" size={12}
                       onClick={(e) => {
-                        console.log(e);
                         const index = types.findIndex((val) => val == e.target.dataset.type);
                         if (index == -1) {
                           return;
@@ -347,4 +345,4 @@ const SessionPage = () => {
   )
 }
 
-export default SessionPage
+export default SessionsPage

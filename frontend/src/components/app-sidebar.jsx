@@ -87,6 +87,10 @@ const data = {
           title: "Sessions",
           url: "/sessions",
         },
+        {
+          title: "User Interaction",
+          url: "/counsellors/0a95fd0f-8cad-46f3-9f4a-dfb35c6190eb/user-interaction/ba130375-e8a6-44e0-ab08-21ed66bae019",
+        },
       ],
     },
     // {

@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 import pytz
 
@@ -61,4 +62,26 @@ class Counsellor(UUIDPrimaryFieldModel, TimeMonitorModel):
             is_deleted=False,
             fee=fee,
             **kwargs,
+        )
+
+    @property
+    def old_sessions(self):
+        now = datetime.datetime.now(pytz.utc)
+        return self.sessions.filter(
+            to_datetime__lte=now,
+        )
+
+    @property
+    def upcoming_sessions(self):
+        now = datetime.datetime.now(pytz.utc)
+        return self.sessions.filter(
+            to_datetime__gt=now,
+        )
+
+    @property
+    def active_sessions(self):
+        now = datetime.datetime.now(pytz.utc)
+        return self.sessions.filter(
+            from_datetime__lte=now,
+            to_datetime__gt=now,
         )

@@ -32,7 +32,6 @@ const ChatContextProvider = ({ children }) => {
 
   // To rearrange chats
   useEffect(() => {
-    console.log("use effect of message dep runs to reorder")
     add_chats(chats, []);
   }, [messages])
 
@@ -238,7 +237,6 @@ const ChatContextProvider = ({ children }) => {
     if (
       get_chat(chat_id) && !refetch
     ) {
-      console.log("chat was already fetched")
       return true;
     }
 

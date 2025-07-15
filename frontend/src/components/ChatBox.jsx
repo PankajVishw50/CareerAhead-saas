@@ -110,7 +110,6 @@ const ChatBox = ({ chat_id = null }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    console.log(e)
 
     // Send Over websocket
 

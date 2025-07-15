@@ -5,3 +5,5 @@ from .SlotsView import SlotsView
 from .CounsellorSessionsView import CounsellorSessionsView
 from .SlotView import SlotView
 from .SessionsView import SessionsView
+from .SessionView import SessionView
+from .CounsellorStatsView import CounsellorStatsView

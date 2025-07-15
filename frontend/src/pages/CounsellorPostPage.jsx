@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SquareUser, School, PencilRuler, SquareM } from 'lucide-react';
 
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 import {
   Tabs,
@@ -20,11 +20,13 @@ import useAuth from "@/hooks/useAuth";
 import { urls } from "@/utils/urls";
 import CounsellorScheduleWindow from "@/components/CounsellorScheduleWindow"
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router";
 
 const CounsellorPostPage = () => {
-  const {counsellor_id} = useParams();
-  const {counsellors, setCounsellors} = useLocalDB();
-  const {auth_request} = useAuth();
+  const { counsellor_id } = useParams();
+  const { counsellors, setCounsellors } = useLocalDB();
+  const { auth_request, user } = useAuth();
+  const navigate = useNavigate();
 
   const [counsellor, setCounsellor] = useState();
   const [activeTab, setActiveTab] = useState("tab2");
@@ -36,9 +38,8 @@ const CounsellorPostPage = () => {
       return;
     }
 
-    // Fetch it from API
     (async () => {
-      const {json, error} = await auth_request(
+      const { json, error } = await auth_request(
         urls.counsellor.get_url(counsellor_id),
         {
           method: "GET",
@@ -72,10 +73,16 @@ const CounsellorPostPage = () => {
         <div className="flex items-center gap-4 border-b pb-4 mb-4">
           <Avatar className="h-16 w-16">
             <AvatarImage src="/placeholder.jpg" alt="Dr. Ahmed Khurana" />
-            <AvatarFallback>{counsellor ? counsellor.user.name[0].toUpperCase() : "|" }</AvatarFallback>
+            <AvatarFallback>{counsellor ? counsellor.user.name[0].toUpperCase() : "|"}</AvatarFallback>
           </Avatar>
           <div className="text-lg font-medium text-white">
             {counsellor ? counsellor.user.name : "......"}
+          </div>
+
+          <div className="ml-auto border h-full h-max">
+            <Button onClick={() => navigate(`/counsellors/${counsellor_id}/user-interaction/${user.id}`)}>
+              View Interactions
+            </Button>
           </div>
         </div>
 
@@ -93,7 +100,7 @@ const CounsellorPostPage = () => {
             <div className="p-6 md:p-10 shadow rounded-xl space-y-4">
               <section className="space-y-2 border-b border-dashed border-gray-300 pb-4">
                 <div className="flex items-center gap-2">
-                  <SquareUser/>
+                  <SquareUser />
                   <h2 className="text-2xl font-bold text-primary">Introduction</h2>
                 </div>
                 <p className="text-muted-foreground text-base leading-relaxed">
@@ -103,7 +110,7 @@ const CounsellorPostPage = () => {
 
               <section className="space-y-2 border-b border-dashed border-gray-300 pb-4">
                 <div className="flex items-center gap-2">
-                  <School/>
+                  <School />
                   <h2 className="text-2xl font-bold text-primary">Qualification</h2>
                 </div>
                 <p className="text-muted-foreground text-base leading-relaxed">
@@ -113,7 +120,7 @@ const CounsellorPostPage = () => {
 
               <section className="space-y-2 border-b border-dashed border-gray-300 pb-4">
                 <div className="flex items-center gap-2">
-                  <PencilRuler/>
+                  <PencilRuler />
                   <h2 className="text-2xl font-bold text-primary">Speciality</h2>
                 </div>
                 <p className="text-muted-foreground text-base leading-relaxed">
@@ -123,7 +130,7 @@ const CounsellorPostPage = () => {
 
               <section className="space-y-2 border-b border-dashed border-gray-300 pb-4">
                 <div className="flex items-center gap-2">
-                  <SquareM/>
+                  <SquareM />
                   <h2 className="text-2xl font-bold text-primary">Methodology</h2>
                 </div>
                 <p className="text-muted-foreground text-base leading-relaxed">
@@ -134,10 +141,10 @@ const CounsellorPostPage = () => {
 
           </TabsContent>
           <TabsContent value="tab2" forceMount={true} className={cn("mt-6 text-muted-foreground", activeTab === "tab2" ? "" : "hidden")}>
-            { counsellor && <CounsellorScheduleWindow counsellor={counsellor} /> }
+            {counsellor && <CounsellorScheduleWindow counsellor={counsellor} />}
           </TabsContent>
           <TabsContent value="tab3" forceMount={true} className={cn("mt-6 text-muted-foreground", activeTab === "tab3" ? "" : "hidden")}>
-            <TestCounter/>
+            <TestCounter />
           </TabsContent>
           <TabsContent value="tab4" forceMount={true} className={cn("mt-6 text-muted-foreground", activeTab === "tab4" ? "" : "hidden")}>
             Content for Tab 4

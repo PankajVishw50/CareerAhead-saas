@@ -20,7 +20,6 @@ const useSearchParams = () => {
     if (!loaded) {
       return;
     }
-    console.log("neet to update history state", searchParams);
     const nparam = new URLSearchParams();
 
     for (const [key, values] of Object.entries(searchParams)) {

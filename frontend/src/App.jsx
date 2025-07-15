@@ -13,6 +13,7 @@ import WalletPage from './pages/WalletPage'
 import { cn } from "@/lib/utils"
 import ChatPage from '@/pages/ChatPage'
 import SessionsPage from "@/pages/SessionsPage"
+import InteractionPage from "@/pages/InteractionPage"
 
 function App() {
   const { mode } = useColorMode()
@@ -32,9 +33,9 @@ function App() {
               <Route path="/market" element={<MarketPage />} />
               <Route path="/counsellors/:counsellor_id" element={<CounsellorPostPage />} />
               <Route path="/wallet" element={<WalletPage />} />
-              {/* <Route path="/chat-test" element={<TestChatBox/>} /> */}
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/sessions" element={<SessionsPage />} />
+              <Route path="/counsellors/:counsellor_id/user-interaction/:user_id" element={<InteractionPage />} />
             </Route>
           </Route>
 

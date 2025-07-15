@@ -6,9 +6,13 @@ const abs_url = (url_path) => {
 
 
 const urls = {
+  me: {
+    get_url: () => urls.me.url,
+    url: "/api/users/me"
+  },
   user: {
-    get_url: () => urls.user.url,
-    url: "/api/auth/me"
+    get_url: (user_id) => urls.user.url.replace(":user_id", user_id),
+    url: "/api/users/:user_id"
   },
   login: {
     url: "/api/auth/login",
@@ -73,6 +77,10 @@ const urls = {
   chats: {
     url: "/api/chats",
     get_url: () => urls.chats.url,
+  },
+  counsellor_stats: {
+    url: "/api/counsellors/:counsellor_id/stats",
+    get_url: (counsellor_id) => urls.counsellor_stats.url.replace(":counsellor_id", counsellor_id),
   },
 }
 

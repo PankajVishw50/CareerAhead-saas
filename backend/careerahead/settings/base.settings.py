@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "django_extensions",
+    "django_filters",
     "account",
     "wallet",
     "counselling",

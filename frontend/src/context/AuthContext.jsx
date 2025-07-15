@@ -1,17 +1,17 @@
 import { toast } from "@/hooks/use-toast";
 import useRequest from "@/hooks/useRequest";
 import { useSettings } from "@/hooks/useSettings";
-import {createContext, useEffect, useState} from "react";
+import { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({
   user: null,
   logged: null,
 })
 
-const AuthContextProvider = ({children}) => {
+const AuthContextProvider = ({ children }) => {
 
-  const {urls} = useSettings();
-  const {make_request} = useRequest();
+  const { urls } = useSettings();
+  const { make_request } = useRequest();
 
   const [user, setUser] = useState(null);
   const [logged, setLogged] = useState(null);
@@ -35,7 +35,7 @@ const AuthContextProvider = ({children}) => {
       // Get Access token
       const token = localStorage.getItem("access_token") ?? await fetch_token();
 
-      if (!token){
+      if (!token) {
         setLogged(false);
         return;
       }
@@ -50,16 +50,16 @@ const AuthContextProvider = ({children}) => {
   useEffect(() => {
     if (logged) {
       fetch_user()
-      .then(data => {
-        setUser(data);
-      })
+        .then(data => {
+          setUser(data);
+        })
     }
 
   }, [logged])
 
 
   const fetch_token = async () => {
-    const {response, json, error}  = await make_request(
+    const { response, json, error } = await make_request(
       urls.access_token.get_url(),
       {
         method: "POST",
@@ -80,8 +80,8 @@ const AuthContextProvider = ({children}) => {
 
   // const fetch_me
   const fetch_user = async () => {
-    const {response, json, error}  = await auth_request(
-      urls.user.get_url(),
+    const { response, json, error } = await auth_request(
+      urls.me.get_url(),
       {
         method: "GET",
       }
@@ -104,7 +104,7 @@ const AuthContextProvider = ({children}) => {
   }
 
   const logout = (token) => {
-    if (!logged){
+    if (!logged) {
       toast({
         description: "No logged in user to logout",
         variant: "destructive"
@@ -112,14 +112,14 @@ const AuthContextProvider = ({children}) => {
       return;
     }
 
-    const {response, json, error} = auth_request(
+    const { response, json, error } = auth_request(
       urls.logout.get_url(),
       {
         method: "POST",
       }
     )
 
-    if (error){
+    if (error) {
       toast({
         description: "Failed to logout",
         variant: "destructive"
@@ -131,7 +131,7 @@ const AuthContextProvider = ({children}) => {
     setToken(false);
   }
 
-  return <AuthContext.Provider value={{user, logged, login, logout, auth_request}}> {children} </AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, logged, login, logout, auth_request }}> {children} </AuthContext.Provider>
 }
 
 export {

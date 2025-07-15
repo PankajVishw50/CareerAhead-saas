@@ -85,16 +85,16 @@ const useRequest = () => {
   useEffect(() => {
 
     return (() => {
-          controllers.current.forEach(controller => {
-            try {
-                controller.abort();
+      controllers.current.forEach(controller => {
+        try {
+          controller.abort();
         } catch {
-              ;
-    }
+          ;
+        }
       });
-controllers.current = [];
+      controllers.current = [];
     });
-    }, []);
+  }, []);
 
   return { make_request, get_url_query_params, get_url_query_params_string };
 

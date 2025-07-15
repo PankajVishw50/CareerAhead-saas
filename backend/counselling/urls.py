@@ -1,7 +1,9 @@
 from django.urls import path, include
 from counselling.views import (
+    CounsellorStatsView,
     CounsellorView,
     AvailableSlotsView,
+    SessionView,
     SessionsView,
     SlotsView,
     CounsellorSessionsView,
@@ -28,8 +30,10 @@ urlpatterns = [
                     CounsellorSessionsView.as_view(),
                     name="schedule-session",
                 ),
+                path("stats", CounsellorStatsView.as_view(), name="counsellor-stats"),
             ]
         ),
     ),
     path("sessions/", SessionsView.as_view(), name="scheduled-sessions"),
+    path("sessions/<uuid:pk>", SessionView.as_view(), name="scheduled-session"),
 ]

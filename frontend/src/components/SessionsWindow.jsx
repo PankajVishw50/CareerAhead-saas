@@ -58,7 +58,6 @@ const SessionsWindow = ({
     }
     fetching.current = true
     setRetries(prev => prev - 1)
-    console.log("fetching sessions")
 
     const { json, error } = await auth_request(
       nextFetchUrl,

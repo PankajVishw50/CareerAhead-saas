@@ -17,8 +17,6 @@ const WebSocketContextProvider = ({ children }) => {
   const [subscribers, setSubscribers] = useState({});
   const [queues, setQueues] = useState({});
 
-  console.log('web socket context loading')
-
   // Fetch Signed Token
   useEffect(() => {
     // Ignore if not logged
@@ -42,24 +40,23 @@ const WebSocketContextProvider = ({ children }) => {
     const _ws = new WebSocket(ws_notification_url)
 
     _ws.onopen = (e) => {
-      console.log("Connection opened:", e);
+      console.log("WS Connection opened:", e);
     }
 
     _ws.onclose = (e) => {
-      console.log("Connection closed:", e);
+      console.log("WS Connection closed:", e);
     }
 
     _ws.onerror = (e) => {
-      console.log("Connection error:", e);
+      console.log("WS Connection error:", e);
     }
 
     _ws.onmessage = (e) => {
-      console.log("Message:", e);
       let json = null
       try {
         json = JSON.parse(e.data);
       } catch (error) {
-        console.warn("Failed to JSON parse the data: ", e.data);
+        console.warn("Failed to JSON parse the WS data: ", e.data);
       }
       handle_message(json || e.data)
     }
@@ -68,13 +65,12 @@ const WebSocketContextProvider = ({ children }) => {
 
     return (() => {
       _ws.close();
-      console.log("Connection closed by unmounting")
+      console.log("WS Connection closed by unmounting")
     });
 
   }, [signedToken]);
 
   useEffect(() => {
-    console.log("inside useeffect [queues, subscribers]");
     for (let [k, v] of Object.entries(queues)) {
       let index = 0;
 
@@ -135,7 +131,6 @@ const WebSocketContextProvider = ({ children }) => {
   const unsubscribe = (message_type, id) => {
     setSubscribers(prev => {
       const index = prev[message_type]?.findIndex(subscriber => subscriber.id == id);
-      console.log("unsubscribe ran for ", message_type, id, index);
       if (index === -1) {
         return prev;
       }

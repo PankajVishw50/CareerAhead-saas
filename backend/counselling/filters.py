@@ -2,7 +2,7 @@ import django_filters
 from django.db.models import F, Q, Value
 from django.db.models.expressions import RawSQL
 
-from counselling.models import Counsellor
+from counselling.models import CounsellingSession, Counsellor
 from account.models import User
 from counselling.models import Slot
 
@@ -64,3 +64,12 @@ class SlotsModelFilterSet(django_filters.FilterSet):
         return queryset.annotate(working_days=F("days").bitand(sum(day_bits))).filter(
             working_days__gt=0
         )
+
+
+class SessionsFiltler(django_filters.FilterSet):
+    user = django_filters.UUIDFilter(field_name="user__id")
+    counsellor = django_filters.UUIDFilter(field_name="counsellor__id")
+
+    class Meta:
+        model = CounsellingSession
+        fields = {}
