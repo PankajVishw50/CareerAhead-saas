@@ -36,7 +36,7 @@ const CounsellorProfile = ({ counsellor }) => {
           // size="icon"
           asChild
         >
-          <Link to="/counsellors/0a95fd0f-8cad-46f3-9f4a-dfb35c6190eb" className="text-muted-foreground text-white text-xs">
+          <Link to={`/counsellors/${counsellor.id}`} className="text-muted-foreground text-white text-xs">
             {/* <TwitterIcon className="stroke-muted-foreground" /> */}
             Visit Profile
           </Link>
